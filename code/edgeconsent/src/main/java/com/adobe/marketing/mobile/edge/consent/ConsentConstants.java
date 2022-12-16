@@ -18,8 +18,6 @@ final class ConsentConstants {
 	static final String EXTENSION_NAME = "com.adobe.edge.consent";
 	static final String FRIENDLY_NAME = "Consent";
 
-	private ConsentConstants() {}
-
 	static final class EventDataKey {
 
 		static final String CONSENTS = "consents";
@@ -30,6 +28,8 @@ final class ConsentConstants {
 
 		private EventDataKey() {}
 	}
+
+	private ConsentConstants() {}
 
 	static final class DataStoreKey {
 

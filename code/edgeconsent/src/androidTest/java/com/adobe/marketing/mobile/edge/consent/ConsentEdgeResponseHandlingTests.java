@@ -11,38 +11,35 @@
 
 package com.adobe.marketing.mobile.edge.consent;
 
-import static com.adobe.marketing.mobile.TestHelper.getDispatchedEventsWith;
-import static com.adobe.marketing.mobile.TestHelper.getXDMSharedStateFor;
-import static com.adobe.marketing.mobile.TestHelper.resetTestExpectations;
-import static com.adobe.marketing.mobile.TestHelper.waitForThreads;
-import static com.adobe.marketing.mobile.edge.consent.ConsentAndroidTestUtil.*;
+import static com.adobe.marketing.mobile.edge.consent.util.ConsentFunctionalTestUtil.*;
+import static com.adobe.marketing.mobile.edge.consent.util.TestHelper.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import com.adobe.marketing.mobile.AdobeCallback;
 import com.adobe.marketing.mobile.Event;
 import com.adobe.marketing.mobile.EventSource;
 import com.adobe.marketing.mobile.EventType;
 import com.adobe.marketing.mobile.MobileCore;
-import com.adobe.marketing.mobile.TestHelper;
-import com.adobe.marketing.mobile.TestPersistenceHelper;
+import com.adobe.marketing.mobile.edge.consent.util.ConsentFunctionalTestUtil;
+import com.adobe.marketing.mobile.edge.consent.util.MonitorExtension;
+import com.adobe.marketing.mobile.edge.consent.util.TestHelper;
+import com.adobe.marketing.mobile.edge.consent.util.TestPersistenceHelper;
+import com.adobe.marketing.mobile.util.JSONUtils;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CountDownLatch;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.RuleChain;
+import org.junit.rules.TestRule;
 
 public class ConsentEdgeResponseHandlingTests {
 
 	static final String SHARED_STATE = "com.adobe.eventSource.sharedState";
 
 	@Rule
-	public RuleChain rule = RuleChain
-		.outerRule(new TestHelper.SetupCoreRule())
-		.around(new TestHelper.RegisterMonitorExtensionRule());
+	public TestRule rule = new TestHelper.SetupCoreRule();
 
 	// --------------------------------------------------------------------------------------------
 	// Setup
@@ -50,20 +47,10 @@ public class ConsentEdgeResponseHandlingTests {
 
 	@Before
 	public void setup() throws Exception {
-		Consent.registerExtension();
-
-		final CountDownLatch latch = new CountDownLatch(1);
-		MobileCore.start(
-			new AdobeCallback() {
-				@Override
-				public void call(Object o) {
-					latch.countDown();
-				}
-			}
+		ConsentFunctionalTestUtil.registerExtensions(
+			Arrays.asList(MonitorExtension.EXTENSION, Consent.EXTENSION),
+			null
 		);
-
-		latch.await();
-		resetTestExpectations();
 	}
 
 	@Test
@@ -84,7 +71,7 @@ public class ConsentEdgeResponseHandlingTests {
 		applyDefaultConsent(CreateConsentXDMMap("p", "n"));
 		Consent.update(CreateConsentXDMMap("y"));
 		waitForThreads(1000);
-		resetTestExpectations();
+		TestHelper.resetTestExpectations();
 
 		MobileCore.dispatchEvent(buildEdgeConsentPreferenceEventWithConsents(CreateConsentXDMMap("n")), null); // edge response sets the collect consent to no
 		waitForThreads(1000);
@@ -110,7 +97,7 @@ public class ConsentEdgeResponseHandlingTests {
 			ConsentConstants.DataStoreKey.DATASTORE_NAME,
 			ConsentConstants.DataStoreKey.CONSENT_PREFERENCES
 		);
-		Map<String, Object> persistedMap = Utility.toMap(new JSONObject(persistedJson));
+		Map<String, Object> persistedMap = JSONUtils.toMap(new JSONObject(persistedJson));
 		Map<String, String> flattenPersistedMap = flattenMap(persistedMap);
 		assertEquals(2, flattenPersistedMap.size());
 		assertEquals("n", flattenPersistedMap.get("consents.collect.val"));
@@ -134,7 +121,7 @@ public class ConsentEdgeResponseHandlingTests {
 		applyDefaultConsent(CreateConsentXDMMap("p"));
 		Consent.update(CreateConsentXDMMap("y"));
 		waitForThreads(1000);
-		resetTestExpectations();
+		TestHelper.resetTestExpectations();
 
 		// test
 		MobileCore.dispatchEvent(
@@ -154,7 +141,7 @@ public class ConsentEdgeResponseHandlingTests {
 			ConsentConstants.DataStoreKey.DATASTORE_NAME,
 			ConsentConstants.DataStoreKey.CONSENT_PREFERENCES
 		);
-		Map<String, Object> persistedMap = Utility.toMap(new JSONObject(persistedJson));
+		Map<String, Object> persistedMap = JSONUtils.toMap(new JSONObject(persistedJson));
 		Map<String, String> flattenPersistedMap = flattenMap(persistedMap);
 		assertEquals(2, flattenPersistedMap.size());
 		assertEquals("y", flattenPersistedMap.get("consents.collect.val"));
@@ -176,7 +163,7 @@ public class ConsentEdgeResponseHandlingTests {
 		// setup
 		Consent.update(CreateConsentXDMMap("y"));
 		waitForThreads(1000);
-		resetTestExpectations();
+		TestHelper.resetTestExpectations();
 
 		// read timestamp from XDM shared state
 		Map<String, String> xdmSharedState = flattenMap(getXDMSharedStateFor(ConsentConstants.EXTENSION_NAME, 1000));
@@ -212,7 +199,7 @@ public class ConsentEdgeResponseHandlingTests {
 		// setup
 		Consent.update(CreateConsentXDMMap("y", "n"));
 		waitForThreads(1000);
-		resetTestExpectations();
+		TestHelper.resetTestExpectations();
 
 		// read timestamp from XDM shared state
 		Map<String, String> xdmSharedState = flattenMap(getXDMSharedStateFor(ConsentConstants.EXTENSION_NAME, 1000));

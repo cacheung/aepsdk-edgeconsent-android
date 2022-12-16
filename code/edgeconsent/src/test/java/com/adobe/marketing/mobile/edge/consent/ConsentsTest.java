@@ -224,16 +224,12 @@ public class ConsentsTest {
 	//		Consents consents = new Consents(CreateConsentXDMMap("n"));
 	//
 	//		// test
-	//		String iso8601DateString = TimeUtils.getIso8601DateTimeZoneISO8601();
+	//		String iso8601DateString = TimeUtils.getISO8601UTCDateWithMilliseconds(new Date(currentTimestamp));
 	//		long currentTimestamp = System.currentTimeMillis();
 	//		consents.setTimestamp(currentTimestamp);
 	//
 	//		// verify
 	//		String consentTimeStamp = ConsentTestUtil.readTimestamp(consents);
-	//
-	//		//String iso8601DateToSecond = stringRemoveByIndex(iso8601DateString, 19);
-	//		//String consentTimeStampToSeconds = stringRemoveByIndex(consentTimeStamp, 19);
-	//
 	//		assertEquals(iso8601DateString, consentTimeStamp);
 	//	}
 

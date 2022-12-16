@@ -28,6 +28,7 @@ import com.adobe.marketing.mobile.EventType;
 import com.adobe.marketing.mobile.ExtensionApi;
 import com.adobe.marketing.mobile.ExtensionEventListener;
 import com.adobe.marketing.mobile.services.NamedCollection;
+import com.adobe.marketing.mobile.util.JSONUtils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -722,14 +723,14 @@ public class ConsentExtensionTest {
 	}
 
 	private Event buildEdgeConsentPreferenceEvent(final String jsonString) throws JSONException {
-		Map<String, Object> eventData = Utility.toMap(new JSONObject(jsonString));
+		Map<String, Object> eventData = JSONUtils.toMap(new JSONObject(jsonString));
 		return new Event.Builder("Edge Consent Preference", EventType.EDGE, EventSource.CONSENT_PREFERENCE)
 			.setEventData(eventData)
 			.build();
 	}
 
 	private Event buildConfigurationResponseEvent(final String jsonString) throws JSONException {
-		final Map<String, Object> consentMap = Utility.toMap(new JSONObject(jsonString));
+		final Map<String, Object> consentMap = JSONUtils.toMap(new JSONObject(jsonString));
 		Map<String, Object> configEventData = new HashMap<String, Object>() {
 			{
 				put(ConsentConstants.ConfigurationKey.DEFAULT_CONSENT, consentMap);

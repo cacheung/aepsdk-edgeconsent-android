@@ -9,8 +9,9 @@
   governing permissions and limitations under the License.
 */
 
-package com.adobe.marketing.mobile;
+package com.adobe.marketing.mobile.edge.consent.util;
 
+import static com.adobe.marketing.mobile.edge.consent.util.ConsentTestConstants.LOG_TAG;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -19,7 +20,14 @@ import android.app.Application;
 import android.app.Instrumentation;
 import android.content.Context;
 import androidx.test.platform.app.InstrumentationRegistry;
-import com.adobe.marketing.mobile.MonitorExtension.EventSpec;
+import com.adobe.marketing.mobile.AdobeCallbackWithError;
+import com.adobe.marketing.mobile.AdobeError;
+import com.adobe.marketing.mobile.Event;
+import com.adobe.marketing.mobile.LoggingMode;
+import com.adobe.marketing.mobile.MobileCore;
+import com.adobe.marketing.mobile.MobileCoreHelper;
+import com.adobe.marketing.mobile.edge.consent.util.MonitorExtension.EventSpec;
+import com.adobe.marketing.mobile.services.Log;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -37,9 +45,11 @@ import org.junit.runners.model.Statement;
  */
 public class TestHelper {
 
+	private static final String LOG_SOURCE = "TestHelper";
 	private static final String TAG = "TestHelper";
 	static final int WAIT_TIMEOUT_MS = 1000;
 	static final int WAIT_EVENT_TIMEOUT_MS = 2000;
+	static final long WAIT_SHARED_STATE_MS = 5000;
 	static Application defaultApplication;
 
 	// List of threads to wait for after test execution
@@ -78,57 +88,16 @@ public class TestHelper {
 					try {
 						base.evaluate();
 					} catch (Throwable e) {
-						MobileCore.log(LoggingMode.DEBUG, "SetupCoreRule", "Wait after test failure.");
+						Log.debug(LOG_TAG, "SetupCoreRule", "Wait after test failure.");
 						throw e; // rethrow test failure
 					} finally {
 						// After test execution
-						MobileCore.log(
-							LoggingMode.DEBUG,
-							"SetupCoreRule",
-							"Finished '" + description.getMethodName() + "'"
-						);
+						Log.debug(LOG_TAG, "SetupCoreRule", "Finished '" + description.getMethodName() + "'");
 						waitForThreads(5000); // wait to allow thread to run after test execution
-						Core core = MobileCore.getCore();
 
-						if (core != null && core.eventHub != null) {
-							core.eventHub.shutdown();
-							core.eventHub = null;
-						}
-
-						MobileCore.setCore(null);
+						MobileCoreHelper.resetSDK();
 						TestPersistenceHelper.resetKnownPersistence();
 						resetTestExpectations();
-					}
-				}
-			};
-		}
-	}
-
-	/**
-	 * {@code TestRule} which registers the {@code MonitorExtension}, allowing test cases to assert
-	 * events passing through the {@code EventHub}. This {@code TestRule} must be applied after
-	 * the {@link SetupCoreRule} to ensure the {@code MobileCore} is setup for testing first.
-	 *
-	 * To use, add the following to your test class:
-	 * <pre>
-	 *  @Rule
-	 * 	public RuleChain rule = RuleChain.outerRule(new SetupCoreRule())
-	 * 							.around(new RegisterMonitorExtensionRule());
-	 * </pre>
-	 */
-	public static class RegisterMonitorExtensionRule implements TestRule {
-
-		@Override
-		public Statement apply(final Statement base, final Description description) {
-			return new Statement() {
-				@Override
-				public void evaluate() throws Throwable {
-					MonitorExtension.registerExtension();
-
-					try {
-						base.evaluate();
-					} finally {
-						MonitorExtension.reset();
 					}
 				}
 			};
@@ -253,7 +222,7 @@ public class TestHelper {
 	 * Resets the network and event test expectations.
 	 */
 	public static void resetTestExpectations() {
-		MobileCore.log(LoggingMode.DEBUG, TAG, "Resetting functional test expectations for events");
+		Log.debug(LOG_TAG, LOG_SOURCE, "Resetting functional test expectations for events");
 		MonitorExtension.reset();
 	}
 
@@ -451,13 +420,13 @@ public class TestHelper {
 		throws InterruptedException {
 		Event event = new Event.Builder(
 			"Get Shared State Request",
-			TestConstants.EventType.MONITOR,
-			TestConstants.EventSource.SHARED_STATE_REQUEST
+			ConsentTestConstants.EventType.MONITOR,
+			ConsentTestConstants.EventSource.SHARED_STATE_REQUEST
 		)
 			.setEventData(
 				new HashMap<String, Object>() {
 					{
-						put(TestConstants.EventDataKey.STATE_OWNER, stateOwner);
+						put(ConsentTestConstants.EventDataKey.STATE_OWNER, stateOwner);
 					}
 				}
 			)
@@ -467,7 +436,13 @@ public class TestHelper {
 		final Map<String, Object> sharedState = new HashMap<>();
 		MobileCore.dispatchEventWithResponseCallback(
 			event,
-			new AdobeCallback<Event>() {
+			WAIT_SHARED_STATE_MS,
+			new AdobeCallbackWithError<Event>() {
+				@Override
+				public void fail(AdobeError adobeError) {
+					Log.error(LOG_TAG, LOG_SOURCE, "Failed to get shared state for " + stateOwner + ": " + adobeError);
+				}
+
 				@Override
 				public void call(Event event) {
 					if (event.getEventData() != null) {
@@ -475,16 +450,6 @@ public class TestHelper {
 					}
 
 					latch.countDown();
-				}
-			},
-			new ExtensionErrorCallback<ExtensionError>() {
-				@Override
-				public void error(ExtensionError extensionError) {
-					MobileCore.log(
-						LoggingMode.ERROR,
-						TAG,
-						"Failed to get shared state for " + stateOwner + ": " + extensionError
-					);
 				}
 			}
 		);
@@ -505,13 +470,13 @@ public class TestHelper {
 		throws InterruptedException {
 		Event event = new Event.Builder(
 			"Get Shared State Request",
-			TestConstants.EventType.MONITOR,
-			TestConstants.EventSource.XDM_SHARED_STATE_REQUEST
+			ConsentTestConstants.EventType.MONITOR,
+			ConsentTestConstants.EventSource.XDM_SHARED_STATE_REQUEST
 		)
 			.setEventData(
 				new HashMap<String, Object>() {
 					{
-						put(TestConstants.EventDataKey.STATE_OWNER, stateOwner);
+						put(ConsentTestConstants.EventDataKey.STATE_OWNER, stateOwner);
 					}
 				}
 			)
@@ -521,7 +486,12 @@ public class TestHelper {
 		final Map<String, Object> sharedState = new HashMap<>();
 		MobileCore.dispatchEventWithResponseCallback(
 			event,
-			new AdobeCallback<Event>() {
+			new AdobeCallbackWithError<Event>() {
+				@Override
+				public void fail(AdobeError adobeError) {
+					Log.debug(LOG_TAG, LOG_SOURCE, "Failed to get shared state for " + stateOwner + ": " + adobeError);
+				}
+
 				@Override
 				public void call(Event event) {
 					if (event.getEventData() != null) {
@@ -529,16 +499,6 @@ public class TestHelper {
 					}
 
 					latch.countDown();
-				}
-			},
-			new ExtensionErrorCallback<ExtensionError>() {
-				@Override
-				public void error(ExtensionError extensionError) {
-					MobileCore.log(
-						LoggingMode.ERROR,
-						TAG,
-						"Failed to get shared state for " + stateOwner + ": " + extensionError
-					);
 				}
 			}
 		);

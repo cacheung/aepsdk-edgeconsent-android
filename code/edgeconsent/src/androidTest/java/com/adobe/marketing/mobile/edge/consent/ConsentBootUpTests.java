@@ -11,38 +11,33 @@
 
 package com.adobe.marketing.mobile.edge.consent;
 
-import static com.adobe.marketing.mobile.TestHelper.getDispatchedEventsWith;
-import static com.adobe.marketing.mobile.TestHelper.getXDMSharedStateFor;
-import static com.adobe.marketing.mobile.TestHelper.resetTestExpectations;
-import static com.adobe.marketing.mobile.TestHelper.waitForThreads;
-import static com.adobe.marketing.mobile.edge.consent.ConsentAndroidTestUtil.*;
+import static com.adobe.marketing.mobile.edge.consent.util.ConsentFunctionalTestUtil.*;
+import static com.adobe.marketing.mobile.edge.consent.util.TestHelper.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import com.adobe.marketing.mobile.AdobeCallback;
 import com.adobe.marketing.mobile.Event;
 import com.adobe.marketing.mobile.EventSource;
 import com.adobe.marketing.mobile.EventType;
-import com.adobe.marketing.mobile.Extension;
 import com.adobe.marketing.mobile.MobileCore;
-import com.adobe.marketing.mobile.TestHelper;
-import com.adobe.marketing.mobile.TestPersistenceHelper;
-import java.util.ArrayList;
+import com.adobe.marketing.mobile.edge.consent.util.ConsentFunctionalTestUtil;
+import com.adobe.marketing.mobile.edge.consent.util.ConsentTestConstants;
+import com.adobe.marketing.mobile.edge.consent.util.MonitorExtension;
+import com.adobe.marketing.mobile.edge.consent.util.TestHelper;
+import com.adobe.marketing.mobile.edge.consent.util.TestPersistenceHelper;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CountDownLatch;
 import org.json.JSONObject;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.RuleChain;
+import org.junit.rules.TestRule;
 
 public class ConsentBootUpTests {
 
 	@Rule
-	public RuleChain rule = RuleChain
-		.outerRule(new TestHelper.SetupCoreRule())
-		.around(new TestHelper.RegisterMonitorExtensionRule());
+	public TestRule rule = new TestHelper.SetupCoreRule();
 
 	@Test
 	public void test_BootUp_loadsFromPersistence() throws Exception {
@@ -188,11 +183,11 @@ public class ConsentBootUpTests {
 		);
 		HashMap<String, Object> config = new HashMap<String, Object>() {
 			{
-				put(ConsentConstants.ConfigurationKey.DEFAULT_CONSENT, CreateConsentXDMMap("y", "n"));
+				put(ConsentTestConstants.ConfigurationKey.DEFAULT_CONSENT, CreateConsentXDMMap("y", "n"));
 			}
 		};
 		waitForThreads(2000);
-		resetTestExpectations(); // reset here so we only assert on the last set of events
+		TestHelper.resetTestExpectations(); // reset here so we only assert on the last set of events
 		MobileCore.updateConfiguration(config);
 		waitForThreads(2000);
 
@@ -245,27 +240,12 @@ public class ConsentBootUpTests {
 		if (defaultConsentMap != null) {
 			HashMap<String, Object> config = new HashMap<String, Object>() {
 				{
-					put(ConsentConstants.ConfigurationKey.DEFAULT_CONSENT, defaultConsentMap);
+					put(ConsentTestConstants.ConfigurationKey.DEFAULT_CONSENT, defaultConsentMap);
 				}
 			};
-			MobileCore.updateConfiguration(config);
+			ConsentFunctionalTestUtil.registerExtensions(
+				Arrays.asList(MonitorExtension.EXTENSION, Consent.EXTENSION), config
+			);
 		}
-
-		List<Class<? extends Extension>> extensions = new ArrayList<>();
-		//extensions.add(Consent.);
-		//extensions.add(MonitorExtension.class);
-		//MobileCore.registerExtensions(extensions, o -> latch.countDown());
-		Consent.registerExtension();
-		final CountDownLatch latch = new CountDownLatch(1);
-		MobileCore.start(
-			new AdobeCallback() {
-				@Override
-				public void call(Object o) {
-					latch.countDown();
-				}
-			}
-		);
-
-		latch.await();
 	}
 }
