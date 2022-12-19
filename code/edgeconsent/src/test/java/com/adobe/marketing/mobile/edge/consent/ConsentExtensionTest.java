@@ -41,7 +41,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.powermock.reflect.Whitebox;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ConsentExtensionTest {
@@ -712,7 +711,7 @@ public class ConsentExtensionTest {
 			.when(mockNamedCollection.getString(ConsentConstants.DataStoreKey.CONSENT_PREFERENCES, null))
 			.thenReturn(jsonString);
 		ConsentManager consentManager = new ConsentManager(mockNamedCollection); // loads the data from persistence
-		Whitebox.setInternalState(extension, "consentManager", consentManager);
+		extension.consentManager = consentManager;
 	}
 
 	private Event buildConsentUpdateEvent(final String collectConsentString, final String adIdConsentString) {

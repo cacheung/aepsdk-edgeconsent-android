@@ -26,7 +26,9 @@ final class ConsentManager {
 	private static final String LOG_SOURCE = "ConsentManager";
 	private final NamedCollection namedCollection;
 	private Consents userOptedConsents; // holds on to consents that are updated using PublicAPI or from Edge Consent Response
-	private Consents defaultConsents; // holds on to default consents obtained from configuration response
+
+	// package private vars
+	Consents defaultConsents; // holds on to default consents obtained from configuration response
 
 	/**
 	 * Constructor - initializes the {@link #userOptedConsents} from data in persistence.
