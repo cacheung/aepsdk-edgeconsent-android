@@ -30,8 +30,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -98,14 +96,12 @@ public class ConsentTest {
 	// publicExtensionConstants
 	// ========================================================================================
 	@Test
-	public void test_publicExtensionConstants() throws InterruptedException {
-		MobileCore.setApplication(mockApplication);
-
-		final CountDownLatch latch = new CountDownLatch(1);
+	public void test_publicExtensionConstants() {
+		assertEquals(ConsentExtension.class, Consent.EXTENSION);
 		List<Class<? extends Extension>> extensions = new ArrayList<>();
 		extensions.add(Consent.EXTENSION);
-		MobileCore.registerExtensions(extensions, o -> latch.countDown());
-		assertTrue(latch.await(1000, TimeUnit.MILLISECONDS));
+		// should not throw exceptions
+		MobileCore.registerExtensions(extensions, null);
 	}
 
 	// ========================================================================================

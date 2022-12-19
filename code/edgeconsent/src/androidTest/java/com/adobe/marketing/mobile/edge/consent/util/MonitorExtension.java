@@ -217,7 +217,7 @@ public class MonitorExtension extends Extension {
 			if (type == null || type.isEmpty()) {
 				throw new IllegalArgumentException("Event Type cannot be null or empty.");
 			}
-			// Normalize strings TODO
+			// Normalize strings
 			this.source = source.toLowerCase();
 			this.type = type.toLowerCase();
 		}
