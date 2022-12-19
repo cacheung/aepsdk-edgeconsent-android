@@ -91,7 +91,6 @@ public class TestHelper {
 						// After test execution
 						Log.debug(LOG_TAG, "SetupCoreRule", "Finished '" + description.getMethodName() + "'");
 						waitForThreads(5000); // wait to allow thread to run after test execution
-
 						MobileCoreHelper.resetSDK();
 						TestPersistenceHelper.resetKnownPersistence();
 						resetTestExpectations();
@@ -248,7 +247,6 @@ public class TestHelper {
 	public static List<Event> getDispatchedEventsWith(final String type, final String source, int timeout)
 		throws InterruptedException {
 		EventSpec eventSpec = new EventSpec(source, type);
-
 		Map<EventSpec, List<Event>> receivedEvents = MonitorExtension.getReceivedEvents();
 		Map<EventSpec, ADBCountDownLatch> expectedEvents = MonitorExtension.getExpectedEvents();
 
@@ -263,7 +261,6 @@ public class TestHelper {
 		} else {
 			sleep(WAIT_TIMEOUT_MS);
 		}
-
 		return receivedEvents.containsKey(eventSpec) ? receivedEvents.get(eventSpec) : Collections.emptyList();
 	}
 
@@ -371,6 +368,7 @@ public class TestHelper {
 		);
 
 		assertTrue("Timeout waiting for shared state " + stateOwner, latch.await(timeout, TimeUnit.MILLISECONDS));
+
 		return sharedState.isEmpty() ? null : sharedState;
 	}
 

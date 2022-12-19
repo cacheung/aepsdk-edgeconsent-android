@@ -69,10 +69,7 @@ public class ConsentFunctionalTestUtil {
 
 		final ADBCountDownLatch latch = new ADBCountDownLatch(1);
 		MobileCore.registerExtensions(extensions, o -> latch.countDown());
-
 		latch.await(REGISTRATION_TIMEOUT_MS, TimeUnit.MILLISECONDS);
-		TestHelper.waitForThreads(12000);
-		resetTestExpectations();
 	}
 
 	/**

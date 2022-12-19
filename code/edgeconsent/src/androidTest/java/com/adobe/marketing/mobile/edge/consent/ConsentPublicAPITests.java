@@ -259,6 +259,9 @@ public class ConsentPublicAPITests {
 		// test
 		Consent.getConsents(null);
 
+		//add a wait time for mobile core to return the shared state before verifying the test
+		Thread.sleep(2000);
+
 		// verify shared state set
 		Map<String, Object> sharedState = getXDMSharedStateFor(ConsentConstants.EXTENSION_NAME, 2000);
 		assertNotNull(sharedState);
