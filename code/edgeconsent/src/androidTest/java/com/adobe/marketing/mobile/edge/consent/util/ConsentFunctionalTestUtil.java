@@ -11,7 +11,7 @@
 
 package com.adobe.marketing.mobile.edge.consent.util;
 
-import static com.adobe.marketing.mobile.edge.consent.util.ConsentTestConstants.LOG_TAG;
+import static com.adobe.marketing.mobile.edge.consent.util.TestHelper.*;
 
 import androidx.annotation.Nullable;
 import com.adobe.marketing.mobile.AdobeCallbackWithError;
@@ -311,13 +311,5 @@ public class ConsentFunctionalTestUtil {
 			ValueNode valueNode = (ValueNode) jsonNode;
 			map.put(currentPath, valueNode.asText());
 		}
-	}
-
-	/**
-	 * Resets the network and event test expectations.
-	 */
-	public static void resetTestExpectations() {
-		Log.debug(LOG_TAG, LOG_SOURCE, "Resetting functional test expectations for events");
-		MonitorExtension.reset();
 	}
 }

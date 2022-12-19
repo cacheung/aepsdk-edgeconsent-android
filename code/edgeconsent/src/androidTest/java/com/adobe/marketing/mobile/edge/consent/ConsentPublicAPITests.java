@@ -195,7 +195,7 @@ public class ConsentPublicAPITests {
 		// test
 		Consent.update(ConsentFunctionalTestUtil.CreateConsentXDMMap("y"));
 		waitForThreads(2000);
-		TestHelper.resetTestExpectations();
+		resetTestExpectations();
 		Consent.update(ConsentFunctionalTestUtil.CreateConsentXDMMap("n", "y"));
 
 		// verify edge event dispatched

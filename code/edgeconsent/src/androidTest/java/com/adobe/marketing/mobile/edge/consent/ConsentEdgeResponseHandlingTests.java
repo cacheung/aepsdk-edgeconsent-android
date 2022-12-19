@@ -71,7 +71,7 @@ public class ConsentEdgeResponseHandlingTests {
 		applyDefaultConsent(CreateConsentXDMMap("p", "n"));
 		Consent.update(CreateConsentXDMMap("y"));
 		waitForThreads(1000);
-		TestHelper.resetTestExpectations();
+		resetTestExpectations();
 
 		MobileCore.dispatchEvent(buildEdgeConsentPreferenceEventWithConsents(CreateConsentXDMMap("n"))); // edge response sets the collect consent to no
 		waitForThreads(1000);
@@ -121,7 +121,7 @@ public class ConsentEdgeResponseHandlingTests {
 		applyDefaultConsent(CreateConsentXDMMap("p"));
 		Consent.update(CreateConsentXDMMap("y"));
 		waitForThreads(1000);
-		TestHelper.resetTestExpectations();
+		resetTestExpectations();
 
 		// test
 		MobileCore.dispatchEvent(
@@ -162,7 +162,7 @@ public class ConsentEdgeResponseHandlingTests {
 		// setup
 		Consent.update(CreateConsentXDMMap("y"));
 		waitForThreads(1000);
-		TestHelper.resetTestExpectations();
+		resetTestExpectations();
 
 		// read timestamp from XDM shared state
 		Map<String, String> xdmSharedState = flattenMap(getXDMSharedStateFor(ConsentConstants.EXTENSION_NAME, 1000));
@@ -198,7 +198,7 @@ public class ConsentEdgeResponseHandlingTests {
 		// setup
 		Consent.update(CreateConsentXDMMap("y", "n"));
 		waitForThreads(1000);
-		TestHelper.resetTestExpectations();
+		resetTestExpectations();
 
 		// read timestamp from XDM shared state
 		Map<String, String> xdmSharedState = flattenMap(getXDMSharedStateFor(ConsentConstants.EXTENSION_NAME, 1000));

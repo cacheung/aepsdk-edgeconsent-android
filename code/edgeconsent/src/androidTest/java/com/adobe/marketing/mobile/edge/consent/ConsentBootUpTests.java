@@ -20,7 +20,6 @@ import com.adobe.marketing.mobile.Event;
 import com.adobe.marketing.mobile.EventSource;
 import com.adobe.marketing.mobile.EventType;
 import com.adobe.marketing.mobile.MobileCore;
-import com.adobe.marketing.mobile.edge.consent.util.ConsentFunctionalTestUtil;
 import com.adobe.marketing.mobile.edge.consent.util.ConsentTestConstants;
 import com.adobe.marketing.mobile.edge.consent.util.MonitorExtension;
 import com.adobe.marketing.mobile.edge.consent.util.TestHelper;
@@ -187,7 +186,7 @@ public class ConsentBootUpTests {
 			}
 		};
 		waitForThreads(2000);
-		TestHelper.resetTestExpectations(); // reset here so we only assert on the last set of events
+		resetTestExpectations(); // reset here so we only assert on the last set of events
 		MobileCore.updateConfiguration(config);
 		waitForThreads(2000);
 
@@ -243,10 +242,9 @@ public class ConsentBootUpTests {
 					put(ConsentTestConstants.ConfigurationKey.DEFAULT_CONSENT, defaultConsentMap);
 				}
 			};
-			ConsentFunctionalTestUtil.registerExtensions(
-				Arrays.asList(MonitorExtension.EXTENSION, Consent.EXTENSION),
-				config
-			);
+			MobileCore.updateConfiguration(config);
 		}
+
+		registerExtensions(Arrays.asList(MonitorExtension.EXTENSION, Consent.EXTENSION), null);
 	}
 }
