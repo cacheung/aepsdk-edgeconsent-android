@@ -273,7 +273,6 @@ public class ConsentManagerTest {
 		assertNull(readAdIdConsent(currentConsent)); // assert adID consent is null
 
 		// verify defaultConsent
-		//Consents defaultConsents = Whitebox.getInternalState(consentManager, "defaultConsents");
 		Consents defaultConsents = consentManager.defaultConsents;
 		assertEquals("n", readCollectConsent(defaultConsents));
 		assertNull(readAdIdConsent(defaultConsents)); // assert adID consent is null
