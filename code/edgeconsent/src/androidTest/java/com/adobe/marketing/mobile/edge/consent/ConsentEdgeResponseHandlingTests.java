@@ -73,7 +73,7 @@ public class ConsentEdgeResponseHandlingTests {
 		waitForThreads(1000);
 		TestHelper.resetTestExpectations();
 
-		MobileCore.dispatchEvent(buildEdgeConsentPreferenceEventWithConsents(CreateConsentXDMMap("n")), null); // edge response sets the collect consent to no
+		MobileCore.dispatchEvent(buildEdgeConsentPreferenceEventWithConsents(CreateConsentXDMMap("n"))); // edge response sets the collect consent to no
 		waitForThreads(1000);
 
 		// verify consent response event dispatched
@@ -125,8 +125,7 @@ public class ConsentEdgeResponseHandlingTests {
 
 		// test
 		MobileCore.dispatchEvent(
-			buildEdgeConsentPreferenceEvent("{\n" + "  \"payload\" : \"not what I expect\"\n" + "}"),
-			null
+			buildEdgeConsentPreferenceEvent("{\n" + "  \"payload\" : \"not what I expect\"\n" + "}")
 		);
 		waitForThreads(1000);
 
@@ -170,7 +169,7 @@ public class ConsentEdgeResponseHandlingTests {
 		String timestamp = xdmSharedState.get("consents.metadata.time");
 
 		// test
-		MobileCore.dispatchEvent(buildEdgeConsentPreferenceEventWithConsents(CreateConsentXDMMap("y")), null);
+		MobileCore.dispatchEvent(buildEdgeConsentPreferenceEventWithConsents(CreateConsentXDMMap("y")));
 		waitForThreads(1000);
 
 		// verify that shared state and consent response events are not dispatched
@@ -206,10 +205,7 @@ public class ConsentEdgeResponseHandlingTests {
 		String timestamp = xdmSharedState.get("consents.metadata.time");
 
 		// test
-		MobileCore.dispatchEvent(
-			buildEdgeConsentPreferenceEventWithConsents(CreateConsentXDMMap("y", "n", timestamp)),
-			null
-		);
+		MobileCore.dispatchEvent(buildEdgeConsentPreferenceEventWithConsents(CreateConsentXDMMap("y", "n", timestamp)));
 		waitForThreads(1000);
 
 		// verify that shared state and consent response events are not dispatched

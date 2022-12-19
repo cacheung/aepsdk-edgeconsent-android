@@ -244,7 +244,8 @@ public class ConsentBootUpTests {
 				}
 			};
 			ConsentFunctionalTestUtil.registerExtensions(
-				Arrays.asList(MonitorExtension.EXTENSION, Consent.EXTENSION), config
+				Arrays.asList(MonitorExtension.EXTENSION, Consent.EXTENSION),
+				config
 			);
 		}
 	}

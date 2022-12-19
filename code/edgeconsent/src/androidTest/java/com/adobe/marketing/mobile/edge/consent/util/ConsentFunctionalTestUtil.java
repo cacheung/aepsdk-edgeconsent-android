@@ -71,7 +71,7 @@ public class ConsentFunctionalTestUtil {
 		MobileCore.registerExtensions(extensions, o -> latch.countDown());
 
 		latch.await(REGISTRATION_TIMEOUT_MS, TimeUnit.MILLISECONDS);
-		TestHelper.waitForThreads(2000);
+		TestHelper.waitForThreads(12000);
 		resetTestExpectations();
 	}
 
@@ -262,7 +262,7 @@ public class ConsentFunctionalTestUtil {
 	 */
 	public static Map<String, String> flattenMap(final Map<String, Object> map) {
 		if (map == null || map.isEmpty()) {
-			return Collections.<String, String>emptyMap();
+			return Collections.emptyMap();
 		}
 
 		try {
@@ -274,7 +274,7 @@ public class ConsentFunctionalTestUtil {
 			Log.error(ConsentTestConstants.LOG_TAG, LOG_SOURCE, "Failed to parse JSON object to tree structure.");
 		}
 
-		return Collections.<String, String>emptyMap();
+		return Collections.emptyMap();
 	}
 
 	/**

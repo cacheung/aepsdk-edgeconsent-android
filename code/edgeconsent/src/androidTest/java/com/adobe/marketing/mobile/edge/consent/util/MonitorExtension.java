@@ -13,6 +13,7 @@ package com.adobe.marketing.mobile.edge.consent.util;
 
 import static com.adobe.marketing.mobile.edge.consent.util.ConsentTestConstants.LOG_TAG;
 
+import androidx.annotation.NonNull;
 import com.adobe.marketing.mobile.Event;
 import com.adobe.marketing.mobile.EventSource;
 import com.adobe.marketing.mobile.EventType;
@@ -46,6 +47,7 @@ public class MonitorExtension extends Extension {
 		super(extensionApi);
 	}
 
+	@NonNull
 	@Override
 	protected String getName() {
 		return "MonitorExtension";
@@ -68,17 +70,6 @@ public class MonitorExtension extends Extension {
 		)
 			.build();
 		MobileCore.dispatchEvent(event);
-	}
-
-	/**
-	 * Add an event to the list of expected events.
-	 * @param type the type of the event.
-	 * @param source the source of the event.
-	 * @param count the number of events expected to be received.
-	 */
-	public static void setExpectedEvent(final String type, final String source, final int count) {
-		EventSpec eventSpec = new EventSpec(source, type);
-		expectedEvents.put(eventSpec, new ADBCountDownLatch(count));
 	}
 
 	public static Map<EventSpec, ADBCountDownLatch> getExpectedEvents() {
@@ -125,7 +116,7 @@ public class MonitorExtension extends Extension {
 		Log.debug(LOG_TAG, LOG_SOURCE, "Received and processing event" + eventSpec);
 
 		if (!receivedEvents.containsKey(eventSpec)) {
-			receivedEvents.put(eventSpec, new ArrayList<Event>());
+			receivedEvents.put(eventSpec, new ArrayList<>());
 		}
 
 		receivedEvents.get(eventSpec).add(event);
@@ -226,8 +217,7 @@ public class MonitorExtension extends Extension {
 			if (type == null || type.isEmpty()) {
 				throw new IllegalArgumentException("Event Type cannot be null or empty.");
 			}
-
-			// Normalize strings
+			// Normalize strings TODO
 			this.source = source.toLowerCase();
 			this.type = type.toLowerCase();
 		}
