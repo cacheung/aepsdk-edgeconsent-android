@@ -45,7 +45,7 @@ dependencies {
     implementation('com.adobe.marketing.mobile:edge:1+'){
         exclude group: 'com.adobe.marketing.mobile', module: 'core'
     }
-    implementation('com.adobe.marketing.mobile:assurance:1+'){
-        exclude group: 'com.adobe.marketing.mobile', module: 'core'
+    implementation ('com.github.adobe:aepsdk-assurance-android:v2.0.0-alpha.1') {
+        transitive = false
     }
 }
