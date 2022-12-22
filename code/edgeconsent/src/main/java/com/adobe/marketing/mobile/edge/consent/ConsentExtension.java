@@ -30,7 +30,7 @@ import java.util.Map;
 class ConsentExtension extends Extension {
 
 	private static final String LOG_SOURCE = "ConsentExtension";
-	
+
 	private final ConsentManager consentManager;
 
 	/**
