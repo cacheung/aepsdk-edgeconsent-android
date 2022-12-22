@@ -51,7 +51,7 @@ class ConsentExtension extends Extension {
 
 	/**
 	 * Convenience constructor that instantiates a new {@link ConsentManager} using the passed {@link NamedCollection}.
-	 * <br><br>
+	 * <p>
 	 * Can be used for testing using mocked {@link ExtensionApi} and/or {@link NamedCollection} instances.
 	 *
 	 * @param extensionApi {@link ExtensionApi} instance
