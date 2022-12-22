@@ -41,7 +41,6 @@ public class MonitorExtension extends Extension {
 	private static final String LOG_SOURCE = "MonitorExtension";
 
 	private static final Map<EventSpec, List<Event>> receivedEvents = new HashMap<>();
-	private static final Map<EventSpec, ADBCountDownLatch> expectedEvents = new HashMap<>();
 
 	protected MonitorExtension(ExtensionApi extensionApi) {
 		super(extensionApi);
@@ -72,10 +71,6 @@ public class MonitorExtension extends Extension {
 		MobileCore.dispatchEvent(event);
 	}
 
-	public static Map<EventSpec, ADBCountDownLatch> getExpectedEvents() {
-		return expectedEvents;
-	}
-
 	public static Map<EventSpec, List<Event>> getReceivedEvents() {
 		return receivedEvents;
 	}
@@ -86,7 +81,6 @@ public class MonitorExtension extends Extension {
 	public static void reset() {
 		Log.trace(LOG_TAG, LOG_SOURCE, "Reset expected and received events.");
 		receivedEvents.clear();
-		expectedEvents.clear();
 	}
 
 	/**
@@ -120,10 +114,6 @@ public class MonitorExtension extends Extension {
 		}
 
 		receivedEvents.get(eventSpec).add(event);
-
-		if (expectedEvents.containsKey(eventSpec)) {
-			expectedEvents.get(eventSpec).countDown();
-		}
 	}
 
 	/**

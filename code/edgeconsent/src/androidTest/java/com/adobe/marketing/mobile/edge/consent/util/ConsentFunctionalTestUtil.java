@@ -13,13 +13,11 @@ package com.adobe.marketing.mobile.edge.consent.util;
 
 import static com.adobe.marketing.mobile.edge.consent.util.TestHelper.*;
 
-import androidx.annotation.Nullable;
 import com.adobe.marketing.mobile.AdobeCallbackWithError;
 import com.adobe.marketing.mobile.AdobeError;
 import com.adobe.marketing.mobile.Event;
 import com.adobe.marketing.mobile.EventSource;
 import com.adobe.marketing.mobile.EventType;
-import com.adobe.marketing.mobile.Extension;
 import com.adobe.marketing.mobile.MobileCore;
 import com.adobe.marketing.mobile.edge.consent.Consent;
 import com.adobe.marketing.mobile.services.Log;
@@ -37,7 +35,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -50,27 +47,6 @@ public class ConsentFunctionalTestUtil {
 	private static final String PERSONALIZE = "personalize";
 	private static final String CONTENT = "content";
 	private static final String VALUE = "val";
-	private static final long REGISTRATION_TIMEOUT_MS = TimeUnit.SECONDS.toMillis(2);
-
-	/**
-	 * Applies the configuration provided, registers the extensions and then starts
-	 * core.
-	 * @param extensions the extensions that need to be registered
-	 * @param configuration the initial configuration update that needs to be applied
-	 * @throws InterruptedException if the wait time for extension registration has elapsed
-	 */
-	public static void registerExtensions(
-		final List<Class<? extends Extension>> extensions,
-		@Nullable final Map<String, Object> configuration
-	) throws InterruptedException {
-		if (configuration != null) {
-			MobileCore.updateConfiguration(configuration);
-		}
-
-		final ADBCountDownLatch latch = new ADBCountDownLatch(1);
-		MobileCore.registerExtensions(extensions, o -> latch.countDown());
-		latch.await(REGISTRATION_TIMEOUT_MS, TimeUnit.MILLISECONDS);
-	}
 
 	/**
 	 * A fully prepared valid consent JSON looks like :
