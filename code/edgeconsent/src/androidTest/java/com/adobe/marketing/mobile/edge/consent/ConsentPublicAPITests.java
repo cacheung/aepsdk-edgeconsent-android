@@ -57,10 +57,7 @@ public class ConsentPublicAPITests {
 			}
 		};
 
-		ConsentFunctionalTestUtil.registerExtensions(
-			Arrays.asList(MonitorExtension.EXTENSION, Consent.EXTENSION),
-			config
-		);
+		TestHelper.registerExtensions(Arrays.asList(MonitorExtension.EXTENSION, Consent.EXTENSION), config);
 	}
 
 	// --------------------------------------------------------------------------------------------

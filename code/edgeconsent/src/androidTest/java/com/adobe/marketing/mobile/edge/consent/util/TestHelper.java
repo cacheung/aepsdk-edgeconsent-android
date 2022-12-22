@@ -17,10 +17,12 @@ import static org.junit.Assert.assertTrue;
 import android.app.Application;
 import android.app.Instrumentation;
 import android.content.Context;
+import androidx.annotation.Nullable;
 import androidx.test.platform.app.InstrumentationRegistry;
 import com.adobe.marketing.mobile.AdobeCallbackWithError;
 import com.adobe.marketing.mobile.AdobeError;
 import com.adobe.marketing.mobile.Event;
+import com.adobe.marketing.mobile.Extension;
 import com.adobe.marketing.mobile.LoggingMode;
 import com.adobe.marketing.mobile.MobileCore;
 import com.adobe.marketing.mobile.MobileCoreHelper;
@@ -47,6 +49,7 @@ public class TestHelper {
 	static final int WAIT_TIMEOUT_MS = 1000;
 	static final int WAIT_EVENT_TIMEOUT_MS = 2000;
 	static final long WAIT_SHARED_STATE_MS = 5000;
+	private static final long REGISTRATION_TIMEOUT_MS = TimeUnit.SECONDS.toMillis(2);
 	static Application defaultApplication;
 
 	// List of threads to wait for after test execution
@@ -98,6 +101,26 @@ public class TestHelper {
 				}
 			};
 		}
+	}
+
+	/**
+	 * Applies the configuration provided, registers the extensions and then starts
+	 * core.
+	 * @param extensions the extensions that need to be registered
+	 * @param configuration the initial configuration update that needs to be applied
+	 * @throws InterruptedException if the wait time for extension registration has elapsed
+	 */
+	public static void registerExtensions(
+		final List<Class<? extends Extension>> extensions,
+		@Nullable final Map<String, Object> configuration
+	) throws InterruptedException {
+		if (configuration != null) {
+			MobileCore.updateConfiguration(configuration);
+		}
+
+		final ADBCountDownLatch latch = new ADBCountDownLatch(1);
+		MobileCore.registerExtensions(extensions, o -> latch.countDown());
+		latch.await(REGISTRATION_TIMEOUT_MS, TimeUnit.MILLISECONDS);
 	}
 
 	/**
@@ -248,19 +271,9 @@ public class TestHelper {
 		throws InterruptedException {
 		EventSpec eventSpec = new EventSpec(source, type);
 		Map<EventSpec, List<Event>> receivedEvents = MonitorExtension.getReceivedEvents();
-		Map<EventSpec, ADBCountDownLatch> expectedEvents = MonitorExtension.getExpectedEvents();
 
-		ADBCountDownLatch expectedEventLatch = expectedEvents.get(eventSpec);
+		sleep(timeout);
 
-		if (expectedEventLatch != null) {
-			boolean awaitResult = expectedEventLatch.await(timeout, TimeUnit.MILLISECONDS);
-			assertTrue(
-				"Timed out waiting for event type " + eventSpec.type + " and source " + eventSpec.source,
-				awaitResult
-			);
-		} else {
-			sleep(WAIT_TIMEOUT_MS);
-		}
 		return receivedEvents.containsKey(eventSpec) ? receivedEvents.get(eventSpec) : Collections.emptyList();
 	}
 

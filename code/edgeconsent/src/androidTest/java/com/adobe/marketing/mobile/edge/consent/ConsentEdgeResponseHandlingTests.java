@@ -20,7 +20,6 @@ import com.adobe.marketing.mobile.Event;
 import com.adobe.marketing.mobile.EventSource;
 import com.adobe.marketing.mobile.EventType;
 import com.adobe.marketing.mobile.MobileCore;
-import com.adobe.marketing.mobile.edge.consent.util.ConsentFunctionalTestUtil;
 import com.adobe.marketing.mobile.edge.consent.util.MonitorExtension;
 import com.adobe.marketing.mobile.edge.consent.util.TestHelper;
 import com.adobe.marketing.mobile.edge.consent.util.TestPersistenceHelper;
@@ -47,10 +46,7 @@ public class ConsentEdgeResponseHandlingTests {
 
 	@Before
 	public void setup() throws Exception {
-		ConsentFunctionalTestUtil.registerExtensions(
-			Arrays.asList(MonitorExtension.EXTENSION, Consent.EXTENSION),
-			null
-		);
+		TestHelper.registerExtensions(Arrays.asList(MonitorExtension.EXTENSION, Consent.EXTENSION), null);
 	}
 
 	@Test
