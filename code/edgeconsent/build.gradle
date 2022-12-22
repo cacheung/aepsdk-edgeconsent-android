@@ -221,10 +221,8 @@ configurations.all {
 }
 
 dependencies {
-    // TODO: Uncomment next line when Core 2.0 is published to Maven; remove snapshot dependency
-    // implementation "com.adobe.marketing.mobile:core:${rootProject.mavenCoreVersion}"
-    // Maven snapshot
-    implementation 'com.adobe.marketing.mobile:core:2.0.0-SNAPSHOT'
+    // TODO: Update the value of mavenCoreVersion in gradle.properties to 2.0.0 when Core 2.0 is published to Maven
+    implementation "com.adobe.marketing.mobile:core:${rootProject.mavenCoreVersion}"
     implementation 'androidx.annotation:annotation:1.5.0'
 
     testImplementation "androidx.test.ext:junit:${rootProject.ext.junitVersion}"
