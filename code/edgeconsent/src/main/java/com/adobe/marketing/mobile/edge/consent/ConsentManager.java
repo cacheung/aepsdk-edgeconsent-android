@@ -14,7 +14,6 @@ package com.adobe.marketing.mobile.edge.consent;
 import static com.adobe.marketing.mobile.edge.consent.ConsentConstants.LOG_TAG;
 
 import androidx.annotation.VisibleForTesting;
-
 import com.adobe.marketing.mobile.services.Log;
 import com.adobe.marketing.mobile.services.NamedCollection;
 import com.adobe.marketing.mobile.util.JSONUtils;
