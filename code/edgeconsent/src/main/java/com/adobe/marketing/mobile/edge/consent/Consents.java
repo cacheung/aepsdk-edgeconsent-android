@@ -11,6 +11,8 @@
 
 package com.adobe.marketing.mobile.edge.consent;
 
+import com.adobe.marketing.mobile.util.DataReader;
+import com.adobe.marketing.mobile.util.TimeUtils;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +34,7 @@ final class Consents {
 			return;
 		}
 
-		this.consentsMap = Utility.deepCopy(newConsents.consentsMap);
+		this.consentsMap = Utils.optDeepCopy(newConsents.consentsMap, new HashMap<>());
 	}
 
 	/**
@@ -45,16 +47,14 @@ final class Consents {
 			return;
 		}
 
-		Object allConsents = xdmMap.get(ConsentConstants.EventDataKey.CONSENTS);
+		Map<String, Object> allConsents = DataReader.optTypedMap(
+			Object.class,
+			xdmMap,
+			ConsentConstants.EventDataKey.CONSENTS,
+			new HashMap<>()
+		);
 
-		try {
-			consentsMap =
-				(allConsents instanceof HashMap)
-					? Utility.deepCopy((Map<String, Object>) allConsents)
-					: new HashMap<String, Object>();
-		} catch (final ClassCastException exp) {
-			consentsMap = new HashMap<>();
-		}
+		consentsMap = Utils.optDeepCopy(allConsents, new HashMap<>());
 	}
 
 	/**
@@ -103,8 +103,10 @@ final class Consents {
 		} catch (final ClassCastException exception) {
 			return;
 		}
-
-		metaDataContents.put(ConsentConstants.EventDataKey.TIME, DateUtility.dateToISO8601String(new Date(timeStamp)));
+		metaDataContents.put(
+			ConsentConstants.EventDataKey.TIME,
+			TimeUtils.getISO8601UTCDateWithMilliseconds(new Date(timeStamp))
+		);
 		consentsMap.put(ConsentConstants.EventDataKey.METADATA, metaDataContents);
 	}
 
@@ -146,11 +148,9 @@ final class Consents {
 	 * @return {@link Map} representing the Consents in XDM format
 	 */
 	Map<String, Object> asXDMMap() {
-		final Map<String, Object> internalConsentMap = consentsMap != null
-			? Utility.deepCopy(consentsMap)
-			: new HashMap<String, Object>();
-
+		Map<String, Object> internalConsentMap = Utils.optDeepCopy(consentsMap, new HashMap<String, Object>());
 		final Map<String, Object> xdmFormattedMap = new HashMap<>();
+
 		xdmFormattedMap.put(ConsentConstants.EventDataKey.CONSENTS, internalConsentMap);
 		return xdmFormattedMap;
 	}
@@ -185,7 +185,7 @@ final class Consents {
 
 	/**
 	 * Compares the current consent instance the with the passed object ignoring the timestamp field in metadata
-	 *
+	 * @param comparingConsent the new consent object to be compared against current consent settings
 	 * @return true, if both the consents are equal ignoring timestamp
 	 */
 	boolean equalsIgnoreTimestamp(final Consents comparingConsent) {
