@@ -11,10 +11,11 @@ The AEP Consent Collection mobile extension enables consent preferences collecti
 Integrate the Consent extension into your app by including the following in your gradle file's `dependencies`:
 
 ```
-implementation 'com.adobe.marketing.mobile:edgeconsent:1.+'
-implementation 'com.adobe.marketing.mobile:edge:1.+'
-implementation 'com.adobe.marketing.mobile:core:1.+'
+implementation 'com.adobe.marketing.mobile:edgeconsent:2.0.0'
+implementation 'com.adobe.marketing.mobile:edge:2.0.0'
+implementation 'com.adobe.marketing.mobile:core:2.0.0'
 ```
+See the [current version list](https://developer.adobe.com/client-sdks/documentation/current-sdk-versions) for the latest extension versions to use.
 
 ### Development
 
@@ -48,12 +49,6 @@ To enable the Git pre-commit hook to apply code formatting on each commit, run t
 ```
 make init
 ```
-
-## Related Projects
-
-| Project                                                      | Description                                                  |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
-| [AEP SDK Sample App for Android](https://github.com/adobe/aepsdk-sample-app-android) | Contains Android sample app for the AEP SDK.                 |
 
 ## Contributing
 

@@ -63,7 +63,7 @@ public class MobileApp extends Application {
 
 		// register Adobe extensions
 		MobileCore.registerExtensions(
-			Arrays.asList(Consent.EXTENSION, Edge.EXTENSION, Assurance.EXTENSION),
+			Arrays.asList(Consent.EXTENSION, Edge.EXTENSION, Identity.EXTENSION, Assurance.EXTENSION),
 			o -> Log.d("MobileApp", "Mobile SDK was initialized")
 		);
 	}
