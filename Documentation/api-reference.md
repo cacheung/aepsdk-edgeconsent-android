@@ -59,7 +59,7 @@ Consent.getConsents(new AdobeCallback<Map<String, Object>>() {
 Registers the Edge Consent extension with the Mobile Core SDK.
 
 > **Warning**
-> Deprecated as of 2.0.0. Use [MobileCore.registerExtensions API](https://github.com/adobe/aepsdk-core-android/blob/main/docs/Usage/MobileCore.md#registering-extensions-and-starting-the-sdk) instead.
+> Deprecated as of 2.0.0. Use [MobileCore.registerExtensions API](https://developer.adobe.com/client-sdks/documentation/mobile-core/api-reference) instead.
 
 #### Java
 
