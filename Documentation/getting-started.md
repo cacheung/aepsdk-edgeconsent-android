@@ -24,26 +24,23 @@ The Adobe Experience Platform Consent for Edge Network extension has the followi
 
 ### Download and import the Consent extension
 
-1. Add the Mobile Core and Edge extensions to your project using the app's Gradle file. See the [current version list](https://developer.adobe.com/client-sdks/documentation/current-sdk-versions) for the latest extension versions to use.
+1. Add the Mobile Core and Edge extensions to your project using the app's Gradle file. 
+See the [current version list](https://developer.adobe.com/client-sdks/documentation/current-sdk-versions) for the latest extension versions to use.
 
   ```java
-implementation 'com.adobe.marketing.mobile:core:2.0.0'
-implementation 'com.adobe.marketing.mobile:edge:2.0.0'
-implementation 'com.adobe.marketing.mobile:edgeidentity:2.0.0'
-implementation 'com.adobe.marketing.mobile:edgeconsent:2.0.0'
+  implementation 'com.adobe.marketing.mobile:core:2.0.0'
+  implementation 'com.adobe.marketing.mobile:edge:2.0.0'
+  implementation 'com.adobe.marketing.mobile:edgeidentity:2.0.0'
+  implementation 'com.adobe.marketing.mobile:edgeconsent:2.0.0'
   ```
 
 2. Import the Mobile Core and Edge extensions in your Application class.
 
   ```java
-import com.adobe.marketing.mobile.MobileCore;
-import com.adobe.marketing.mobile.Edge;
-import com.adobe.marketing.mobile.edge.identity.Identity;
-import com.adobe.marketing.mobile.edge.consent.Consent;
-import com.adobe.marketing.mobile.LoggingMode;
-import android.app.Application;
-import java.util.Arrays;
-import android.util.Log;
+  import com.adobe.marketing.mobile.MobileCore;
+  import com.adobe.marketing.mobile.Edge;
+  import com.adobe.marketing.mobile.edge.identity.Identity;
+  import com.adobe.marketing.mobile.edge.consent.Consent;
   ```
 
 3. Register Edge extensions with Mobile Core
@@ -58,7 +55,6 @@ public class MobileApp extends Application {
 		super.onCreate();
 		MobileCore.setApplication(this);
 
-		MobileCore.setLogLevel(LoggingMode.VERBOSE);
 		MobileCore.configureWithAppID(ENVIRONMENT_FILE_ID);
 
 		// register Adobe extensions
