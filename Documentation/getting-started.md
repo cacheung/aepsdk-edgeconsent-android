@@ -24,13 +24,13 @@ The Adobe Experience Platform Consent for Edge Network extension has the followi
 
 ### Download and import the Consent extension
 
-1. Add the Mobile Core and Edge extensions to your project using the app's Gradle file.
+1. Add the Mobile Core and Edge extensions to your project using the app's Gradle file. See the [current version list](https://developer.adobe.com/client-sdks/documentation/current-sdk-versions) for the latest extension versions to use.
 
   ```java
-implementation 'com.adobe.marketing.mobile:core:2.+'
-implementation 'com.adobe.marketing.mobile:edge:2.+'
-implementation 'com.adobe.marketing.mobile:edgeidentity:2.+'
-implementation 'com.adobe.marketing.mobile:edgeconsent:2.+'
+implementation 'com.adobe.marketing.mobile:core:2.0.0'
+implementation 'com.adobe.marketing.mobile:edge:2.0.0'
+implementation 'com.adobe.marketing.mobile:edgeidentity:2.0.0'
+implementation 'com.adobe.marketing.mobile:edgeconsent:2.0.0'
   ```
 
 2. Import the Mobile Core and Edge extensions in your Application class.
@@ -63,7 +63,7 @@ public class MobileApp extends Application {
 
 		// register Adobe extensions
 		MobileCore.registerExtensions(
-			Arrays.asList(Consent.EXTENSION, Edge.EXTENSION, Identity.EXTENSION, Assurance.EXTENSION),
+			Arrays.asList(Consent.EXTENSION, Edge.EXTENSION, Identity.EXTENSION),
 			o -> Log.d("MobileApp", "Mobile SDK was initialized")
 		);
 	}

@@ -14,6 +14,7 @@ Integrate the Consent extension into your app by including the following in your
 implementation 'com.adobe.marketing.mobile:edgeconsent:2.0.0'
 implementation 'com.adobe.marketing.mobile:edge:2.0.0'
 implementation 'com.adobe.marketing.mobile:core:2.0.0'
+implementation 'com.adobe.marketing.mobile:edgeidentity:2.0.0'
 ```
 See the [current version list](https://developer.adobe.com/client-sdks/documentation/current-sdk-versions) for the latest extension versions to use.
 
