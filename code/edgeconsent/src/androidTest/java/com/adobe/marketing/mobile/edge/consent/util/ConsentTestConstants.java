@@ -9,13 +9,23 @@
   governing permissions and limitations under the License.
 */
 
-package com.adobe.marketing.mobile.edge.consent;
+package com.adobe.marketing.mobile.edge.consent.util;
 
+/**
+ * Class to maintain test constants.
+ */
 public class ConsentTestConstants {
 
-	public static String SAMPLE_METADATA_TIMESTAMP = "2019-09-23T18:15:45Z";
+	public static final String LOG_TAG = "Consent";
 
-	public final class DataStoreKey {
+	public static class EventType {
+
+		static final String MONITOR = "com.adobe.functional.eventType.monitor";
+
+		private EventType() {}
+	}
+
+	static final class DataStoreKey {
 
 		public static final String CONFIG_DATASTORE = "AdobeMobile_ConfigState";
 		public static final String CONSENT_DATASTORE = "com.adobe.edge.consent";
@@ -40,5 +50,32 @@ public class ConsentTestConstants {
 		private GetConsentHelper() {}
 	}
 
-	private ConsentTestConstants() {}
+	public static class EventSource {
+
+		// Used by Monitor Extension
+		static final String XDM_SHARED_STATE_REQUEST = "com.adobe.eventSource.xdmSharedStateRequest";
+		static final String XDM_SHARED_STATE_RESPONSE = "com.adobe.eventSource.xdmSharedStateResponse";
+		static final String SHARED_STATE_REQUEST = "com.adobe.eventSource.sharedStateRequest";
+		static final String SHARED_STATE_RESPONSE = "com.adobe.eventSource.sharedStateResponse";
+		static final String UNREGISTER = "com.adobe.eventSource.unregister";
+
+		private EventSource() {}
+	}
+
+	public static class EventDataKey {
+
+		static final String STATE_OWNER = "stateowner";
+		public static final String CONSENTS = "consents";
+		static final String METADATA = "metadata";
+		static final String TIME = "time";
+
+		private EventDataKey() {}
+	}
+
+	public static final class ConfigurationKey {
+
+		public static final String DEFAULT_CONSENT = "consent.default";
+
+		private ConfigurationKey() {}
+	}
 }
