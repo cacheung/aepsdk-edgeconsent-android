@@ -12,6 +12,7 @@
 package com.adobe.marketing.mobile.edge.consent;
 
 import com.adobe.marketing.mobile.util.DataReader;
+import com.adobe.marketing.mobile.util.MapUtils;
 import com.adobe.marketing.mobile.util.TimeUtils;
 import java.util.Date;
 import java.util.HashMap;
@@ -67,19 +68,18 @@ final class Consents {
 			return null;
 		}
 
-		try {
-			final Map<String, Object> metaDataContents = (Map<String, Object>) consentsMap.get(
-				ConsentConstants.EventDataKey.METADATA
-			);
+		final Map<String, Object> metaDataContents = DataReader.optTypedMap(
+			Object.class,
+			consentsMap,
+			ConsentConstants.EventDataKey.METADATA,
+			null
+		);
 
-			if (metaDataContents == null) {
-				return null;
-			}
-
-			return (String) metaDataContents.get(ConsentConstants.EventDataKey.TIME);
-		} catch (final ClassCastException exp) {
+		if (MapUtils.isNullOrEmpty(metaDataContents)) {
 			return null;
 		}
+
+		return DataReader.optString(metaDataContents, ConsentConstants.EventDataKey.TIME, null);
 	}
 
 	/**
@@ -92,17 +92,17 @@ final class Consents {
 			return;
 		}
 
-		Map<String, Object> metaDataContents;
+		Map<String, Object> metaDataContents = DataReader.optTypedMap(
+			Object.class,
+			consentsMap,
+			ConsentConstants.EventDataKey.METADATA,
+			null
+		);
 
-		try {
-			metaDataContents = (Map<String, Object>) consentsMap.get(ConsentConstants.EventDataKey.METADATA);
-
-			if (metaDataContents == null || metaDataContents.isEmpty()) {
-				metaDataContents = new HashMap<>();
-			}
-		} catch (final ClassCastException exception) {
-			return;
+		if (MapUtils.isNullOrEmpty(metaDataContents)) {
+			metaDataContents = new HashMap<>();
 		}
+
 		metaDataContents.put(
 			ConsentConstants.EventDataKey.TIME,
 			TimeUtils.getISO8601UTCDateWithMilliseconds(new Date(timeStamp))
@@ -117,7 +117,7 @@ final class Consents {
 	 * @return {@code true} if there are no consents
 	 */
 	boolean isEmpty() {
-		return consentsMap == null || consentsMap.isEmpty();
+		return MapUtils.isNullOrEmpty(consentsMap);
 	}
 
 	/**
@@ -148,7 +148,7 @@ final class Consents {
 	 * @return {@link Map} representing the Consents in XDM format
 	 */
 	Map<String, Object> asXDMMap() {
-		Map<String, Object> internalConsentMap = Utils.optDeepCopy(consentsMap, new HashMap<String, Object>());
+		Map<String, Object> internalConsentMap = Utils.optDeepCopy(consentsMap, new HashMap<>());
 		final Map<String, Object> xdmFormattedMap = new HashMap<>();
 
 		xdmFormattedMap.put(ConsentConstants.EventDataKey.CONSENTS, internalConsentMap);
@@ -210,14 +210,14 @@ final class Consents {
 	 * Private helper method to remove metadata timestamp from this {@link Consents}
 	 */
 	private void removeTimeStamp() {
-		Map<String, Object> metaDataContents;
-		try {
-			metaDataContents = (Map<String, Object>) consentsMap.get(ConsentConstants.EventDataKey.METADATA);
-		} catch (final ClassCastException exp) {
-			return;
-		}
+		Map<String, Object> metaDataContents = DataReader.optTypedMap(
+			Object.class,
+			consentsMap,
+			ConsentConstants.EventDataKey.METADATA,
+			null
+		);
 
-		if (metaDataContents == null || metaDataContents.isEmpty()) {
+		if (MapUtils.isNullOrEmpty(metaDataContents)) {
 			return;
 		}
 
