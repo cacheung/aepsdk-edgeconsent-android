@@ -30,11 +30,6 @@ String extensionVersion = Consent.extensionVersion();
 
 #### Kotlin
 
-##### Syntax
-```kotlin
-fun extensionVersion(): String
-```
-
 ##### Example
 ```kotlin
 val extensionVersion = Consent.extensionVersion()
@@ -66,11 +61,6 @@ Consent.getConsents(new AdobeCallback<Map<String, Object>>() {
 
 #### Kotlin
 
-##### Syntax
-```kotlin
-fun getConsents(callback: AdobeCallback<Map<String, Object>>)
-```
-
 ##### Example
 ```kotlin
 Consent.getConsents { currentConsents ->
@@ -100,11 +90,6 @@ Consent.registerExtension();
 ```
 
 #### Kotlin
-
-##### Syntax
-```kotlin
-fun registerExtension()
-```
 
 ##### Example
 ```kotlin
@@ -159,11 +144,6 @@ Consent.update(consents);
 ```
 
 #### Kotlin
-
-##### Syntax
-```kotlin
-fun update(consents: Map<String, Object>)
-```
 
 ##### Example
 ```kotlin
