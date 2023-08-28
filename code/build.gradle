@@ -28,6 +28,6 @@ ext {
     prettierPluginJavaVersion = "1.6.2"
 }
 
-task clean(type: Delete) {
+tasks.register('clean', Delete) {
     delete rootProject.buildDir
 }
