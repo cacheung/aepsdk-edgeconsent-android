@@ -1,6 +1,15 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine.
+# See: https://circleci.com/docs/2.0/configuration-reference
+# For a detailed guide to building and testing on Android, read the docs:
+# https://circleci.com/docs/2.0/language-android/ for more details.
 version: 2.1
+
+# Orbs are reusable packages of CircleCI configuration that you may share across projects, enabling you to create encapsulated, parameterized commands, jobs, and executors that can be used across multiple projects.
+# See: https://circleci.com/docs/2.0/orb-intro/
 orbs:
-  android: circleci/android@1.0
+  # Use the circleci android orb version that supports OpenJDK17 required by AGP 8.2+ 
+  android: circleci/android@2.4.0
+  codecov: codecov/codecov@3.2.4
 
 # Workflows orchestrate a set of jobs to be run;
 workflows:
@@ -38,6 +47,19 @@ jobs:
     steps:
       - checkout
       - run:
+          name: build library
+          command: |
+            make assemble-phone
+
+      - run:
+          name: build jitpack library
+          command: |
+            make edgeconsent-publish-maven-local-jitpack
+
+      - store_artifacts:
+          path: code/edgeconsent/build/libs
+
+      - run:
           name: Javadoc
           command: make ci-javadoc
       - store_artifacts:
@@ -55,21 +77,15 @@ jobs:
           name: UnitTests
           command: make ci-unit-test
 
-            # code coverage
-      - run:
-          name: Upload Code Coverage Report
+     # code coverage
+     - run:
+          name: code coverage
           command: |
-            curl -s https://codecov.io/bash > codecov;
-            VERSION=$(grep 'VERSION=\"[0-9\.]*\"' codecov | cut -d'"' -f2);
-            SHAVERSION=$(shasum -v);
-            echo "Using CodeCov version '$VERSION'"
-            echo "Using shasum '$SHAVERSION'"
-            for i in 1 256 512
-            do
-              shasum -a $i -c --ignore-missing <(curl -s "https://raw.githubusercontent.com/codecov/codecov-bash/${VERSION}/SHA${i}SUM") ||
-              shasum -a $i -c <(curl -s "https://raw.githubusercontent.com/codecov/codecov-bash/${VERSION}/SHA${i}SUM" | grep -w "codecov")
-            done
-            bash ./codecov -v -X s3 -c -D "./ci/unit-test/build/reports" -F unit-tests
+            make ci-unit-test-coverage
+
+      - codecov/upload:
+          file: code/userprofile/build/reports/coverage/test/phone/debug/report.xml
+          flags: unit-tests
 
       - store_artifacts:
           path: ci/unit-test/build/reports
@@ -81,6 +97,7 @@ jobs:
     executor:
       name: android/android-machine
       resource-class: large
+      tag: 2024.01.1
     steps:
       - checkout
       - android/start-emulator-and-run-tests:
@@ -92,20 +109,14 @@ jobs:
           test-command: make ci-functional-test
 
       # code coverage
-      - run:
-          name: Upload Code Coverage Report
+       - run:
+          name: code coverage
           command: |
-            curl -s https://codecov.io/bash > codecov;
-            VERSION=$(grep 'VERSION=\"[0-9\.]*\"' codecov | cut -d'"' -f2);
-            SHAVERSION=$(shasum -v);
-            echo "Using CodeCov version '$VERSION'"
-            echo "Using shasum '$SHAVERSION'"
-            for i in 1 256 512
-            do
-              shasum -a $i -c --ignore-missing <(curl -s "https://raw.githubusercontent.com/codecov/codecov-bash/${VERSION}/SHA${i}SUM") ||
-              shasum -a $i -c <(curl -s "https://raw.githubusercontent.com/codecov/codecov-bash/${VERSION}/SHA${i}SUM" | grep -w "codecov")
-            done
-            bash ./codecov -v -X s3 -c -D "./ci/functional-test/build/reports" -F functional-tests
+            make ci-functional-test-coverage
+      - codecov/upload:
+          file: code/core/build/reports/coverage/androidTest/phone/connected/debug/report.xml
+          flags: functional-tests
+
 
       - store_artifacts:
           path: ci/functional-test/build/reports

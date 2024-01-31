@@ -28,3 +28,6 @@ local.properties
 
 # .Idea file
 code/.idea*
+
+#vscode
+.vscode

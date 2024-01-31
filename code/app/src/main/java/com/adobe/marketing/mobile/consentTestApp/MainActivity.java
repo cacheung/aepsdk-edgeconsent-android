@@ -9,7 +9,7 @@
   governing permissions and limitations under the License.
 */
 
-package com.adobe.marketing.mobile.consentTestApp;
+package com.adobe.marketing.mobile.edge.consent.consentTestApp;
 
 import android.os.Bundle;
 import android.util.Log;
