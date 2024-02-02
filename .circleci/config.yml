@@ -16,36 +16,84 @@ workflows:
   version: 2
   build-test-deploy:
     jobs:
-      - validate-code
+      - validate-code:
+        gradle-cache-prefix: v1
+        build-cache-prefix: v1
+
       - build-and-unit-test:
+        gradle-cache-prefix: v1
+        build-cache-prefix: v1
           requires:
             - validate-code
+
       - functional-test:
+        gradle-cache-prefix: v1
+        build-cache-prefix: v1
           requires:
             - validate-code
  
 jobs:
-  validate-code:
-    working_directory: ~/code
-    docker:
-      - image: circleci/android:api-29-node
-    environment:
-      JVM_OPTS: -Xmx3200m
+   validate-code:
+    parameters:
+      gradle-cache-prefix:
+        type: string
+        default: v1
+      build-cache-prefix:
+        type: string
+        default: v1
+
+    # List of available Android Docker images: https://circleci.com/developer/images/image/cimg/android#image-tags
+    executor:
+      name: android/android-docker
+      tag: 2022.09.2-node
+
     steps:
       - checkout
+
+      - android/restore-gradle-cache:
+          cache-prefix: << parameters.gradle-cache-prefix >>
+      - android/restore-build-cache:
+          cache-prefix: << parameters.build-cache-prefix >>
 
       - run:
           name: Check Code Format
           command: make format-check
 
+      - run:
+          name: Lint Code
+          command: make lint
+
+      - android/save-gradle-cache:
+          cache-prefix: << parameters.gradle-cache-prefix >>
+      - android/save-build-cache:
+          cache-prefix: << parameters.build-cache-prefix >>
+
+      # Store Lint report
+      - store_artifacts:
+          path: code/edge/build/reports
+
   build-and-unit-test:
-    working_directory: ~/code
-    docker:
-      - image: circleci/android:api-29-node
-    environment:
-      JVM_OPTS: -Xmx3200m
+    parameters:
+      gradle-cache-prefix:
+        type: string
+        default: v1
+      build-cache-prefix:
+        type: string
+        default: v1
+
+    # List of available Android Docker images: https://circleci.com/developer/images/image/cimg/android#image-tags
+    executor:
+      name: android/android-docker
+      tag: 2022.09.2-node
+
     steps:
       - checkout
+
+      - android/restore-gradle-cache:
+          cache-prefix: << parameters.gradle-cache-prefix >>
+      - android/restore-build-cache:
+          cache-prefix: << parameters.build-cache-prefix >>
+
       - run:
           name: build library
           command: |
@@ -54,73 +102,99 @@ jobs:
       - run:
           name: build jitpack library
           command: |
-            make edgeconsent-publish-maven-local-jitpack
+            make publish-maven-local-jitpack
 
       - store_artifacts:
           path: code/edgeconsent/build/libs
 
       - run:
           name: Javadoc
-          command: make ci-javadoc
+          command: make javadoc
       - store_artifacts:
-          path: ci/javadoc/build/reports
+          path: javadoc/build/reports
 
       - run:
           name: Build
-          command: make ci-build
+          command: make build
 
       - run:
           name: Build App
-          command: make ci-build-app
+          command: make build-app
 
       - run:
           name: UnitTests
-          command: make ci-unit-test
+          command: make unit-test
 
      # code coverage
      - run:
           name: code coverage
           command: |
-            make ci-unit-test-coverage
+            make unit-test-coverage
 
+     - android/save-gradle-cache:
+          cache-prefix: << parameters.gradle-cache-prefix >>
+     - android/save-build-cache:
+          cache-prefix: << parameters.build-cache-prefix >>
+ 
       - codecov/upload:
-          file: code/userprofile/build/reports/coverage/test/phone/debug/report.xml
+          file: code/edgeconsent/build/reports/coverage/test/phone/debug/report.xml
           flags: unit-tests
 
       - store_artifacts:
-          path: ci/unit-test/build/reports
+          path: unit-test/build/reports
 
       - store_test_results:
-          path: ci/unit-test/build/test-results
+          path: unit-test/build/test-results
 
   functional-test:
+    parameters:
+    gradle-cache-prefix:
+      type: string
+      default: v1
+    build-cache-prefix:
+      type: string
+      default: v1
+
+     # list of available Android machine images: https://circleci.com/developer/machine/image/android#image-tags
     executor:
       name: android/android-machine
       resource-class: large
-      tag: 2024.01.1
+      tag: 2022.09.1
+
     steps:
       - checkout
+
+      - android/restore-build-cache:
+        cache-prefix: << parameters.build-cache-prefix >>
+      
+      - run:
+         name: List available emulator images
+         command: sdkmanager --list
+
       - android/start-emulator-and-run-tests:
           #   It should match the name seen in the "sdkmanager --list" output
           system-image: system-images;android-29;default;x86
           #   The command to be run, while waiting for emulator startup
-          post-emulator-launch-assemble-command: make ci-build
+          post-emulator-launch-assemble-command: make build
           #   The test command
-          test-command: make ci-functional-test
+          test-command: make functional-test
+
+       - android/save-build-cache:
+          cache-prefix: << parameters.build-cache-prefix >>
 
       # code coverage
        - run:
           name: code coverage
           command: |
-            make ci-functional-test-coverage
+            make functional-test-coverage
       - codecov/upload:
           file: code/core/build/reports/coverage/androidTest/phone/connected/debug/report.xml
           flags: functional-tests
 
-
       - store_artifacts:
-          path: ci/functional-test/build/reports
+          path: functional-test/build/reports
 
+       # On test failures, the step in the Makefile to copy the reports to ci/ is not run, so store test results from build folder instead.
       - store_test_results:
-          path: ci/functional-test/build/outputs/androidTest-results
+          path: code/edgeconsent/build/outputs/androidTest-results
 

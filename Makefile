@@ -1,7 +1,6 @@
 EXTENSION-LIBRARY-FOLDER-NAME = edgeconsent
 TEST-APP-FOLDER-NAME = app
 
-BUILD-ASSEMBLE-LOCATION = ./ci/assemble
 ROOT_DIR=$(shell git rev-parse --show-toplevel)
 
 PROJECT_NAME = $(shell cat $(ROOT_DIR)/code/gradle.properties | grep "moduleProjectName" | cut -d'=' -f2)
@@ -22,31 +21,26 @@ format-check:
 	(./code/gradlew -p code/$(EXTENSION-LIBRARY-FOLDER-NAME) spotlessCheck)
 	(./code/gradlew -p code/$(TEST-APP-FOLDER-NAME) spotlessCheck)
 
-create-ci: clean
-	(mkdir -p ci)
-
 clean:
-	(rm -rf ci)
 	(rm -rf $(AAR_FILE_DIR))
 	(./code/gradlew -p code clean)
 
-ci-build: create-ci
-	(mkdir -p ci/assemble)
+lint:
+    (./code/gradlew -p code/$(EXTENSION-LIBRARY-FOLDER-NAME) lint)
 
-	(./code/gradlew -p code/$(EXTENSION-LIBRARY-FOLDER-NAME) lint)
+assemble-phone:
 	(./code/gradlew -p code/$(EXTENSION-LIBRARY-FOLDER-NAME) assemblePhone)
 	(mv $(AAR_FILE_DIR)/$(EXTENSION-LIBRARY-FOLDER-NAME)-phone-release.aar  $(AAR_FILE_DIR)/$(MODULE_NAME)-release-$(LIB_VERSION).aar)
-	(cp -r ./code/$(EXTENSION-LIBRARY-FOLDER-NAME)/build $(BUILD-ASSEMBLE-LOCATION))
 
-ci-build-app:
+build-app:
 	(./code/gradlew -p code/$(TEST-APP-FOLDER-NAME) assemble)
 
-ci-unit-test: create-ci
+unit-test: create-ci
 	(mkdir -p ci/unit-test)
 	(./code/gradlew -p code/$(EXTENSION-LIBRARY-FOLDER-NAME) platformUnitTestJacocoReport)
 	(cp -r ./code/$(EXTENSION-LIBRARY-FOLDER-NAME)/build ./ci/unit-test/)
 
-ci-unit-test-coverage:
+unit-test-coverage:
 		(./code/gradlew -p code/$(EXTENSION-LIBRARY-FOLDER-NAME) createPhoneDebugUnitTestCoverageReport)
 
 ci-functional-test: create-ci
@@ -55,31 +49,23 @@ ci-functional-test: create-ci
 	(./code/gradlew -p code/$(EXTENSION-LIBRARY-FOLDER-NAME) connectedPhoneDebugAndroidTest platformFunctionalTestJacocoReport)
 	(cp -r ./code/$(EXTENSION-LIBRARY-FOLDER-NAME)/build ./ci/functional-test)
 
-ci-functional-test-coverage: 
+functional-test-coverage: 
 	(./code/gradlew -p code/$(EXTENSION-LIBRARY-FOLDER-NAME) createPhoneDebugAndroidTestCoverageReport)
 
-ci-javadoc: create-ci
-	(mkdir -p ci/javadoc)
-	(./code/gradlew -p code/$(EXTENSION-LIBRARY-FOLDER-NAME) javadocJar > ci/javadocJar.log 2>&1)
-	(cp -r ./code/$(EXTENSION-LIBRARY-FOLDER-NAME)/build ./ci/javadoc)
-
 javadoc:
-		(./code/gradlew -p code/$(EXTENSION-LIBRARY-FOLDER-NAME) javadocJar)
+    (./code/gradlew -p code/$(EXTENSION-LIBRARY-FOLDER-NAME) javadocJar)
 
-ci-generate-library-debug:
+build-debug:
 	(./code/gradlew -p code/${EXTENSION-LIBRARY-FOLDER-NAME}  assemblePhoneDebug)
 
-ci-generate-library-release:
+build-release:
 	(./code/gradlew -p code/${EXTENSION-LIBRARY-FOLDER-NAME}  assemblePhoneRelease)
 
-build-release:
-	(./code/gradlew -p code/${EXTENSION-LIBRARY-FOLDER-NAME} clean lint assemblePhoneRelease)
-
-ci-publish-staging: clean build-release
+publish-staging: clean build-release
 	(./code/gradlew -p code/${EXTENSION-LIBRARY-FOLDER-NAME} publishReleasePublicationToSonatypeRepository --stacktrace)
 
-ci-publish-main: clean build-release
+publish-main: clean build-release
 	(./code/gradlew -p code/${EXTENSION-LIBRARY-FOLDER-NAME} publishReleasePublicationToSonatypeRepository -Prelease)
 
-edgeconsent-publish-maven-local-jitpack:
-		(./code/gradlew -p code/${EXTENSION-LIBRARY-FOLDER-NAME} publishReleasePublicationToMavenLocal -Pjitpack  -x signReleasePublication)
+publish-maven-local-jitpack:
+	(./code/gradlew -p code/${EXTENSION-LIBRARY-FOLDER-NAME} publishReleasePublicationToMavenLocal -Pjitpack  -x signReleasePublication)
