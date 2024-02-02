@@ -1,6 +1,7 @@
 EXTENSION-LIBRARY-FOLDER-NAME = edgeconsent
 TEST-APP-FOLDER-NAME = app
 
+BUILD-ASSEMBLE-LOCATION = ./ci/assemble
 ROOT_DIR=$(shell git rev-parse --show-toplevel)
 
 PROJECT_NAME = $(shell cat $(ROOT_DIR)/code/gradle.properties | grep "moduleProjectName" | cut -d'=' -f2)
@@ -26,34 +27,32 @@ clean:
 	(./code/gradlew -p code clean)
 
 lint:
-    (./code/gradlew -p code/$(EXTENSION-LIBRARY-FOLDER-NAME) lint)
+	(./code/gradlew -p code/$(EXTENSION-LIBRARY-FOLDER-NAME) lint)
 
 assemble-phone:
 	(./code/gradlew -p code/$(EXTENSION-LIBRARY-FOLDER-NAME) assemblePhone)
 	(mv $(AAR_FILE_DIR)/$(EXTENSION-LIBRARY-FOLDER-NAME)-phone-release.aar  $(AAR_FILE_DIR)/$(MODULE_NAME)-release-$(LIB_VERSION).aar)
+	(cp -r ./code/$(EXTENSION-LIBRARY-FOLDER-NAME)/build $(BUILD-ASSEMBLE-LOCATION))
 
 build-app:
 	(./code/gradlew -p code/$(TEST-APP-FOLDER-NAME) assemble)
 
-unit-test: create-ci
-	(mkdir -p ci/unit-test)
+unit-test:
 	(./code/gradlew -p code/$(EXTENSION-LIBRARY-FOLDER-NAME) platformUnitTestJacocoReport)
 	(cp -r ./code/$(EXTENSION-LIBRARY-FOLDER-NAME)/build ./ci/unit-test/)
 
 unit-test-coverage:
-		(./code/gradlew -p code/$(EXTENSION-LIBRARY-FOLDER-NAME) createPhoneDebugUnitTestCoverageReport)
+	(./code/gradlew -p code/$(EXTENSION-LIBRARY-FOLDER-NAME) createPhoneDebugUnitTestCoverageReport)
 
-ci-functional-test: create-ci
-	(mkdir -p ci/functional-test)
+functional-test:
 	(./code/gradlew -p code/$(EXTENSION-LIBRARY-FOLDER-NAME) uninstallPhoneDebugAndroidTest)
 	(./code/gradlew -p code/$(EXTENSION-LIBRARY-FOLDER-NAME) connectedPhoneDebugAndroidTest platformFunctionalTestJacocoReport)
-	(cp -r ./code/$(EXTENSION-LIBRARY-FOLDER-NAME)/build ./ci/functional-test)
 
-functional-test-coverage: 
-	(./code/gradlew -p code/$(EXTENSION-LIBRARY-FOLDER-NAME) createPhoneDebugAndroidTestCoverageReport)
+functional-test-coverage:
+		(./code/gradlew -p code/$(EXTENSION-LIBRARY-FOLDER-NAME) createPhoneDebugAndroidTestCoverageReport)
 
 javadoc:
-    (./code/gradlew -p code/$(EXTENSION-LIBRARY-FOLDER-NAME) javadocJar)
+	(./code/gradlew -p code/$(EXTENSION-LIBRARY-FOLDER-NAME) javadocJar)
 
 build-debug:
 	(./code/gradlew -p code/${EXTENSION-LIBRARY-FOLDER-NAME}  assemblePhoneDebug)
