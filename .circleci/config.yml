@@ -16,13 +16,13 @@ workflows:
       - build-and-unit-test:
         gradle-cache-prefix: v1
         build-cache-prefix: v1
-          requires:
+        requires:
             - validate-code
 
       - functional-test:
         gradle-cache-prefix: v1
         build-cache-prefix: v1
-          requires:
+        requires:
             - validate-code
  
 jobs:
