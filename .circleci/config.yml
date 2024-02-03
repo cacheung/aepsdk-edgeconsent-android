@@ -10,23 +10,23 @@ workflows:
   build-test-deploy:
     jobs:
       - validate-code:
-        gradle-cache-prefix: v1
-        build-cache-prefix: v1
+          gradle-cache-prefix: v1
+          build-cache-prefix: v1
 
       - build-and-unit-test:
-        gradle-cache-prefix: v1
-        build-cache-prefix: v1
-        requires:
+          gradle-cache-prefix: v1
+          build-cache-prefix: v1
+          requires:
             - validate-code
 
       - functional-test:
-        gradle-cache-prefix: v1
-        build-cache-prefix: v1
-        requires:
+          gradle-cache-prefix: v1
+          build-cache-prefix: v1
+          requires:
             - validate-code
  
 jobs:
-   validate-code:
+  validate-code:
     parameters:
       gradle-cache-prefix:
         type: string
@@ -61,69 +61,8 @@ jobs:
       - store_artifacts:
           path: code/edge/build/reports
 
-    build-and-unit-test:
-      parameters:
-        gradle-cache-prefix:
-          type: string
-          default: v1
-        build-cache-prefix:
-          type: string
-          default: v1
-
-      # List of available Android Docker images: https://circleci.com/developer/images/image/cimg/android#image-tags
-      executor:
-          name: android/android-docker
-          resource-class: large
-          tag: 2024.01.1
-
-      steps:
-        - checkout
-
-        - android/restore-gradle-cache:
-            cache-prefix: << parameters.gradle-cache-prefix >>
-        - android/restore-build-cache:
-            cache-prefix: << parameters.build-cache-prefix >>
-
-        - run:
-            name: Build Library
-            command: |
-              make build-library
-
-        - run:
-            name: Build Jitpack Library
-            command: |
-              make ci-publish-maven-local-jitpack
-
-        - run:
-            name: Build Test App
-            command: make build-app
-        
-        - run:
-          name: Build Java Doc
-          command: |
-            make javadoc
-
-        - store_artifacts:
-            path: code/edgeconsent/build/docs/javadoc
-
-        - run:
-            name: Run Unit Tests
-            command: make unit-test-coverage
-    
-        - store_test_results:
-            path: code/edgeconsent/build/test-results/testPhoneDebugUnitTest
-        
-        - android/save-gradle-cache:
-            cache-prefix: << parameters.gradle-cache-prefix >>
-        - android/save-build-cache:
-            cache-prefix: << parameters.build-cache-prefix >>
-
-        - codecov/upload:
-            file: code/edgeconsent/build/reports/coverage/test/phone/debug/report.xml
-            flags: unit-tests
-
-    functional-test:
-      parameters:
+build-and-unit-test:
+    parameters:
       gradle-cache-prefix:
         type: string
         default: v1
@@ -131,39 +70,100 @@ jobs:
         type: string
         default: v1
 
-     # list of available Android machine images: https://circleci.com/developer/machine/image/android#image-tags
-      executor:
-        name: android/android-machine
-        resource-class: large
-        tag: 2024.01.1
+    # List of available Android Docker images: https://circleci.com/developer/images/image/cimg/android#image-tags
+    executor:
+      name: android/android-docker
+      resource-class: large
+      tag: 2024.01.1
 
-      steps:
-        - checkout
+    steps:
+      - checkout
 
-        - android/restore-build-cache:
+      - android/restore-gradle-cache:
+          cache-prefix: << parameters.gradle-cache-prefix >>
+      - android/restore-build-cache:
+          cache-prefix: << parameters.build-cache-prefix >>
+
+      - run:
+          name: Build Library
+          command: |
+            make build-library
+
+      - run:
+          name: Build Jitpack Library
+          command: |
+            make ci-publish-maven-local-jitpack
+
+      - run:
+          name: Build Test App
+          command: make build-app
+      
+      - run:
+          name: Build Java Doc
+          command: |
+            make javadoc
+
+      - store_artifacts:
+          path: code/edgeconsent/build/docs/javadoc
+
+      - run:
+          name: Run Unit Tests
+          command: make unit-test-coverage
+  
+      - store_test_results:
+          path: code/edgeconsent/build/test-results/testPhoneDebugUnitTest
+      
+      - android/save-gradle-cache:
+          cache-prefix: << parameters.gradle-cache-prefix >>
+      - android/save-build-cache:
+          cache-prefix: << parameters.build-cache-prefix >>
+
+      - codecov/upload:
+          file: code/edgeconsent/build/reports/coverage/test/phone/debug/report.xml
+          flags: unit-tests
+
+ functional-test:
+    parameters:
+      gradle-cache-prefix:
+        type: string
+        default: v1
+      build-cache-prefix:
+        type: string
+        default: v1
+
+    # list of available Android machine images: https://circleci.com/developer/machine/image/android#image-tags
+    executor:
+      name: android/android-machine
+      resource-class: large
+      tag: 2024.01.1
+
+    steps:
+      - checkout
+
+      - android/restore-build-cache:
           cache-prefix: << parameters.build-cache-prefix >>
         
-        - run:
+      - run:
           name: List available emulator images
           command: sdkmanager --list
 
-        - android/start-emulator-and-run-tests:
-            #   It should match the name seen in the "sdkmanager --list" output
-            system-image: system-images;android-29;default;x86
-            #   The command to be run, while waiting for emulator startup
-            post-emulator-launch-assemble-command: make build-library
-            #   The test command
-            test-command: make functional-test-coverage
-            restore-gradle-cache-prefix: << parameters.gradle-cache-prefix >>
+      - android/start-emulator-and-run-tests:
+          #   It should match the name seen in the "sdkmanager --list" output
+          system-image: system-images;android-29;default;x86
+          #   The command to be run, while waiting for emulator startup
+          post-emulator-launch-assemble-command: make build-library
+          #   The test command
+          test-command: make functional-test-coverage
+          restore-gradle-cache-prefix: << parameters.gradle-cache-prefix >>
+    
+      - android/save-build-cache:
+        cache-prefix: << parameters.build-cache-prefix >>
       
-        - android/save-build-cache:
-          cache-prefix: << parameters.build-cache-prefix >>
-        
-        - store_test_results:
-          path: code/edgeconsent/build/test-results/testPhoneDebugFunctionalTest
+      - store_test_results:
+        path: code/edgeconsent/build/test-results/testPhoneDebugFunctionalTest
 
-        - codecov/upload:
-            file: code/edgeconsent/build/reports/coverage/androidTest/phone/connected/debug/report.xml
-            flags: functional-tests
+      - codecov/upload:
+          file: code/edgeconsent/build/reports/coverage/androidTest/phone/connected/debug/report.xml
+          flags: functional-tests
           
         
