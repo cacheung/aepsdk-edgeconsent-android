@@ -1,115 +1,169 @@
 version: 2.1
 orbs:
-  android: circleci/android@1.0
+  # Use the circleci android orb version that supports OpenJDK17 required by AGP 8.2+ 
+  android: circleci/android@2.4.0
+  codecov: codecov/codecov@3.2.4
 
 # Workflows orchestrate a set of jobs to be run;
 workflows:
   version: 2
   build-test-deploy:
     jobs:
-      - validate-code
+      - validate-code:
+        gradle-cache-prefix: v1
+        build-cache-prefix: v1
+
       - build-and-unit-test:
+        gradle-cache-prefix: v1
+        build-cache-prefix: v1
           requires:
             - validate-code
+
       - functional-test:
+        gradle-cache-prefix: v1
+        build-cache-prefix: v1
           requires:
             - validate-code
  
 jobs:
-  validate-code:
-    working_directory: ~/code
-    docker:
-      - image: circleci/android:api-29-node
-    environment:
-      JVM_OPTS: -Xmx3200m
+   validate-code:
+    parameters:
+      gradle-cache-prefix:
+        type: string
+        default: v1
+      build-cache-prefix:
+        type: string
+        default: v1
+
+    # List of available Android Docker images: https://circleci.com/developer/images/image/cimg/android#image-tags
+    executor:
+      name: android/android-docker
+      resource-class: large
+      tag: 2024.01.1
+
     steps:
       - checkout
+
+      - android/restore-gradle-cache:
+          cache-prefix: << parameters.gradle-cache-prefix >>
+      - android/restore-build-cache:
+          cache-prefix: << parameters.build-cache-prefix >>
 
       - run:
           name: Check Code Format
           command: make format-check
 
+      - run:
+          name: Lint Code
+          command: make lint
+
+      # Store Lint report
+      - store_artifacts:
+          path: code/edge/build/reports
+
   build-and-unit-test:
-    working_directory: ~/code
-    docker:
-      - image: circleci/android:api-29-node
-    environment:
-      JVM_OPTS: -Xmx3200m
+    parameters:
+      gradle-cache-prefix:
+        type: string
+        default: v1
+      build-cache-prefix:
+        type: string
+        default: v1
+
+    # List of available Android Docker images: https://circleci.com/developer/images/image/cimg/android#image-tags
+   executor:
+      name: android/android-docker
+      resource-class: large
+      tag: 2024.01.1
+
     steps:
       - checkout
-      - run:
-          name: Javadoc
-          command: make ci-javadoc
-      - store_artifacts:
-          path: ci/javadoc/build/reports
+
+      - android/restore-gradle-cache:
+          cache-prefix: << parameters.gradle-cache-prefix >>
+      - android/restore-build-cache:
+          cache-prefix: << parameters.build-cache-prefix >>
 
       - run:
-          name: Build
-          command: make ci-build
-
-      - run:
-          name: Build App
-          command: make ci-build-app
-
-      - run:
-          name: UnitTests
-          command: make ci-unit-test
-
-            # code coverage
-      - run:
-          name: Upload Code Coverage Report
+          name: Build Library
           command: |
-            curl -s https://codecov.io/bash > codecov;
-            VERSION=$(grep 'VERSION=\"[0-9\.]*\"' codecov | cut -d'"' -f2);
-            SHAVERSION=$(shasum -v);
-            echo "Using CodeCov version '$VERSION'"
-            echo "Using shasum '$SHAVERSION'"
-            for i in 1 256 512
-            do
-              shasum -a $i -c --ignore-missing <(curl -s "https://raw.githubusercontent.com/codecov/codecov-bash/${VERSION}/SHA${i}SUM") ||
-              shasum -a $i -c <(curl -s "https://raw.githubusercontent.com/codecov/codecov-bash/${VERSION}/SHA${i}SUM" | grep -w "codecov")
-            done
-            bash ./codecov -v -X s3 -c -D "./ci/unit-test/build/reports" -F unit-tests
+            make build-library
+
+      - run:
+          name: Build Jitpack Library
+          command: |
+            make ci-publish-maven-local-jitpack
+
+      - run:
+          name: Build Test App
+          command: make build-app
+      
+      - run:
+        name: Build Java Doc
+        command: |
+          make javadoc
 
       - store_artifacts:
-          path: ci/unit-test/build/reports
+          path: code/edgeconsent/build/docs/javadoc
 
+      - run:
+          name: Run Unit Tests
+          command: make unit-test-coverage
+   
       - store_test_results:
-          path: ci/unit-test/build/test-results
+          path: code/edgeconsent/build/test-results/testPhoneDebugUnitTest
+      
+      - android/save-gradle-cache:
+          cache-prefix: << parameters.gradle-cache-prefix >>
+      - android/save-build-cache:
+          cache-prefix: << parameters.build-cache-prefix >>
+
+      - codecov/upload:
+          file: code/edgeconsent/build/reports/coverage/test/phone/debug/report.xml
+          flags: unit-tests
 
   functional-test:
+    parameters:
+    gradle-cache-prefix:
+      type: string
+      default: v1
+    build-cache-prefix:
+      type: string
+      default: v1
+
+     # list of available Android machine images: https://circleci.com/developer/machine/image/android#image-tags
     executor:
       name: android/android-machine
       resource-class: large
+      tag: 2024.01.1
+
     steps:
       - checkout
+
+      - android/restore-build-cache:
+        cache-prefix: << parameters.build-cache-prefix >>
+      
+      - run:
+         name: List available emulator images
+         command: sdkmanager --list
+
       - android/start-emulator-and-run-tests:
           #   It should match the name seen in the "sdkmanager --list" output
           system-image: system-images;android-29;default;x86
           #   The command to be run, while waiting for emulator startup
-          post-emulator-launch-assemble-command: make ci-build
+          post-emulator-launch-assemble-command: make build-library
           #   The test command
-          test-command: make ci-functional-test
-
-      # code coverage
-      - run:
-          name: Upload Code Coverage Report
-          command: |
-            curl -s https://codecov.io/bash > codecov;
-            VERSION=$(grep 'VERSION=\"[0-9\.]*\"' codecov | cut -d'"' -f2);
-            SHAVERSION=$(shasum -v);
-            echo "Using CodeCov version '$VERSION'"
-            echo "Using shasum '$SHAVERSION'"
-            for i in 1 256 512
-            do
-              shasum -a $i -c --ignore-missing <(curl -s "https://raw.githubusercontent.com/codecov/codecov-bash/${VERSION}/SHA${i}SUM") ||
-              shasum -a $i -c <(curl -s "https://raw.githubusercontent.com/codecov/codecov-bash/${VERSION}/SHA${i}SUM" | grep -w "codecov")
-            done
-            bash ./codecov -v -X s3 -c -D "./ci/functional-test/build/reports" -F functional-tests
-
-      - store_artifacts:
-          path: ci/functional-test/build/reports
-
+          test-command: make functional-test-coverage
+          restore-gradle-cache-prefix: << parameters.gradle-cache-prefix >>
+    
+      - android/save-build-cache:
+        cache-prefix: << parameters.build-cache-prefix >>
+      
       - store_test_results:
-          path: ci/functional-test/build/outputs/androidTest-results
+        path: code/edgeconsent/build/test-results/testPhoneDebugFunctionalTest
 
+      - codecov/upload:
+          file: code/edgeconsent/build/reports/coverage/androidTest/phone/connected/debug/report.xml
+          flags: functional-tests
+        
+      
