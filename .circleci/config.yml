@@ -59,13 +59,28 @@ jobs:
           cache-prefix: << parameters.build-cache-prefix >>  
 
   build-and-unit-test:
-    working_directory: ~/code
-    docker:
-      - image: circleci/android:api-29-node
-    environment:
-      JVM_OPTS: -Xmx3200m
+    parameters:
+      gradle-cache-prefix:
+        type: string
+        default: v1
+      build-cache-prefix:
+        type: string
+        default: v1
+
+    # List of available Android Docker images: https://circleci.com/developer/images/image/cimg/android#image-tags
+    executor:
+      name: android/android-docker
+      resource-class: large
+      tag: 2024.01.1
+
     steps:
       - checkout
+
+      - android/restore-gradle-cache:
+          cache-prefix: << parameters.gradle-cache-prefix >>
+      - android/restore-build-cache:
+          cache-prefix: << parameters.build-cache-prefix >>
+
       - run:
           name: Javadoc
           command: make ci-javadoc
@@ -105,11 +120,26 @@ jobs:
 
       - store_test_results:
           path: ci/unit-test/build/test-results
+      
+      - android/save-gradle-cache:
+          cache-prefix: << parameters.gradle-cache-prefix >>
+      - android/save-build-cache:
+          cache-prefix: << parameters.build-cache-prefix >>
 
   functional-test:
-    executor:
-      name: android/android-machine
+    parameters:
+      gradle-cache-prefix:
+        type: string
+        default: v1
+      build-cache-prefix:
+        type: string
+        default: v1
+
+    executor: 
+      name: android/android-docker
       resource-class: large
+      tag: 2024.01.1
+      
     steps:
       - checkout
       - android/start-emulator-and-run-tests:
