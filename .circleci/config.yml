@@ -1,6 +1,5 @@
 version: 2.1
 orbs:
-  # Use the CircleCI Android orb version that supports OpenJDK17 required by AGP 8.2+
   android: circleci/android@2.1.2
   codecov: codecov/codecov@3.2.4
 
@@ -79,7 +78,7 @@ jobs:
 
       - run:
           name: Build Library
-          command: make assmeble-phone
+          command: make assemble-phone
 
       - run:
           name: Build Test App
