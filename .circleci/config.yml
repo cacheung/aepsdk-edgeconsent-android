@@ -1,6 +1,7 @@
 version: 2.1
 orbs:
-  android: circleci/android@1.0
+  android: circleci/android@2.4.0
+  codecov: codecov/codecov@3.2.4
 
 # Workflows orchestrate a set of jobs to be run;
 workflows:
@@ -8,10 +9,18 @@ workflows:
   build-test-deploy:
     jobs:
       - validate-code
+          gradle-cache-prefix: v1
+          build-cache-prefix: v1
+
       - build-and-unit-test:
+          gradle-cache-prefix: v1
+          build-cache-prefix: v1
           requires:
             - validate-code
+            
       - functional-test:
+          gradle-cache-prefix: v1
+          build-cache-prefix: v1
           requires:
             - validate-code
  
