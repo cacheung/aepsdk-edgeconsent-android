@@ -1,17 +1,11 @@
 EXTENSION-LIBRARY-FOLDER-NAME = edgeconsent
 TEST-APP-FOLDER-NAME = app
 
-ROOT_DIR=$(shell git rev-parse --show-toplevel)
-
-PROJECT_NAME = $(shell cat $(ROOT_DIR)/code/gradle.properties | grep "moduleProjectName" | cut -d'=' -f2)
-AAR_NAME = $(shell cat $(ROOT_DIR)/code/gradle.properties | grep "moduleAARName" | cut -d'=' -f2)
-MODULE_NAME = $(shell cat $(ROOT_DIR)/code/gradle.properties | grep "moduleName" | cut -d'=' -f2)
-LIB_VERSION = $(shell cat $(ROOT_DIR)/code/gradle.properties | grep "moduleVersion" | cut -d'=' -f2)
-SOURCE_FILE_DIR =  $(ROOT_DIR)/code/$(PROJECT_NAME)
-AAR_FILE_DIR =  $(ROOT_DIR)/code/$(PROJECT_NAME)/build/outputs/aar
-
 init:
 	git config core.hooksPath .githooks
+
+clean:
+	(./code/gradlew -p code clean)
 
 format:
 	(./code/gradlew -p code/$(EXTENSION-LIBRARY-FOLDER-NAME) spotlessApply)
@@ -21,18 +15,8 @@ format-check:
 	(./code/gradlew -p code/$(EXTENSION-LIBRARY-FOLDER-NAME) spotlessCheck)
 	(./code/gradlew -p code/$(TEST-APP-FOLDER-NAME) spotlessCheck)
 
-clean:
-	(rm -rf $(AAR_FILE_DIR))
-	(./code/gradlew -p code clean)
-
 lint:
 	(./code/gradlew -p code/$(EXTENSION-LIBRARY-FOLDER-NAME) lint)
-
-build-library:
-	(./code/gradlew -p code/$(EXTENSION-LIBRARY-FOLDER-NAME) assemblePhone)
-
-build-app:
-	(./code/gradlew -p code/$(TEST-APP-FOLDER-NAME) assemble)
 
 unit-test:
 	(./code/gradlew -p code/$(EXTENSION-LIBRARY-FOLDER-NAME) platformUnitTestJacocoReport)
@@ -50,17 +34,23 @@ functional-test-coverage:
 javadoc:
 	(./code/gradlew -p code/$(EXTENSION-LIBRARY-FOLDER-NAME) javadocJar)
 
-build-debug:
+assmeble-phone:
+	(./code/gradlew -p code/$(EXTENSION-LIBRARY-FOLDER-NAME) assemblePhone)
+
+assemble-phone-debug:
 	(./code/gradlew -p code/${EXTENSION-LIBRARY-FOLDER-NAME}  assemblePhoneDebug)
 
-build-release:
+assemble-phone-release:
 	(./code/gradlew -p code/${EXTENSION-LIBRARY-FOLDER-NAME}  assemblePhoneRelease)
+
+assemble-app:
+	(./code/gradlew -p code/$(TEST-APP-FOLDER-NAME) assemble)
+
+ci-publish-maven-local-jitpack:
+	(./code/gradlew -p code/${EXTENSION-LIBRARY-FOLDER-NAME} publishReleasePublicationToMavenLocal -Pjitpack  -x signReleasePublication)
 
 ci-publish-staging: assemble-phone-release
 	(./code/gradlew -p code/${EXTENSION-LIBRARY-FOLDER-NAME} publishReleasePublicationToSonatypeRepository --stacktrace)
 
 ci-publish: assemble-phone-release
 	(./code/gradlew -p code/${EXTENSION-LIBRARY-FOLDER-NAME} publishReleasePublicationToSonatypeRepository -Prelease)
-
-ci-publish-maven-local-jitpack:
-	(./code/gradlew -p code/${EXTENSION-LIBRARY-FOLDER-NAME} publishReleasePublicationToMavenLocal -Pjitpack  -x signReleasePublication)

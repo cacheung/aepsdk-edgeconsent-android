@@ -91,7 +91,7 @@ jobs:
 
       - run:
           name: Build Library
-          command: make build-library
+          command: make assmeble-phone
 
       - run:
           name: Build Jitpack Library
@@ -99,7 +99,7 @@ jobs:
 
       - run:
           name: Build Test App
-          command: make build-app
+          command: make assemble-app
 
       - run:
           name: Build Java Doc
@@ -153,9 +153,9 @@ jobs:
           #   It should match the name seen in the "sdkmanager --list" output
           system-image: system-images;android-29;default;x86
           #   The command to be run, while waiting for emulator startup
-          post-emulator-launch-assemble-command: make ci-build
+          post-emulator-launch-assemble-command: make assemble-phone
           #   The test command
-          test-command: make ci-functional-test
+          test-command: make functional-test-coverage
           restore-gradle-cache-prefix: << parameters.gradle-cache-prefix >>
 
       - android/save-build-cache:
