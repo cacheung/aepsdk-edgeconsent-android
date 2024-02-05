@@ -47,15 +47,23 @@ jobs:
           cache-prefix: << parameters.gradle-cache-prefix >>
       - android/restore-build-cache:
           cache-prefix: << parameters.build-cache-prefix >>
-
+      
       - run:
           name: Check Code Format
           command: make format-check
+
+      - run:
+          name: Lint Code
+          command: make lint
           
       - android/save-gradle-cache:
           cache-prefix: << parameters.gradle-cache-prefix >>
       - android/save-build-cache:
-          cache-prefix: << parameters.build-cache-prefix >>      
+          cache-prefix: << parameters.build-cache-prefix >> 
+
+      # Store Lint report
+      - store_artifacts:
+          path: code/edgeconsent/build/reports     
 
   build-and-unit-test:
     parameters:
@@ -87,10 +95,6 @@ jobs:
       - run:
           name: Build Test App
           command: make assemble-app
-
-      - run:
-          name: Build Java Doc
-          command: make javadoc
 
       - store_artifacts:
           path: code/edgeconsent/build/docs/javadoc
