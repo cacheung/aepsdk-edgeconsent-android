@@ -153,8 +153,8 @@ jobs:
           cache-prefix: << parameters.build-cache-prefix >>
 
       - store_test_results:
-          path: code/edgeconsent/build/test-results/testPhoneDebugFunctionalTest
+          path: code/edgeconsent/build/outputs/androidTest-results
 
       - codecov/upload:
-          file: code/edgeconsent/build/reports/coverage/androidTest/phone/connected/debug/report.xml
+          file: code/edgeconsent/build/reports/coverage/androidTest/phone/debug/connected/report.xml
           flags: functional-tests
