@@ -38,7 +38,7 @@ jobs:
     executor:
       name: android/android-docker
       resource-class: large
-      tag: 2022.09.1
+      tag: 2022.09.2-node
 
     steps:
       - checkout
@@ -47,6 +47,10 @@ jobs:
           cache-prefix: << parameters.gradle-cache-prefix >>
       - android/restore-build-cache:
           cache-prefix: << parameters.build-cache-prefix >>
+
+      - run:
+          name: Check Code Format
+          command: make format-check
           
       - android/save-gradle-cache:
           cache-prefix: << parameters.gradle-cache-prefix >>
@@ -66,7 +70,7 @@ jobs:
     executor:
       name: android/android-docker
       resource-class: large
-      tag: 2022.09.1
+      tag: 2022.09.2-node
  
     steps:
       - checkout
@@ -120,7 +124,7 @@ jobs:
     executor: 
       name: android/android-docker
       resource-class: large
-      tag: 2022.09.1
+      tag: 2022.09.2-node
   
     steps:
       - checkout
