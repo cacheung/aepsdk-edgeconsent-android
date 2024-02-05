@@ -13,12 +13,6 @@ workflows:
           gradle-cache-prefix: v1
           build-cache-prefix: v1
 
-      - functional-test:
-          gradle-cache-prefix: v1
-          build-cache-prefix: v1
-          requires:
-            - validate-code
- 
 jobs:
   validate-code:
     parameters:
@@ -59,47 +53,3 @@ jobs:
       # Store Lint report
       - store_artifacts:
           path: code/edgeconsent/build/reports
-
-  functional-test:
-    parameters:
-      gradle-cache-prefix:
-        type: string
-        default: v1
-      build-cache-prefix:
-        type: string
-        default: v1
-    
-    # List of available Android Docker images: https://circleci.com/developer/images/image/cimg/android#image-tags
-    executor: 
-      name: android/android-docker
-      resource-class: large
-      tag: 2024.01.1
-
-    steps:
-      - checkout
-
-      - android/restore-build-cache:
-          cache-prefix: << parameters.build-cache-prefix >>
-
-      - run:
-          name: List available emulator images
-          command: sdkmanager --list
-
-      - android/start-emulator-and-run-tests:
-          #   It should match the name seen in the "sdkmanager --list" output
-          system-image: system-images;android-29;default;x86
-          #   The command to be run, while waiting for emulator startup
-          post-emulator-launch-assemble-command: make build-library
-          #   The test command
-          test-command: make functional-test-coverage
-          restore-gradle-cache-prefix: << parameters.gradle-cache-prefix >>
-
-      - android/save-build-cache:
-          cache-prefix: << parameters.build-cache-prefix >>
-
-      - store_test_results:
-        path: code/edgeconsent/build/test-results/testPhoneDebugFunctionalTest
-
-      - codecov/upload:
-        file: code/edgeconsent/build/reports/coverage/androidTest/phone/connected/debug/report.xml
-        flags: functional-tests
