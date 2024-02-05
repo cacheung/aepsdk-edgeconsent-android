@@ -77,3 +77,16 @@ jobs:
  
     steps:
       - checkout
+
+      - android/restore-gradle-cache:
+          cache-prefix: << parameters.gradle-cache-prefix >>
+      - android/restore-build-cache:
+          cache-prefix: << parameters.build-cache-prefix >>
+
+      - run:
+          name: Build Library
+          command: make build-library
+
+      - run:
+          name: Build Jitpack Library
+          command: make ci-publish-maven-local-jitpack
