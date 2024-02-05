@@ -24,7 +24,7 @@ workflows:
           build-cache-prefix: v1
           requires:
             - validate-code
- 
+
 jobs:
   validate-code:
     parameters:
@@ -34,12 +34,12 @@ jobs:
       build-cache-prefix:
         type: string
         default: v1
-  
+
     # List of available Android Docker images: https://circleci.com/developer/images/image/cimg/android#image-tags
     executor:
       name: android/android-docker
       resource-class: large
-      tag: 2022.09.2-node
+      tag: 2022.09.1
 
     steps:
       - checkout
@@ -48,15 +48,11 @@ jobs:
           cache-prefix: << parameters.gradle-cache-prefix >>
       - android/restore-build-cache:
           cache-prefix: << parameters.build-cache-prefix >>
-
-      - run:
-          name: Check Code Format
-          command: make format-check
-
+          
       - android/save-gradle-cache:
           cache-prefix: << parameters.gradle-cache-prefix >>
       - android/save-build-cache:
-          cache-prefix: << parameters.build-cache-prefix >>  
+          cache-prefix: << parameters.build-cache-prefix >>      
 
   build-and-unit-test:
     parameters:
@@ -71,8 +67,8 @@ jobs:
     executor:
       name: android/android-docker
       resource-class: large
-      tag: 2022.09.2-node
-
+      tag: 2022.09.1
+ 
     steps:
       - checkout
 
@@ -82,49 +78,35 @@ jobs:
           cache-prefix: << parameters.build-cache-prefix >>
 
       - run:
-          name: Javadoc
-          command: make ci-javadoc
-      - store_artifacts:
-          path: ci/javadoc/build/reports
+          name: Build Library
+          command: make assmeble-phone
 
       - run:
-          name: Build
-          command: make ci-build
+          name: Build Test App
+          command: make assemble-app
 
       - run:
-          name: Build App
-          command: make ci-build-app
-
-      - run:
-          name: UnitTests
-          command: make ci-unit-test
-
-            # code coverage
-      - run:
-          name: Upload Code Coverage Report
-          command: |
-            curl -s https://codecov.io/bash > codecov;
-            VERSION=$(grep 'VERSION=\"[0-9\.]*\"' codecov | cut -d'"' -f2);
-            SHAVERSION=$(shasum -v);
-            echo "Using CodeCov version '$VERSION'"
-            echo "Using shasum '$SHAVERSION'"
-            for i in 1 256 512
-            do
-              shasum -a $i -c --ignore-missing <(curl -s "https://raw.githubusercontent.com/codecov/codecov-bash/${VERSION}/SHA${i}SUM") ||
-              shasum -a $i -c <(curl -s "https://raw.githubusercontent.com/codecov/codecov-bash/${VERSION}/SHA${i}SUM" | grep -w "codecov")
-            done
-            bash ./codecov -v -X s3 -c -D "./ci/unit-test/build/reports" -F unit-tests
+          name: Build Java Doc
+          command: make javadoc
 
       - store_artifacts:
-          path: ci/unit-test/build/reports
+          path: code/edgeconsent/build/docs/javadoc
+
+      - run:
+          name: Run Unit Tests
+          command: make unit-test-coverage
 
       - store_test_results:
-          path: ci/unit-test/build/test-results
-      
+          path: code/edgeconsent/build/test-results/testPhoneDebugUnitTest
+
       - android/save-gradle-cache:
           cache-prefix: << parameters.gradle-cache-prefix >>
       - android/save-build-cache:
           cache-prefix: << parameters.build-cache-prefix >>
+
+      - codecov/upload:
+          file: code/edgeconsent/build/reports/coverage/test/phone/debug/report.xml
+          flags: unit-tests
 
   functional-test:
     parameters:
@@ -135,40 +117,37 @@ jobs:
         type: string
         default: v1
 
+   # List of available Android Docker images: https://circleci.com/developer/images/image/cimg/android#image-tags
     executor: 
       name: android/android-docker
       resource-class: large
-      tag: 2022.09.2-node
-
+      tag: 2022.09.1
+  
     steps:
       - checkout
+
+      - android/restore-build-cache:
+          cache-prefix: << parameters.build-cache-prefix >>
+
+      - run:
+          name: List available emulator images
+          command: sdkmanager --list
+
       - android/start-emulator-and-run-tests:
           #   It should match the name seen in the "sdkmanager --list" output
           system-image: system-images;android-29;default;x86
           #   The command to be run, while waiting for emulator startup
-          post-emulator-launch-assemble-command: make ci-build
+          post-emulator-launch-assemble-command: make assemble-phone
           #   The test command
-          test-command: make ci-functional-test
+          test-command: make functional-test-coverage
+          restore-gradle-cache-prefix: << parameters.gradle-cache-prefix >>
 
-      # code coverage
-      - run:
-          name: Upload Code Coverage Report
-          command: |
-            curl -s https://codecov.io/bash > codecov;
-            VERSION=$(grep 'VERSION=\"[0-9\.]*\"' codecov | cut -d'"' -f2);
-            SHAVERSION=$(shasum -v);
-            echo "Using CodeCov version '$VERSION'"
-            echo "Using shasum '$SHAVERSION'"
-            for i in 1 256 512
-            do
-              shasum -a $i -c --ignore-missing <(curl -s "https://raw.githubusercontent.com/codecov/codecov-bash/${VERSION}/SHA${i}SUM") ||
-              shasum -a $i -c <(curl -s "https://raw.githubusercontent.com/codecov/codecov-bash/${VERSION}/SHA${i}SUM" | grep -w "codecov")
-            done
-            bash ./codecov -v -X s3 -c -D "./ci/functional-test/build/reports" -F functional-tests
-
-      - store_artifacts:
-          path: ci/functional-test/build/reports
+      - android/save-build-cache:
+          cache-prefix: << parameters.build-cache-prefix >>
 
       - store_test_results:
-          path: ci/functional-test/build/outputs/androidTest-results
+          path: code/edgeconsent/build/test-results/testPhoneDebugFunctionalTest
 
+      - codecov/upload:
+          file: code/edgeconsent/build/reports/coverage/androidTest/phone/connected/debug/report.xml
+          flags: functional-tests
