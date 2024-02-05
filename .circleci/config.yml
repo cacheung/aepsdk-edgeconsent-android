@@ -60,7 +60,7 @@ jobs:
       - store_artifacts:
           path: code/edgeconsent/build/reports
 
-   build-and-unit-test:
+  build-and-unit-test:
     parameters:
       gradle-cache-prefix:
         type: string
