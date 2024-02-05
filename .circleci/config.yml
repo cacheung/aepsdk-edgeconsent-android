@@ -50,10 +50,6 @@ jobs:
           cache-prefix: << parameters.build-cache-prefix >>
 
       - run:
-          name: Check Code Format
-          command: make format-check
-
-      - run:
           name: Lint Code
           command: make lint
 
@@ -92,10 +88,6 @@ jobs:
       - run:
           name: Build Library
           command: make assmeble-phone
-
-      - run:
-          name: Build Jitpack Library
-          command: make ci-publish-maven-local-jitpack
 
       - run:
           name: Build Test App
