@@ -76,11 +76,11 @@ jobs:
         default: v1
 
     # List of available Android Docker images: https://circleci.com/developer/images/image/cimg/android#image-tags
-    executor: 
+    executor:
       name: android/android-docker
       resource-class: large
       tag: 2024.01.1
-
+ 
     steps:
       - checkout
 
