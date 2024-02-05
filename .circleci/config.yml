@@ -13,6 +13,12 @@ workflows:
           gradle-cache-prefix: v1
           build-cache-prefix: v1
 
+      - build-and-unit-test:
+          gradle-cache-prefix: v1
+          build-cache-prefix: v1
+          requires:
+            - validate-code
+
 jobs:
   validate-code:
     parameters:
@@ -53,3 +59,64 @@ jobs:
       # Store Lint report
       - store_artifacts:
           path: code/edgeconsent/build/reports
+
+   build-and-unit-test:
+    parameters:
+      gradle-cache-prefix:
+        type: string
+        default: v1
+      build-cache-prefix:
+        type: string
+        default: v1
+
+    # List of available Android Docker images: https://circleci.com/developer/images/image/cimg/android#image-tags
+    executor:
+      name: android/android-docker
+      resource-class: large
+      tag: 2024.01.1
+ 
+    steps:
+      - checkout
+
+      - android/restore-gradle-cache:
+          cache-prefix: << parameters.gradle-cache-prefix >>
+      - android/restore-build-cache:
+          cache-prefix: << parameters.build-cache-prefix >>
+
+      - run:
+          name: Build Library
+          command: make build-library
+      
+      - run:
+          name: Build Jitpack Library
+          command: make ci-publish-maven-local-jitpack
+
+      - run:
+          name: Build Test App
+          command: make build-app
+
+      - run:
+          name: Build Java Doc
+          command: make javadoc
+      
+      - store_artifacts:
+          path: code/edgeconsent/build/docs/javadoc
+
+      - run:
+        name: Run Unit Tests
+        command: make unit-test-coverage
+
+      - store_test_results:
+          path: code/edgeconsent/build/test-results/testPhoneDebugUnitTest
+
+      - android/save-gradle-cache:
+          cache-prefix: << parameters.gradle-cache-prefix >>
+      - android/save-build-cache:
+          cache-prefix: << parameters.build-cache-prefix >>
+
+      - codecov/upload:
+          file: code/edgeconsent/build/reports/coverage/test/phone/debug/report.xml
+          flags: unit-tests
+
+
+
