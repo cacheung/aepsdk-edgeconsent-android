@@ -8,7 +8,7 @@ workflows:
   version: 2
   build-test-deploy:
     jobs:
-      - validate-code
+      - validate-code:
           gradle-cache-prefix: v1
           build-cache-prefix: v1
 
@@ -17,7 +17,7 @@ workflows:
           build-cache-prefix: v1
           requires:
             - validate-code
-            
+
       - functional-test:
           gradle-cache-prefix: v1
           build-cache-prefix: v1
