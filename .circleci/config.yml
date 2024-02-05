@@ -146,7 +146,7 @@ jobs:
           #   The command to be run, while waiting for emulator startup
           post-emulator-launch-assemble-command: make assemble-phone
           #   The test command
-          test-command: make functional-test-coverage
+          test-command: make functional-test
           restore-gradle-cache-prefix: << parameters.gradle-cache-prefix >>
 
       - android/save-build-cache:
