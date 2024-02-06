@@ -46,11 +46,11 @@ assemble-phone-release:
 assemble-app:
 	(./code/gradlew -p code/$(TEST-APP-FOLDER-NAME) assemble)
 
-publish-maven-local-jitpack:
+ci-publish-maven-local-jitpack:
 	(./code/gradlew -p code/${EXTENSION-LIBRARY-FOLDER-NAME} publishReleasePublicationToMavenLocal -Pjitpack  -x signReleasePublication)
 
-publish-staging: assemble-phone-release
+ci-publish-staging: assemble-phone-release
 	(./code/gradlew -p code/${EXTENSION-LIBRARY-FOLDER-NAME} publishReleasePublicationToSonatypeRepository --stacktrace)
 
-publish: assemble-phone-release
+ci-publish: assemble-phone-release
 	(./code/gradlew -p code/${EXTENSION-LIBRARY-FOLDER-NAME} publishReleasePublicationToSonatypeRepository -Prelease)

@@ -38,7 +38,7 @@ jobs:
     executor:
       name: android/android-docker
       resource-class: large
-      tag: 2022.09.2-node
+      tag: 2022.09.1
 
     steps:
       - checkout
@@ -78,7 +78,7 @@ jobs:
     executor:
       name: android/android-docker
       resource-class: large
-      tag: 2022.09.2-node
+      tag: 2022.09.1
  
     steps:
       - checkout
@@ -102,6 +102,9 @@ jobs:
       - run:
           name: Run Unit Tests
           command: make unit-test-coverage
+      
+      - store_artifacts:
+          path: code/edgeconsent/build/reports/tests
 
       - store_test_results:
           path: code/edgeconsent/build/test-results/testPhoneDebugUnitTest
@@ -128,7 +131,7 @@ jobs:
     executor: 
       name: android/android-docker
       resource-class: large
-      tag: 2022.09.2-node
+      tag: 2022.09.1
   
     steps:
       - checkout
@@ -146,15 +149,15 @@ jobs:
           #   The command to be run, while waiting for emulator startup
           post-emulator-launch-assemble-command: make assemble-phone
           #   The test command
-          test-command: make functional-test
+          test-command: make functional-test-coverage
           restore-gradle-cache-prefix: << parameters.gradle-cache-prefix >>
-
+      
       - android/save-build-cache:
           cache-prefix: << parameters.build-cache-prefix >>
-
-      - store_test_results:
-          path: code/edgeconsent/build/outputs/androidTest-results
 
       - codecov/upload:
           file: code/edgeconsent/build/reports/coverage/androidTest/phone/debug/connected/report.xml
           flags: functional-tests
+
+      - store_test_results:
+          path: code/edgeconsent/build/outputs/androidTest-results
