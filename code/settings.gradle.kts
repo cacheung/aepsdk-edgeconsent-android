@@ -1,19 +1,25 @@
-
 pluginManagement {
     repositories {
         gradlePluginPortal()
         google()
         mavenCentral()
+        mavenLocal()
     }
 }
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        mavenLocal()
+        maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots/") }
+        maven { url = uri("https://jitpack.io") }
     }
 }
 
-include ':app', ':edgeconsent'
-rootProject.name = "edgeconsent-sdk"
+rootProject.name = "aepsdk-edgeconsent-android"
+include (
+         ":app",
+         ":edgeconsent"
+)
