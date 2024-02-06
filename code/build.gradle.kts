@@ -7,6 +7,6 @@ buildscript {
         mavenLocal()
     }
     dependencies {
-        classpath("com.github.adobe:aepsdk-commons:9deb721db7d")
+        classpath("com.github.adobe:aepsdk-commons:9deb721db7")
     }
 }
