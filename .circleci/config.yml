@@ -96,9 +96,6 @@ jobs:
           name: Build Test App
           command: make assemble-app
 
-      - store_artifacts:
-          path: code/edgeconsent/build/docs/javadoc
-
       - run:
           name: Run Unit Tests
           command: make unit-test-coverage
