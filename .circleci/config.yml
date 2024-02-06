@@ -38,7 +38,7 @@ jobs:
     executor:
       name: android/android-docker
       resource-class: large
-      tag: 2022.09.1
+      tag: 2022.09.1-node
 
     steps:
       - checkout
@@ -78,7 +78,7 @@ jobs:
     executor:
       name: android/android-docker
       resource-class: large
-      tag: 2022.09.1
+      tag: 2022.09.1-node
  
     steps:
       - checkout
@@ -131,7 +131,7 @@ jobs:
     executor: 
       name: android/android-docker
       resource-class: large
-      tag: 2022.09.1
+      tag: 2022.09.1-node
   
     steps:
       - checkout
@@ -158,6 +158,9 @@ jobs:
       - codecov/upload:
           file: code/edgeconsent/build/reports/coverage/androidTest/phone/debug/connected/report.xml
           flags: functional-tests
+      
+      - store_artifacts:
+          path: code/edgeconsent/build/reports/androidTests
 
       - store_test_results:
           path: code/edgeconsent/build/outputs/androidTest-results
