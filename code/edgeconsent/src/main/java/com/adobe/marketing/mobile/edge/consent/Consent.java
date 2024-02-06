@@ -46,30 +46,6 @@ public class Consent {
 	}
 
 	/**
-
-	 * Registers the extension with the Mobile SDK. This method should be called only once in your application class.
-	 * @deprecated Use {@link MobileCore#registerExtensions(List, AdobeCallback)} with {@link Consent#EXTENSION} instead.
-	 */
-	@Deprecated
-	@SuppressWarnings("deprecation")
-	public static void registerExtension() {
-		MobileCore.registerExtension(
-			ConsentExtension.class,
-			extensionError -> {
-				if (extensionError == null) {
-					return;
-				}
-				Log.error(
-					LOG_TAG,
-					LOG_SOURCE,
-					"There was an error registering the Consent extension:  %s",
-					extensionError.getErrorName()
-				);
-			}
-		);
-	}
-
-	/**
 	 * Merges the existing consents with the given consents. Duplicate keys will take the value of those passed in the API
 	 * <p>
 	 * Input example: {"consents": {"collect": {"val": "y"}}}
