@@ -101,8 +101,8 @@ jobs:
           command: make assemble-phone
 
       - run:
-        name: Build Jitpack Library
-        command: make ci-publish-maven-local-jitpack
+          name: Build Jitpack Library
+          command: make ci-publish-maven-local-jitpack
 
       - run:
           name: Build Test App
