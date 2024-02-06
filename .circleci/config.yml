@@ -38,7 +38,7 @@ jobs:
     executor:
       name: android/android-machine
       resource-class: large
-      tag: 2022.09.1-node
+      tag: 2022.09.1
 
     steps:
       - checkout
@@ -78,7 +78,7 @@ jobs:
     executor:
       name: android/android-machine
       resource-class: large
-      tag: 2022.09.1-node
+      tag: 2022.09.1
  
     steps:
       - checkout
@@ -131,7 +131,7 @@ jobs:
     executor: 
       name: android/android-machine
       resource-class: large
-      tag: 2022.09.1-node
+      tag: 2022.09.1
   
     steps:
       - checkout
