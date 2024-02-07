@@ -7,7 +7,7 @@ val mavenEdgeVersion: String by project
 
 aepLibrary {
     namespace = "com.adobe.marketing.mobile.edge.consent"
-    enableSpotless = true
+    enableSpotlessPrettierForJava = true
     enableCheckStyle = true
  
     publishing {
@@ -22,7 +22,7 @@ dependencies {
 
     testImplementation ("com.fasterxml.jackson.core:jackson-databind:2.12.7")
     testImplementation ("org.json:json:20180813")
-    
+
     androidTestImplementation ("androidx.test.espresso:espresso-core:3.4.0")
     androidTestImplementation ("com.fasterxml.jackson.core:jackson-databind:2.12.7")
 }
