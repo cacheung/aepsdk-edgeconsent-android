@@ -23,8 +23,6 @@ import com.adobe.marketing.mobile.Event;
 import com.adobe.marketing.mobile.EventSource;
 import com.adobe.marketing.mobile.EventType;
 import com.adobe.marketing.mobile.Extension;
-import com.adobe.marketing.mobile.ExtensionError;
-import com.adobe.marketing.mobile.ExtensionErrorCallback;
 import com.adobe.marketing.mobile.MobileCore;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -69,30 +67,6 @@ public class ConsentTest {
 	}
 
 	// ========================================================================================
-	// registerExtension
-	// ========================================================================================
-	@Test
-	public void testRegistration_deprecated() {
-		try (MockedStatic<MobileCore> mobileCoreMockedStatic = Mockito.mockStatic(MobileCore.class)) {
-			// mock MobileCore.registerExtension()
-			ArgumentCaptor<Class> extensionClassCaptor = ArgumentCaptor.forClass(Class.class);
-			ArgumentCaptor<ExtensionErrorCallback> callbackCaptor = ArgumentCaptor.forClass(
-				ExtensionErrorCallback.class
-			);
-			mobileCoreMockedStatic
-				.when(() -> MobileCore.registerExtension(extensionClassCaptor.capture(), callbackCaptor.capture()))
-				.thenReturn(true);
-			// call registerExtension() API
-			Consent.registerExtension();
-			// verify: happy
-			assertNotNull(callbackCaptor.getValue());
-			assertEquals(ConsentExtension.class, extensionClassCaptor.getValue());
-			// verify: not exception when error callback was called
-			callbackCaptor.getValue().error(ExtensionError.UNEXPECTED_ERROR);
-		}
-	}
-
-	// ========================================================================================
 	// publicExtensionConstants
 	// ========================================================================================
 	@Test
@@ -102,30 +76,6 @@ public class ConsentTest {
 		extensions.add(Consent.EXTENSION);
 		// should not throw exceptions
 		MobileCore.registerExtensions(extensions, null);
-	}
-
-	// ========================================================================================
-	// Registration without Error
-	// ========================================================================================
-	@Test
-	public void test_registerExtension_withoutError_deprecated() {
-		try (MockedStatic<MobileCore> mobileCoreMockedStatic = Mockito.mockStatic(MobileCore.class)) {
-			// mock MobileCore.registerExtension()
-			ArgumentCaptor<Class> extensionClassCaptor = ArgumentCaptor.forClass(Class.class);
-			ArgumentCaptor<ExtensionErrorCallback> callbackCaptor = ArgumentCaptor.forClass(
-				ExtensionErrorCallback.class
-			);
-			mobileCoreMockedStatic
-				.when(() -> MobileCore.registerExtension(extensionClassCaptor.capture(), callbackCaptor.capture()))
-				.thenReturn(true);
-			// call registerExtension() API
-			Consent.registerExtension();
-			// verify: happy
-			assertNotNull(callbackCaptor.getValue());
-			assertEquals(ConsentExtension.class, extensionClassCaptor.getValue());
-			// verify: not exception when error callback was called
-			callbackCaptor.getValue().error(null);
-		}
 	}
 
 	// ========================================================================================
