@@ -6,9 +6,6 @@ val mavenCoreVersion: String by project
 
 aepLibrary {
     namespace = "com.adobe.marketing.mobile.edge.consent"
-
-    enableSpotless = false
-    enableSpotlessPrettierForJava = false
     enableCheckStyle = false
 
     publishing {
