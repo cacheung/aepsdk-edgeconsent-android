@@ -2,30 +2,6 @@ import com.adobe.marketing.mobile.gradle.BuildConstants
 
 plugins {
     id("com.android.application")
-   // id("com.diffplug.spotless")
-}
-
-configure<com.diffplug.gradle.spotless.SpotlessExtension> {
-    java {
-        toggleOffOn("format:off", "format:on")
-        target("src/*/java/**/*.java")
-        removeUnusedImports()
-        prettier(
-                mapOf(
-                        "prettier" to rootProject.extra["prettierVersion"].toString(),
-                        "prettier-plugin-java" to rootProject.extra["prettierPluginJavaVersion"].toString()
-                )
-        ).config(
-                mapOf(
-                        "parser" to "java",
-                        "tabWidth" to 4,
-                        "useTabs" to true,
-                        "printWidth" to 120
-                )
-        )
-        endWithNewline()
-        licenseHeaderFile("../../config/formatter/adobe.header.txt")
-    }
 }
 
 android {
@@ -43,7 +19,6 @@ android {
     buildTypes {
         getByName(BuildConstants.BuildTypes.RELEASE)  {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
 }
