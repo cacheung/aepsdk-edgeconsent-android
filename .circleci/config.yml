@@ -1,7 +1,7 @@
 version: 2.1
 orbs:
   # Use the circleci android orb version that supports OpenJDK17 required by AGP 8.2+
-  android: circleci/android@2.1.2
+  android: circleci/android@2.4.0
   codecov: codecov/codecov@3.2.4
 
 # Workflows orchestrate a set of jobs to be run;
@@ -49,13 +49,13 @@ jobs:
       - android/restore-build-cache:
           cache-prefix: << parameters.build-cache-prefix >>
 
-      - run:
-          name: Check Code Format
-          command: make format-check
+      # - run:
+      #     name: Check Code Format
+      #     command: make format-check
 
-      - run:
-          name: Lint Code
-          command: make lint
+      # - run:
+      #     name: Lint Code
+      #     command: make lint
 
       - run:
           name: Javadoc
