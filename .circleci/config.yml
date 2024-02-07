@@ -37,9 +37,9 @@ jobs:
 
     # List of available Android Docker images: https://circleci.com/developer/images/image/cimg/android#image-tags
     executor:
-      name: android/android-machine
+      name: android/android-docker
       resource-class: large
-      tag: 2022.09.1
+      tag: 2024.01.1
 
     steps:
       - checkout
@@ -84,9 +84,9 @@ jobs:
 
     # List of available Android Docker images: https://circleci.com/developer/images/image/cimg/android#image-tags
     executor:
-      name: android/android-machine
+      name: android/android-docker
       resource-class: large
-      tag: 2022.09.1
+      tag: 2024.01.1
  
     steps:
       - checkout
@@ -140,7 +140,7 @@ jobs:
     executor: 
       name: android/android-machine
       resource-class: large
-      tag: 2022.09.1
+      tag: 2024.01.1
   
     steps:
       - checkout
