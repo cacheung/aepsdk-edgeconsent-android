@@ -6,8 +6,9 @@ val mavenCoreVersion: String by project
 
 aepLibrary {
     namespace = "com.adobe.marketing.mobile.edge.consent"
-    enableCheckStyle = false
-
+    enableSpotless = true
+    enableCheckStyle = true
+ 
     publishing {
         gitRepoName = "aepsdk-edgeconsent-android"
         addCoreDependency(mavenCoreVersion)
