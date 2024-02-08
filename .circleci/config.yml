@@ -50,11 +50,11 @@ jobs:
           cache-prefix: << parameters.build-cache-prefix >>
 
       # - run:
-      #     name: Check Code Format
-      #     command: make format-check
+      #     name: Check Format
+      #     command: make checkformat
 
       # - run:
-      #     name: Lint Code
+      #     name: Lint
       #     command: make lint
 
       - android/save-gradle-cache:
@@ -97,15 +97,15 @@ jobs:
           path: code/edgeconsent/build/docs/javadoc
 
       - run:
-          name: Build Library
+          name: Assemble Phone
           command: make assemble-phone
 
       - run:
-          name: Build Jitpack Library
+          name: Assemble for Jitpack
           command: make ci-publish-maven-local-jitpack
 
       - run:
-          name: Build Test App
+          name: Assemble App
           command: make assemble-app
 
       - run:
