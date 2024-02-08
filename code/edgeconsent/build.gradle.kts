@@ -13,6 +13,7 @@ aepLibrary {
     publishing {
         gitRepoName = "aepsdk-edgeconsent-android"
         addCoreDependency(mavenCoreVersion)
+        addMavenDependency("com.adobe.marketing.mobile", "edge", mavenEdgeVersion)
     }
 }
 
