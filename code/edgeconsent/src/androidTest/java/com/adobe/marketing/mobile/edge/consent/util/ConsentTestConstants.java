@@ -11,71 +11,71 @@
 
 package com.adobe.marketing.mobile.edge.consent.util;
 
-/**
- * Class to maintain test constants.
- */
+/** Class to maintain test constants. */
 public class ConsentTestConstants {
 
-	public static final String LOG_TAG = "Consent";
+    public static final String LOG_TAG = "Consent";
 
-	public static class EventType {
+    public static class EventType {
 
-		static final String MONITOR = "com.adobe.functional.eventType.monitor";
+        static final String MONITOR = "com.adobe.functional.eventType.monitor";
 
-		private EventType() {}
-	}
+        private EventType() {}
+    }
 
-	static final class DataStoreKey {
+    static final class DataStoreKey {
 
-		public static final String CONFIG_DATASTORE = "AdobeMobile_ConfigState";
-		public static final String CONSENT_DATASTORE = "com.adobe.edge.consent";
-		public static final String CONSENT_PREFERENCES = "consent:preferences";
+        public static final String CONFIG_DATASTORE = "AdobeMobile_ConfigState";
+        public static final String CONSENT_DATASTORE = "com.adobe.edge.consent";
+        public static final String CONSENT_PREFERENCES = "consent:preferences";
 
-		private DataStoreKey() {}
-	}
+        private DataStoreKey() {}
+    }
 
-	public final class SharedStateName {
+    public final class SharedStateName {
 
-		public static final String CONFIG = "com.adobe.module.configuration";
-		public static final String EVENT_HUB = "com.adobe.module.eventhub";
+        public static final String CONFIG = "com.adobe.module.configuration";
+        public static final String EVENT_HUB = "com.adobe.module.eventhub";
 
-		private SharedStateName() {}
-	}
+        private SharedStateName() {}
+    }
 
-	public final class GetConsentHelper {
+    public final class GetConsentHelper {
 
-		public static final String VALUE = "getConsentValue";
-		public static final String ERROR = "getConsentError";
+        public static final String VALUE = "getConsentValue";
+        public static final String ERROR = "getConsentError";
 
-		private GetConsentHelper() {}
-	}
+        private GetConsentHelper() {}
+    }
 
-	public static class EventSource {
+    public static class EventSource {
 
-		// Used by Monitor Extension
-		static final String XDM_SHARED_STATE_REQUEST = "com.adobe.eventSource.xdmSharedStateRequest";
-		static final String XDM_SHARED_STATE_RESPONSE = "com.adobe.eventSource.xdmSharedStateResponse";
-		static final String SHARED_STATE_REQUEST = "com.adobe.eventSource.sharedStateRequest";
-		static final String SHARED_STATE_RESPONSE = "com.adobe.eventSource.sharedStateResponse";
-		static final String UNREGISTER = "com.adobe.eventSource.unregister";
+        // Used by Monitor Extension
+        static final String XDM_SHARED_STATE_REQUEST =
+                "com.adobe.eventSource.xdmSharedStateRequest";
+        static final String XDM_SHARED_STATE_RESPONSE =
+                "com.adobe.eventSource.xdmSharedStateResponse";
+        static final String SHARED_STATE_REQUEST = "com.adobe.eventSource.sharedStateRequest";
+        static final String SHARED_STATE_RESPONSE = "com.adobe.eventSource.sharedStateResponse";
+        static final String UNREGISTER = "com.adobe.eventSource.unregister";
 
-		private EventSource() {}
-	}
+        private EventSource() {}
+    }
 
-	public static class EventDataKey {
+    public static class EventDataKey {
 
-		static final String STATE_OWNER = "stateowner";
-		public static final String CONSENTS = "consents";
-		static final String METADATA = "metadata";
-		static final String TIME = "time";
+        static final String STATE_OWNER = "stateowner";
+        public static final String CONSENTS = "consents";
+        static final String METADATA = "metadata";
+        static final String TIME = "time";
 
-		private EventDataKey() {}
-	}
+        private EventDataKey() {}
+    }
 
-	public static final class ConfigurationKey {
+    public static final class ConfigurationKey {
 
-		public static final String DEFAULT_CONSENT = "consent.default";
+        public static final String DEFAULT_CONSENT = "consent.default";
 
-		private ConfigurationKey() {}
-	}
+        private ConfigurationKey() {}
+    }
 }

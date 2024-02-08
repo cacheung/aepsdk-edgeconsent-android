@@ -7,7 +7,7 @@ val mavenEdgeVersion: String by project
 
 aepLibrary {
     namespace = "com.adobe.marketing.mobile.edge.consent"
-    enableSpotlessPrettierForJava = true
+    enableSpotless = true
     enableCheckStyle = true
  
     publishing {
