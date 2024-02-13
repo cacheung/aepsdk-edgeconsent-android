@@ -22,7 +22,9 @@ jobs:
     executor:
       name: android/android-docker
       resource-class: medium
-      tag: 2024.01.1
+      tag: 2024.01.1-node
+    environment:
+      BUILD_FOLDER: code/edgeconsent/build/
 
     steps:
       - checkout
@@ -45,13 +47,13 @@ jobs:
 
       # Store Lint report
       - store_artifacts:
-          path: code/edgeconsent/build/reports     
+          path: ${BUILD_FOLDER}reports     
 
   build-and-unit-test:
     executor:
       name: android/android-docker
       resource-class: medium
-      tag: 2024.01.1
+      tag: 2024.01.1-node
  
     steps:
       - checkout
@@ -65,7 +67,7 @@ jobs:
           command: make javadoc
 
       - store_artifacts:
-          path: code/edgeconsent/build/docs/javadoc
+          path: ${BUILD_FOLDER}docs/javadoc
 
       - run:
           name: Assemble Phone
@@ -87,14 +89,14 @@ jobs:
           path: code/edgeconsent/build/reports/tests
 
       - store_test_results:
-          path: code/edgeconsent/build/test-results/testPhoneDebugUnitTest
+          path: ${BUILD_FOLDER}test-results/testPhoneDebugUnitTest
 
       - android/save-gradle-cache
 
       - android/save-build-cache
 
       - codecov/upload:
-          file: code/edgeconsent/build/reports/coverage/test/phone/debug/report.xml
+          file: ${BUILD_FOLDER}reports/coverage/test/phone/debug/report.xml
           flags: unit-tests
 
   functional-test:
@@ -123,11 +125,11 @@ jobs:
       - android/save-build-cache
 
       - codecov/upload:
-          file: code/edgeconsent/build/reports/coverage/androidTest/phone/debug/connected/report.xml
+          file: ${BUILD_FOLDER}coverage/androidTest/phone/debug/connected/report.xml
           flags: functional-tests
  
       - store_artifacts:
-          path: code/edgeconsent/build/reports/androidTests
+          path: ${BUILD_FOLDER}reports/androidTests
 
       - store_test_results:
-          path: code/edgeconsent/build/outputs/androidTest-results
+          path: ${BUILD_FOLDER}outputs/androidTest-results
