@@ -19,7 +19,7 @@ val mavenEdgeVersion: String by project
 aepLibrary {
     namespace = "com.adobe.marketing.mobile.edge.consent"
     enableSpotless = true
-    enableCheckStyle = true
+    enableSpotlessPrettierForJava = true
  
     publishing {
         gitRepoName = "aepsdk-edgeconsent-android"
