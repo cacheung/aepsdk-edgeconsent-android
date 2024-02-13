@@ -13,6 +13,7 @@ aepLibrary {
     publishing {
         gitRepoName = "aepsdk-edgeconsent-android"
         addCoreDependency(mavenCoreVersion)
+        addEdgeDependency(mavenEdgeVersion)
     }
 }
 
@@ -20,9 +21,13 @@ dependencies {
     implementation("com.adobe.marketing.mobile:core:$mavenCoreVersion-SNAPSHOT")
     implementation("com.adobe.marketing.mobile:edge:$mavenEdgeVersion")
 
-    testImplementation ("com.fasterxml.jackson.core:jackson-databind:2.12.7")
-    testImplementation ("org.json:json:20180813")
+    // testImplementation dependencies provided by aep-library:
+    // MOCKITO_CORE, MOCKITO_INLINE, JSON
 
-    androidTestImplementation ("androidx.test.espresso:espresso-core:3.4.0")
+    testImplementation ("com.fasterxml.jackson.core:jackson-databind:2.12.7")
+
+    // androidTestImplementation dependencies provided by aep-library:
+    // ANDROIDX_TEST_EXT_JUNIT, ESPRESSO_CORE
+
     androidTestImplementation ("com.fasterxml.jackson.core:jackson-databind:2.12.7")
 }

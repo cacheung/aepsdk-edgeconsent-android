@@ -9,7 +9,7 @@
   governing permissions and limitations under the License.
 */
 
-package com.adobe.marketing.mobile.edge.consent.consentTestApp;
+package com.adobe.marketing.mobile.edge.consent.testapp;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.adobe.marketing.mobile.AdobeCallbackWithError;
 import com.adobe.marketing.mobile.AdobeError;
 import com.adobe.marketing.mobile.edge.consent.Consent;
+
 import java.util.HashMap;
 import java.util.Map;
 
