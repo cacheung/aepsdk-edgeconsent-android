@@ -85,9 +85,9 @@ public class UtilsTest {
         assertEquals("value1", result.get("key1"));
     }
 
-	@Test
-	public void testDeepCopy_whenInvalidMapWithCustomObjects_returnsCustomObjectsRemoved() {
-		class CustomObj {
+    @Test
+    public void testDeepCopy_whenInvalidMapWithCustomObjects_returnsCustomObjectsRemoved() {
+        class CustomObj {
 
             private final int value;
 
@@ -99,10 +99,10 @@ public class UtilsTest {
         map.put("key1", "value1");
         map.put("key2", new CustomObj(1000));
 
-		Map<String, Object> deepCopy = Utils.deepCopy(map);
-		assertEquals(1, deepCopy.size());
-		assertEquals("value1", deepCopy.get("key1"));
-	}
+        Map<String, Object> deepCopy = Utils.deepCopy(map);
+        assertEquals(1, deepCopy.size());
+        assertEquals("value1", deepCopy.get("key1"));
+    }
 
     @Test
     public void testOptDeepCopy_whenNull_fallbackNull() {
