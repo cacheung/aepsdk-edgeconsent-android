@@ -26,94 +26,94 @@ import org.mockito.junit.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class UtilsTest {
 
-    @Test
-    public void testDeepCopy_whenNull() {
-        assertNull(Utils.deepCopy((Map) null));
-    }
+	@Test
+	public void testDeepCopy_whenNull() {
+		assertNull(Utils.deepCopy((Map) null));
+	}
 
-    @Test
-    public void testDeepCopy_whenEmpty() {
-        Map<String, Object> emptyMap = new HashMap<>();
-        assertEquals(0, Utils.deepCopy(emptyMap).size());
-    }
+	@Test
+	public void testDeepCopy_whenEmpty() {
+		Map<String, Object> emptyMap = new HashMap<>();
+		assertEquals(0, Utils.deepCopy(emptyMap).size());
+	}
 
-    @Test
-    public void testDeepCopy_whenValidSimple_thenSetOriginalNull() {
-        Map<String, Object> map = new HashMap<>();
-        map.put("key1", "value1");
-        Map<String, Object> deepCopy = Utils.deepCopy(map);
+	@Test
+	public void testDeepCopy_whenValidSimple_thenSetOriginalNull() {
+		Map<String, Object> map = new HashMap<>();
+		map.put("key1", "value1");
+		Map<String, Object> deepCopy = Utils.deepCopy(map);
 
-        map = null;
-        assertNotNull(deepCopy);
-    }
+		map = null;
+		assertNotNull(deepCopy);
+	}
 
-    @Test
-    public void testDeepCopy_whenValidSimple_thenMutateOriginal() {
-        Map<String, Object> map = new HashMap<>();
-        map.put("key1", "value1");
+	@Test
+	public void testDeepCopy_whenValidSimple_thenMutateOriginal() {
+		Map<String, Object> map = new HashMap<>();
+		map.put("key1", "value1");
 
-        Map<String, Object> deepCopy = Utils.deepCopy(map);
-        deepCopy.remove("key1");
+		Map<String, Object> deepCopy = Utils.deepCopy(map);
+		deepCopy.remove("key1");
 
-        assertTrue(map.containsKey("key1"));
-    }
+		assertTrue(map.containsKey("key1"));
+	}
 
-    @Test
-    public void testDeepCopy_whenValidNested() {
-        Map<String, Object> map = new HashMap<>();
-        map.put("key1", "value1");
+	@Test
+	public void testDeepCopy_whenValidNested() {
+		Map<String, Object> map = new HashMap<>();
+		map.put("key1", "value1");
 
-        Map<String, Object> nested = new HashMap<>();
-        nested.put("nestedKey", "nestedValue");
-        map.put("nestedMap", nested);
+		Map<String, Object> nested = new HashMap<>();
+		nested.put("nestedKey", "nestedValue");
+		map.put("nestedMap", nested);
 
-        Map<String, Object> deepCopy = Utils.deepCopy(map);
-        Map<String, Object> nestedDeepCopy = (Map<String, Object>) deepCopy.get("nestedMap");
-        nestedDeepCopy.put("newKey", "newValue");
+		Map<String, Object> deepCopy = Utils.deepCopy(map);
+		Map<String, Object> nestedDeepCopy = (Map<String, Object>) deepCopy.get("nestedMap");
+		nestedDeepCopy.put("newKey", "newValue");
 
-        assertFalse(nested.size() == nestedDeepCopy.size());
-    }
+		assertFalse(nested.size() == nestedDeepCopy.size());
+	}
 
-    @Test
-    public void testDeepCopy_whenNullKey_ignoresKey() {
-        Map<String, Object> map = new HashMap<>();
-        map.put("key1", "value1");
-        map.put(null, "null");
+	@Test
+	public void testDeepCopy_whenNullKey_ignoresKey() {
+		Map<String, Object> map = new HashMap<>();
+		map.put("key1", "value1");
+		map.put(null, "null");
 
-        Map<String, Object> result = Utils.deepCopy(map);
-        assertEquals(1, result.size());
-        assertEquals("value1", result.get("key1"));
-    }
+		Map<String, Object> result = Utils.deepCopy(map);
+		assertEquals(1, result.size());
+		assertEquals("value1", result.get("key1"));
+	}
 
-    @Test
-    public void testDeepCopy_whenInvalidMapWithCustomObjects_returnsCustomObjectsRemoved() {
-        class CustomObj {
+	@Test
+	public void testDeepCopy_whenInvalidMapWithCustomObjects_returnsCustomObjectsRemoved() {
+		class CustomObj {
 
-            private final int value;
+			private final int value;
 
-            CustomObj(int value) {
-                this.value = value;
-            }
-        }
-        Map<String, Object> map = new HashMap<>();
-        map.put("key1", "value1");
-        map.put("key2", new CustomObj(1000));
+			CustomObj(int value) {
+				this.value = value;
+			}
+		}
+		Map<String, Object> map = new HashMap<>();
+		map.put("key1", "value1");
+		map.put("key2", new CustomObj(1000));
 
-        Map<String, Object> deepCopy = Utils.deepCopy(map);
-        assertEquals(1, deepCopy.size());
-        assertEquals("value1", deepCopy.get("key1"));
-    }
+		Map<String, Object> deepCopy = Utils.deepCopy(map);
+		assertEquals(1, deepCopy.size());
+		assertEquals("value1", deepCopy.get("key1"));
+	}
 
-    @Test
-    public void testOptDeepCopy_whenNull_fallbackNull() {
-        assertNull(Utils.optDeepCopy(null, null));
-    }
+	@Test
+	public void testOptDeepCopy_whenNull_fallbackNull() {
+		assertNull(Utils.optDeepCopy(null, null));
+	}
 
-    @Test
-    public void testOptDeepCopy_whenNull_fallbackEmptyMap() {
-        Map<String, Object> emptyMap = new HashMap<>();
-        Map<String, Object> copyMap = Utils.optDeepCopy(null, emptyMap);
-        assertNotNull(copyMap);
-        assertEquals(emptyMap, copyMap);
-    }
+	@Test
+	public void testOptDeepCopy_whenNull_fallbackEmptyMap() {
+		Map<String, Object> emptyMap = new HashMap<>();
+		Map<String, Object> copyMap = Utils.optDeepCopy(null, emptyMap);
+		assertNotNull(copyMap);
+		assertEquals(emptyMap, copyMap);
+	}
 }

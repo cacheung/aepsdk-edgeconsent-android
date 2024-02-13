@@ -17,8 +17,8 @@ package com.adobe.marketing.mobile;
  */
 public class MobileCoreHelper {
 
-    /** Wrapper around {@link MobileCore#resetSDK()} */
-    public static void resetSDK() {
-        MobileCore.resetSDK();
-    }
+	/** Wrapper around {@link MobileCore#resetSDK()} */
+	public static void resetSDK() {
+		MobileCore.resetSDK();
+	}
 }

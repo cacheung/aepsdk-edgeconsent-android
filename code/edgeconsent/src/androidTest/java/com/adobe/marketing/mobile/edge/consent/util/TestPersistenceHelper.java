@@ -20,50 +20,46 @@ import java.util.ArrayList;
  */
 public class TestPersistenceHelper {
 
-    private static final ArrayList<String> knownDatastoreName =
-            new ArrayList<String>() {
-                {
-                    add(ConsentTestConstants.DataStoreKey.CONSENT_DATASTORE);
-                    add(ConsentTestConstants.DataStoreKey.CONFIG_DATASTORE);
-                }
-            };
+	private static final ArrayList<String> knownDatastoreName = new ArrayList<String>() {
+		{
+			add(ConsentTestConstants.DataStoreKey.CONSENT_DATASTORE);
+			add(ConsentTestConstants.DataStoreKey.CONFIG_DATASTORE);
+		}
+	};
 
-    /**
-     * Helper method to update the {@link NamedCollection} data.
-     *
-     * @param datastore the name of the datastore to be updated
-     * @param key the persisted data key that has to be updated
-     * @param value the new value
-     */
-    public static void updatePersistence(
-            final String datastore, final String key, final String value) {
-        NamedCollection dataStore =
-                ServiceProvider.getInstance().getDataStoreService().getNamedCollection(datastore);
-        dataStore.setString(key, value);
-    }
+	/**
+	 * Helper method to update the {@link NamedCollection} data.
+	 *
+	 * @param datastore the name of the datastore to be updated
+	 * @param key the persisted data key that has to be updated
+	 * @param value the new value
+	 */
+	public static void updatePersistence(final String datastore, final String key, final String value) {
+		NamedCollection dataStore = ServiceProvider.getInstance().getDataStoreService().getNamedCollection(datastore);
+		dataStore.setString(key, value);
+	}
 
-    /**
-     * Reads the requested persisted data from datastore.
-     *
-     * @param datastore the name of the datastore to be read
-     * @param key the key that needs to be read
-     * @return {@link String} value of persisted data. Null if data is not found in {@link
-     *     NamedCollection}
-     */
-    public static String readPersistedData(final String datastore, final String key) {
-        NamedCollection dataStore =
-                ServiceProvider.getInstance().getDataStoreService().getNamedCollection(datastore);
-        return dataStore.getString(key, null);
-    }
+	/**
+	 * Reads the requested persisted data from datastore.
+	 *
+	 * @param datastore the name of the datastore to be read
+	 * @param key the key that needs to be read
+	 * @return {@link String} value of persisted data. Null if data is not found in {@link
+	 *     NamedCollection}
+	 */
+	public static String readPersistedData(final String datastore, final String key) {
+		NamedCollection dataStore = ServiceProvider.getInstance().getDataStoreService().getNamedCollection(datastore);
+		return dataStore.getString(key, null);
+	}
 
-    /** Clears the Configuration and Consent extension's persisted data */
-    public static void resetKnownPersistence() {
-        for (String eachDatastore : knownDatastoreName) {
-            NamedCollection dataStore =
-                    ServiceProvider.getInstance()
-                            .getDataStoreService()
-                            .getNamedCollection(eachDatastore);
-            dataStore.removeAll();
-        }
-    }
+	/** Clears the Configuration and Consent extension's persisted data */
+	public static void resetKnownPersistence() {
+		for (String eachDatastore : knownDatastoreName) {
+			NamedCollection dataStore = ServiceProvider
+				.getInstance()
+				.getDataStoreService()
+				.getNamedCollection(eachDatastore);
+			dataStore.removeAll();
+		}
+	}
 }

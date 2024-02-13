@@ -28,123 +28,112 @@ import java.util.Map;
 
 public class Consent {
 
-    public static final Class<? extends Extension> EXTENSION = ConsentExtension.class;
-    private static final String LOG_SOURCE = "Consent";
-    private static final long CALLBACK_TIMEOUT_MILLIS = 5000L;
+	public static final Class<? extends Extension> EXTENSION = ConsentExtension.class;
+	private static final String LOG_SOURCE = "Consent";
+	private static final long CALLBACK_TIMEOUT_MILLIS = 5000L;
 
-    private Consent() {}
+	private Consent() {}
 
-    /**
-     * Returns the version of the {@link Consent} extension
-     *
-     * @return The version as {@code String}
-     */
-    @NonNull public static String extensionVersion() {
-        return ConsentConstants.EXTENSION_VERSION;
-    }
+	/**
+	 * Returns the version of the {@link Consent} extension
+	 *
+	 * @return The version as {@code String}
+	 */
+	@NonNull public static String extensionVersion() {
+		return ConsentConstants.EXTENSION_VERSION;
+	}
 
-    /**
-     * Merges the existing consents with the given consents. Duplicate keys will take the value of
-     * those passed in the API
-     *
-     * <p>Input example: {"consents": {"collect": {"val": "y"}}}
-     *
-     * @param consents A {@link Map} of consents to be merged with the existing consents
-     */
-    public static void update(@NonNull final Map<String, Object> consents) {
-        if (consents == null || consents.isEmpty()) {
-            Log.debug(
-                    LOG_TAG,
-                    LOG_SOURCE,
-                    "Null/Empty consents passed to update API. Ignoring the API call.");
-            return;
-        }
+	/**
+	 * Merges the existing consents with the given consents. Duplicate keys will take the value of
+	 * those passed in the API
+	 *
+	 * <p>Input example: {"consents": {"collect": {"val": "y"}}}
+	 *
+	 * @param consents A {@link Map} of consents to be merged with the existing consents
+	 */
+	public static void update(@NonNull final Map<String, Object> consents) {
+		if (consents == null || consents.isEmpty()) {
+			Log.debug(LOG_TAG, LOG_SOURCE, "Null/Empty consents passed to update API. Ignoring the API call.");
+			return;
+		}
 
-        // create and dispatch an consent fragments update event
-        final Event event =
-                new Event.Builder(
-                                ConsentConstants.EventNames.CONSENT_UPDATE_REQUEST,
-                                EventType.CONSENT,
-                                EventSource.UPDATE_CONSENT)
-                        .setEventData(consents)
-                        .build();
-        MobileCore.dispatchEvent(event);
-    }
+		// create and dispatch an consent fragments update event
+		final Event event = new Event.Builder(
+			ConsentConstants.EventNames.CONSENT_UPDATE_REQUEST,
+			EventType.CONSENT,
+			EventSource.UPDATE_CONSENT
+		)
+			.setEventData(consents)
+			.build();
+		MobileCore.dispatchEvent(event);
+	}
 
-    /**
-     * Retrieves the current consent preferences stored in the Consent extension
-     *
-     * <p>Output example: {"consents": {"collect": {"val": "y"}}}
-     *
-     * @param callback The {@link AdobeCallback} is invoked with the current consent preferences. If
-     *     an {@link AdobeCallbackWithError} is provided, an {@link AdobeError} is returned when an
-     *     unexpected error occurs or the request timed out
-     */
-    public static void getConsents(@NonNull final AdobeCallback<Map<String, Object>> callback) {
-        if (callback == null) {
-            Log.debug(
-                    LOG_TAG,
-                    LOG_SOURCE,
-                    "Unexpected null callback, provide a callback to retrieve current consents.");
-            return;
-        }
+	/**
+	 * Retrieves the current consent preferences stored in the Consent extension
+	 *
+	 * <p>Output example: {"consents": {"collect": {"val": "y"}}}
+	 *
+	 * @param callback The {@link AdobeCallback} is invoked with the current consent preferences. If
+	 *     an {@link AdobeCallbackWithError} is provided, an {@link AdobeError} is returned when an
+	 *     unexpected error occurs or the request timed out
+	 */
+	public static void getConsents(@NonNull final AdobeCallback<Map<String, Object>> callback) {
+		if (callback == null) {
+			Log.debug(
+				LOG_TAG,
+				LOG_SOURCE,
+				"Unexpected null callback, provide a callback to retrieve current consents."
+			);
+			return;
+		}
 
-        // dispatch an consent callback response event
-        final Event event =
-                new Event.Builder(
-                                ConsentConstants.EventNames.GET_CONSENTS_REQUEST,
-                                EventType.CONSENT,
-                                EventSource.REQUEST_CONTENT)
-                        .build();
+		// dispatch an consent callback response event
+		final Event event = new Event.Builder(
+			ConsentConstants.EventNames.GET_CONSENTS_REQUEST,
+			EventType.CONSENT,
+			EventSource.REQUEST_CONTENT
+		)
+			.build();
 
-        final AdobeCallbackWithError<Event> callbackWithError =
-                new AdobeCallbackWithError<Event>() {
-                    @Override
-                    public void call(final Event event) {
-                        if (event == null || event.getEventData() == null) {
-                            returnError(callback, AdobeError.UNEXPECTED_ERROR);
-                            return;
-                        }
+		final AdobeCallbackWithError<Event> callbackWithError = new AdobeCallbackWithError<Event>() {
+			@Override
+			public void call(final Event event) {
+				if (event == null || event.getEventData() == null) {
+					returnError(callback, AdobeError.UNEXPECTED_ERROR);
+					return;
+				}
 
-                        Map<String, Object> responseConsentsData =
-                                Utils.optDeepCopy(event.getEventData(), new HashMap<>());
-                        callback.call(responseConsentsData);
-                    }
+				Map<String, Object> responseConsentsData = Utils.optDeepCopy(event.getEventData(), new HashMap<>());
+				callback.call(responseConsentsData);
+			}
 
-                    @Override
-                    public void fail(final AdobeError adobeError) {
-                        returnError(callback, adobeError);
-                        Log.error(
-                                LOG_TAG,
-                                LOG_SOURCE,
-                                "Failed to dispatch %s event: Error : %s.",
-                                adobeError.getErrorName());
-                    }
-                };
-        MobileCore.dispatchEventWithResponseCallback(
-                event, CALLBACK_TIMEOUT_MILLIS, callbackWithError);
-    }
+			@Override
+			public void fail(final AdobeError adobeError) {
+				returnError(callback, adobeError);
+				Log.error(LOG_TAG, LOG_SOURCE, "Failed to dispatch %s event: Error : %s.", adobeError.getErrorName());
+			}
+		};
+		MobileCore.dispatchEventWithResponseCallback(event, CALLBACK_TIMEOUT_MILLIS, callbackWithError);
+	}
 
-    /**
-     * When an {@link AdobeCallbackWithError} is provided, the fail method will be called with
-     * provided {@link AdobeError}.
-     *
-     * @param callback should not be null, should be instance of {@code AdobeCallbackWithError}
-     * @param error the {@code AdobeError} returned back in the callback
-     */
-    private static void returnError(
-            final AdobeCallback<Map<String, Object>> callback, final AdobeError error) {
-        if (callback == null) {
-            return;
-        }
+	/**
+	 * When an {@link AdobeCallbackWithError} is provided, the fail method will be called with
+	 * provided {@link AdobeError}.
+	 *
+	 * @param callback should not be null, should be instance of {@code AdobeCallbackWithError}
+	 * @param error the {@code AdobeError} returned back in the callback
+	 */
+	private static void returnError(final AdobeCallback<Map<String, Object>> callback, final AdobeError error) {
+		if (callback == null) {
+			return;
+		}
 
-        final AdobeCallbackWithError<Map<String, Object>> adobeCallbackWithError =
-                callback instanceof AdobeCallbackWithError
-                        ? (AdobeCallbackWithError<Map<String, Object>>) callback
-                        : null;
+		final AdobeCallbackWithError<Map<String, Object>> adobeCallbackWithError = callback instanceof AdobeCallbackWithError
+			? (AdobeCallbackWithError<Map<String, Object>>) callback
+			: null;
 
-        if (adobeCallbackWithError != null) {
-            adobeCallbackWithError.fail(error);
-        }
-    }
+		if (adobeCallbackWithError != null) {
+			adobeCallbackWithError.fail(error);
+		}
+	}
 }

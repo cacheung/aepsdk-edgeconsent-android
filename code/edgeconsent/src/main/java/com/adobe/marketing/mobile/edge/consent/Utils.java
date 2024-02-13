@@ -20,33 +20,33 @@ import java.util.Map;
 
 final class Utils {
 
-    private static final String LOG_SOURCE = "Utils";
+	private static final String LOG_SOURCE = "Utils";
 
-    private Utils() {}
+	private Utils() {}
 
-    /**
-     * Creates a deep copy of the provided {@link Map}.
-     *
-     * @param map to be copied
-     * @return {@link Map} containing a deep copy of all the elements in {@code map}
-     */
-    static Map<String, Object> deepCopy(final Map<String, Object> map) {
-        try {
-            return EventDataUtils.clone(map);
-        } catch (CloneFailedException e) {
-            Log.debug(
-                    LOG_TAG,
-                    LOG_SOURCE,
-                    "Unable to deep copy map. CloneFailedException: %s",
-                    e.getLocalizedMessage());
-        }
+	/**
+	 * Creates a deep copy of the provided {@link Map}.
+	 *
+	 * @param map to be copied
+	 * @return {@link Map} containing a deep copy of all the elements in {@code map}
+	 */
+	static Map<String, Object> deepCopy(final Map<String, Object> map) {
+		try {
+			return EventDataUtils.clone(map);
+		} catch (CloneFailedException e) {
+			Log.debug(
+				LOG_TAG,
+				LOG_SOURCE,
+				"Unable to deep copy map. CloneFailedException: %s",
+				e.getLocalizedMessage()
+			);
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    static Map<String, Object> optDeepCopy(
-            final Map<String, Object> map, final Map<String, Object> fallback) {
-        Map<String, Object> ret = deepCopy(map);
-        return ret != null ? ret : fallback;
-    }
+	static Map<String, Object> optDeepCopy(final Map<String, Object> map, final Map<String, Object> fallback) {
+		Map<String, Object> ret = deepCopy(map);
+		return ret != null ? ret : fallback;
+	}
 }

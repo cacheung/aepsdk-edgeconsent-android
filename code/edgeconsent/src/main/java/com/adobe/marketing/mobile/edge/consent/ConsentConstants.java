@@ -13,47 +13,47 @@ package com.adobe.marketing.mobile.edge.consent;
 
 final class ConsentConstants {
 
-    static final String LOG_TAG = "Consent";
-    static final String EXTENSION_VERSION = "3.0.0";
-    static final String EXTENSION_NAME = "com.adobe.edge.consent";
-    static final String FRIENDLY_NAME = "Consent";
+	static final String LOG_TAG = "Consent";
+	static final String EXTENSION_VERSION = "3.0.0";
+	static final String EXTENSION_NAME = "com.adobe.edge.consent";
+	static final String FRIENDLY_NAME = "Consent";
 
-    private ConsentConstants() {}
+	private ConsentConstants() {}
 
-    static final class EventDataKey {
+	static final class EventDataKey {
 
-        static final String CONSENTS = "consents";
-        static final String METADATA = "metadata";
-        static final String PAYLOAD = "payload";
+		static final String CONSENTS = "consents";
+		static final String METADATA = "metadata";
+		static final String PAYLOAD = "payload";
 
-        static final String TIME = "time";
+		static final String TIME = "time";
 
-        private EventDataKey() {}
-    }
+		private EventDataKey() {}
+	}
 
-    static final class DataStoreKey {
+	static final class DataStoreKey {
 
-        static final String DATASTORE_NAME = EXTENSION_NAME;
-        static final String CONSENT_PREFERENCES = "consent:preferences";
+		static final String DATASTORE_NAME = EXTENSION_NAME;
+		static final String CONSENT_PREFERENCES = "consent:preferences";
 
-        private DataStoreKey() {}
-    }
+		private DataStoreKey() {}
+	}
 
-    static final class EventNames {
+	static final class EventNames {
 
-        static final String EDGE_CONSENT_UPDATE = "Edge Consent Update Request";
-        static final String CONSENT_UPDATE_REQUEST = "Consent Update Request";
-        static final String GET_CONSENTS_REQUEST = "Get Consents Request";
-        static final String GET_CONSENTS_RESPONSE = "Get Consents Response";
-        static final String CONSENT_PREFERENCES_UPDATED = "Consent Preferences Updated";
+		static final String EDGE_CONSENT_UPDATE = "Edge Consent Update Request";
+		static final String CONSENT_UPDATE_REQUEST = "Consent Update Request";
+		static final String GET_CONSENTS_REQUEST = "Get Consents Request";
+		static final String GET_CONSENTS_RESPONSE = "Get Consents Response";
+		static final String CONSENT_PREFERENCES_UPDATED = "Consent Preferences Updated";
 
-        private EventNames() {}
-    }
+		private EventNames() {}
+	}
 
-    static final class ConfigurationKey {
+	static final class ConfigurationKey {
 
-        static final String DEFAULT_CONSENT = "consent.default";
+		static final String DEFAULT_CONSENT = "consent.default";
 
-        private ConfigurationKey() {}
-    }
+		private ConfigurationKey() {}
+	}
 }

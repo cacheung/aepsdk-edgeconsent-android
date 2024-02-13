@@ -41,228 +41,229 @@ import org.mockito.junit.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class ConsentTest {
 
-    private static Map<String, Object> SAMPLE_CONSENTS_MAP =
-            ConsentTestUtil.CreateConsentXDMMap("y");
+	private static Map<String, Object> SAMPLE_CONSENTS_MAP = ConsentTestUtil.CreateConsentXDMMap("y");
 
-    @Mock Application mockApplication;
+	@Mock
+	Application mockApplication;
 
-    @Before
-    public void setup() {
-        Mockito.reset(mockApplication);
-    }
+	@Before
+	public void setup() {
+		Mockito.reset(mockApplication);
+	}
 
-    // ========================================================================================
-    // extensionVersion
-    // ========================================================================================
+	// ========================================================================================
+	// extensionVersion
+	// ========================================================================================
 
-    @Test
-    public void test_extensionVersionAPI() {
-        // test
-        String extensionVersion = Consent.extensionVersion();
-        assertEquals(
-                "The Extension version API returns the correct value",
-                ConsentConstants.EXTENSION_VERSION,
-                extensionVersion);
-    }
+	@Test
+	public void test_extensionVersionAPI() {
+		// test
+		String extensionVersion = Consent.extensionVersion();
+		assertEquals(
+			"The Extension version API returns the correct value",
+			ConsentConstants.EXTENSION_VERSION,
+			extensionVersion
+		);
+	}
 
-    // ========================================================================================
-    // publicExtensionConstants
-    // ========================================================================================
-    @Test
-    public void test_publicExtensionConstants() {
-        assertEquals(ConsentExtension.class, Consent.EXTENSION);
-        List<Class<? extends Extension>> extensions = new ArrayList<>();
-        extensions.add(Consent.EXTENSION);
-        // should not throw exceptions
-        MobileCore.registerExtensions(extensions, null);
-    }
+	// ========================================================================================
+	// publicExtensionConstants
+	// ========================================================================================
+	@Test
+	public void test_publicExtensionConstants() {
+		assertEquals(ConsentExtension.class, Consent.EXTENSION);
+		List<Class<? extends Extension>> extensions = new ArrayList<>();
+		extensions.add(Consent.EXTENSION);
+		// should not throw exceptions
+		MobileCore.registerExtensions(extensions, null);
+	}
 
-    // ========================================================================================
-    // update Public API
-    // ========================================================================================
-    @Test
-    public void testUpdate() {
-        try (MockedStatic<MobileCore> mobileCoreMockedStatic =
-                Mockito.mockStatic(MobileCore.class)) {
-            ArgumentCaptor<Event> eventCaptor = ArgumentCaptor.forClass(Event.class);
+	// ========================================================================================
+	// update Public API
+	// ========================================================================================
+	@Test
+	public void testUpdate() {
+		try (MockedStatic<MobileCore> mobileCoreMockedStatic = Mockito.mockStatic(MobileCore.class)) {
+			ArgumentCaptor<Event> eventCaptor = ArgumentCaptor.forClass(Event.class);
 
-            // test
-            Consent.update(SAMPLE_CONSENTS_MAP);
+			// test
+			Consent.update(SAMPLE_CONSENTS_MAP);
 
-            // verify
-            mobileCoreMockedStatic.verify(() -> MobileCore.dispatchEvent(eventCaptor.capture()));
-            Event dispatchedEvent = eventCaptor.getValue();
+			// verify
+			mobileCoreMockedStatic.verify(() -> MobileCore.dispatchEvent(eventCaptor.capture()));
+			Event dispatchedEvent = eventCaptor.getValue();
 
-            assertNotNull(dispatchedEvent);
-            assertEquals(
-                    ConsentConstants.EventNames.CONSENT_UPDATE_REQUEST, dispatchedEvent.getName());
-            assertEquals(EventType.CONSENT, dispatchedEvent.getType());
-            assertEquals(EventSource.UPDATE_CONSENT, dispatchedEvent.getSource());
-            assertEquals(SAMPLE_CONSENTS_MAP, dispatchedEvent.getEventData());
-        }
-    }
+			assertNotNull(dispatchedEvent);
+			assertEquals(ConsentConstants.EventNames.CONSENT_UPDATE_REQUEST, dispatchedEvent.getName());
+			assertEquals(EventType.CONSENT, dispatchedEvent.getType());
+			assertEquals(EventSource.UPDATE_CONSENT, dispatchedEvent.getSource());
+			assertEquals(SAMPLE_CONSENTS_MAP, dispatchedEvent.getEventData());
+		}
+	}
 
-    @Test
-    public void testUpdate_withNull() {
-        try (MockedStatic<MobileCore> mobileCoreMockedStatic =
-                Mockito.mockStatic(MobileCore.class)) {
-            // test
-            Consent.update(null);
+	@Test
+	public void testUpdate_withNull() {
+		try (MockedStatic<MobileCore> mobileCoreMockedStatic = Mockito.mockStatic(MobileCore.class)) {
+			// test
+			Consent.update(null);
 
-            // verify
-            mobileCoreMockedStatic.verifyNoInteractions();
-        }
-    }
+			// verify
+			mobileCoreMockedStatic.verifyNoInteractions();
+		}
+	}
 
-    @Test
-    public void testGetConsents() {
-        try (MockedStatic<MobileCore> mobileCoreMockedStatic =
-                Mockito.mockStatic(MobileCore.class)) {
-            // setup
-            final ArgumentCaptor<Event> eventCaptor = ArgumentCaptor.forClass(Event.class);
-            final ArgumentCaptor<AdobeCallbackWithError<Event>> callbackCaptor =
-                    ArgumentCaptor.forClass(AdobeCallbackWithError.class);
+	@Test
+	public void testGetConsents() {
+		try (MockedStatic<MobileCore> mobileCoreMockedStatic = Mockito.mockStatic(MobileCore.class)) {
+			// setup
+			final ArgumentCaptor<Event> eventCaptor = ArgumentCaptor.forClass(Event.class);
+			final ArgumentCaptor<AdobeCallbackWithError<Event>> callbackCaptor = ArgumentCaptor.forClass(
+				AdobeCallbackWithError.class
+			);
 
-            final List<Map<String, Object>> callbackReturnValues = new ArrayList<>();
+			final List<Map<String, Object>> callbackReturnValues = new ArrayList<>();
 
-            // test
-            Consent.getConsents(
-                    new AdobeCallback<Map<String, Object>>() {
-                        @Override
-                        public void call(Map<String, Object> stringObjectMap) {
-                            callbackReturnValues.add(stringObjectMap);
-                        }
-                    });
+			// test
+			Consent.getConsents(
+				new AdobeCallback<Map<String, Object>>() {
+					@Override
+					public void call(Map<String, Object> stringObjectMap) {
+						callbackReturnValues.add(stringObjectMap);
+					}
+				}
+			);
 
-            // verify
-            mobileCoreMockedStatic.verify(
-                    () ->
-                            MobileCore.dispatchEventWithResponseCallback(
-                                    eventCaptor.capture(),
-                                    ArgumentMatchers.anyLong(),
-                                    callbackCaptor.capture()));
+			// verify
+			mobileCoreMockedStatic.verify(() ->
+				MobileCore.dispatchEventWithResponseCallback(
+					eventCaptor.capture(),
+					ArgumentMatchers.anyLong(),
+					callbackCaptor.capture()
+				)
+			);
 
-            final Event dispatchedEvent = eventCaptor.getValue();
-            final AdobeCallbackWithError<Event> callbackWithError = callbackCaptor.getValue();
+			final Event dispatchedEvent = eventCaptor.getValue();
+			final AdobeCallbackWithError<Event> callbackWithError = callbackCaptor.getValue();
 
-            // verify the dispatched event details
-            assertEquals(
-                    ConsentConstants.EventNames.GET_CONSENTS_REQUEST, dispatchedEvent.getName());
-            assertEquals(EventType.CONSENT, dispatchedEvent.getType());
-            assertEquals(EventSource.REQUEST_CONTENT, dispatchedEvent.getSource());
-            final Map<String, Object> eventData = dispatchedEvent.getEventData();
-            assertEquals(null, eventData);
-            // verify callback responses
+			// verify the dispatched event details
+			assertEquals(ConsentConstants.EventNames.GET_CONSENTS_REQUEST, dispatchedEvent.getName());
+			assertEquals(EventType.CONSENT, dispatchedEvent.getType());
+			assertEquals(EventSource.REQUEST_CONTENT, dispatchedEvent.getSource());
+			final Map<String, Object> eventData = dispatchedEvent.getEventData();
+			assertEquals(null, eventData);
+			// verify callback responses
 
-            callbackWithError.call(buildConsentResponseEvent(SAMPLE_CONSENTS_MAP));
-            assertEquals(SAMPLE_CONSENTS_MAP, callbackReturnValues.get(0));
-        }
-    }
+			callbackWithError.call(buildConsentResponseEvent(SAMPLE_CONSENTS_MAP));
+			assertEquals(SAMPLE_CONSENTS_MAP, callbackReturnValues.get(0));
+		}
+	}
 
-    @Test
-    public void testGetConsents_NullCallback() {
-        try (MockedStatic<MobileCore> mobileCoreMockedStatic =
-                Mockito.mockStatic(MobileCore.class)) {
-            // test
-            Consent.getConsents(null);
+	@Test
+	public void testGetConsents_NullCallback() {
+		try (MockedStatic<MobileCore> mobileCoreMockedStatic = Mockito.mockStatic(MobileCore.class)) {
+			// test
+			Consent.getConsents(null);
 
-            // verify
-            mobileCoreMockedStatic.verifyNoInteractions();
-        }
-    }
+			// verify
+			mobileCoreMockedStatic.verifyNoInteractions();
+		}
+	}
 
-    @Test
-    public void testGetConsents_NullResponseEvent() {
-        try (MockedStatic<MobileCore> mobileCoreMockedStatic =
-                Mockito.mockStatic(MobileCore.class)) {
-            // setup
-            final String KEY_IS_ERRORCALLBACK_CALLED = "errorCallBackCalled";
-            final String KEY_CAPTUREDERRORCALLBACK = "capturedErrorCallback";
-            final Map<String, Object> errorCapture = new HashMap<>();
-            final ArgumentCaptor<AdobeCallbackWithError> adobeCallbackCaptor =
-                    ArgumentCaptor.forClass(AdobeCallbackWithError.class);
+	@Test
+	public void testGetConsents_NullResponseEvent() {
+		try (MockedStatic<MobileCore> mobileCoreMockedStatic = Mockito.mockStatic(MobileCore.class)) {
+			// setup
+			final String KEY_IS_ERRORCALLBACK_CALLED = "errorCallBackCalled";
+			final String KEY_CAPTUREDERRORCALLBACK = "capturedErrorCallback";
+			final Map<String, Object> errorCapture = new HashMap<>();
+			final ArgumentCaptor<AdobeCallbackWithError> adobeCallbackCaptor = ArgumentCaptor.forClass(
+				AdobeCallbackWithError.class
+			);
 
-            final AdobeCallbackWithError callbackWithError =
-                    new AdobeCallbackWithError() {
-                        @Override
-                        public void fail(AdobeError adobeError) {
-                            errorCapture.put(KEY_IS_ERRORCALLBACK_CALLED, true);
-                            errorCapture.put(KEY_CAPTUREDERRORCALLBACK, adobeError);
-                        }
+			final AdobeCallbackWithError callbackWithError = new AdobeCallbackWithError() {
+				@Override
+				public void fail(AdobeError adobeError) {
+					errorCapture.put(KEY_IS_ERRORCALLBACK_CALLED, true);
+					errorCapture.put(KEY_CAPTUREDERRORCALLBACK, adobeError);
+				}
 
-                        @Override
-                        public void call(Object o) {}
-                    };
+				@Override
+				public void call(Object o) {}
+			};
 
-            // test
-            Consent.getConsents(callbackWithError);
+			// test
+			Consent.getConsents(callbackWithError);
 
-            // verify if the event is dispatched
-            mobileCoreMockedStatic.verify(
-                    () ->
-                            MobileCore.dispatchEventWithResponseCallback(
-                                    ArgumentMatchers.any(Event.class),
-                                    ArgumentMatchers.anyLong(),
-                                    adobeCallbackCaptor.capture()));
-            // set response event to null
-            adobeCallbackCaptor.getValue().call(null);
+			// verify if the event is dispatched
+			mobileCoreMockedStatic.verify(() ->
+				MobileCore.dispatchEventWithResponseCallback(
+					ArgumentMatchers.any(Event.class),
+					ArgumentMatchers.anyLong(),
+					adobeCallbackCaptor.capture()
+				)
+			);
+			// set response event to null
+			adobeCallbackCaptor.getValue().call(null);
 
-            // verify
-            assertTrue((boolean) errorCapture.get(KEY_IS_ERRORCALLBACK_CALLED));
-            assertEquals(AdobeError.UNEXPECTED_ERROR, errorCapture.get(KEY_CAPTUREDERRORCALLBACK));
-        }
-    }
+			// verify
+			assertTrue((boolean) errorCapture.get(KEY_IS_ERRORCALLBACK_CALLED));
+			assertEquals(AdobeError.UNEXPECTED_ERROR, errorCapture.get(KEY_CAPTUREDERRORCALLBACK));
+		}
+	}
 
-    @Test
-    public void testGetConsentsModifyConsentCallbackResponse() {
-        try (MockedStatic<MobileCore> mobileCoreMockedStatic =
-                Mockito.mockStatic(MobileCore.class)) {
-            // setup
-            final ArgumentCaptor<Event> eventCaptor = ArgumentCaptor.forClass(Event.class);
-            final ArgumentCaptor<AdobeCallbackWithError<Event>> callbackCaptor =
-                    ArgumentCaptor.forClass(AdobeCallbackWithError.class);
+	@Test
+	public void testGetConsentsModifyConsentCallbackResponse() {
+		try (MockedStatic<MobileCore> mobileCoreMockedStatic = Mockito.mockStatic(MobileCore.class)) {
+			// setup
+			final ArgumentCaptor<Event> eventCaptor = ArgumentCaptor.forClass(Event.class);
+			final ArgumentCaptor<AdobeCallbackWithError<Event>> callbackCaptor = ArgumentCaptor.forClass(
+				AdobeCallbackWithError.class
+			);
 
-            final List<Map<String, Object>> callbackReturnValues = new ArrayList<>();
+			final List<Map<String, Object>> callbackReturnValues = new ArrayList<>();
 
-            // test
-            Consent.getConsents(
-                    new AdobeCallback<Map<String, Object>>() {
-                        @Override
-                        public void call(Map<String, Object> stringObjectMap) {
-                            callbackReturnValues.add(stringObjectMap);
-                        }
-                    });
+			// test
+			Consent.getConsents(
+				new AdobeCallback<Map<String, Object>>() {
+					@Override
+					public void call(Map<String, Object> stringObjectMap) {
+						callbackReturnValues.add(stringObjectMap);
+					}
+				}
+			);
 
-            // verify
-            mobileCoreMockedStatic.verify(
-                    () ->
-                            MobileCore.dispatchEventWithResponseCallback(
-                                    eventCaptor.capture(),
-                                    ArgumentMatchers.anyLong(),
-                                    callbackCaptor.capture()));
+			// verify
+			mobileCoreMockedStatic.verify(() ->
+				MobileCore.dispatchEventWithResponseCallback(
+					eventCaptor.capture(),
+					ArgumentMatchers.anyLong(),
+					callbackCaptor.capture()
+				)
+			);
 
-            final AdobeCallbackWithError<Event> callbackWithError = callbackCaptor.getValue();
+			final AdobeCallbackWithError<Event> callbackWithError = callbackCaptor.getValue();
 
-            Map<String, Object> verifyConsentMap = ConsentTestUtil.CreateConsentXDMMap("y");
-            callbackWithError.call(buildConsentResponseEvent(verifyConsentMap));
-            assertEquals(verifyConsentMap, callbackReturnValues.get(0));
+			Map<String, Object> verifyConsentMap = ConsentTestUtil.CreateConsentXDMMap("y");
+			callbackWithError.call(buildConsentResponseEvent(verifyConsentMap));
+			assertEquals(verifyConsentMap, callbackReturnValues.get(0));
 
-            // Verify the responseConsentsMap can be modified
-            verifyConsentMap.put("newkey", "newvalue");
-            callbackReturnValues.get(0).put("newkey", "newvalue");
-            assertEquals(verifyConsentMap, callbackReturnValues.get(0));
-        }
-    }
+			// Verify the responseConsentsMap can be modified
+			verifyConsentMap.put("newkey", "newvalue");
+			callbackReturnValues.get(0).put("newkey", "newvalue");
+			assertEquals(verifyConsentMap, callbackReturnValues.get(0));
+		}
+	}
 
-    // ========================================================================================
-    // Private method
-    // ========================================================================================
-    private Event buildConsentResponseEvent(final Map<String, Object> eventData) {
-        return new Event.Builder(
-                        ConsentConstants.EventNames.GET_CONSENTS_RESPONSE,
-                        EventType.CONSENT,
-                        EventSource.RESPONSE_CONTENT)
-                .setEventData(eventData)
-                .build();
-    }
+	// ========================================================================================
+	// Private method
+	// ========================================================================================
+	private Event buildConsentResponseEvent(final Map<String, Object> eventData) {
+		return new Event.Builder(
+			ConsentConstants.EventNames.GET_CONSENTS_RESPONSE,
+			EventType.CONSENT,
+			EventSource.RESPONSE_CONTENT
+		)
+			.setEventData(eventData)
+			.build();
+	}
 }
