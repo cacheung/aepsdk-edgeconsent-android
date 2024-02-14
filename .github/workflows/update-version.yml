@@ -10,7 +10,7 @@ on:
         description: '[Optional] Update Core dependency in pom.xml. Example: 3.0.0'
         required: false
 
-       edge-dependency:
+      edge-dependency:
         description: '[Optional] Update Edge dependency in pom.xml. Example: 3.0.0'
         required: false
 
