@@ -26,6 +26,18 @@ import org.mockito.junit.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class UtilsTest {
 
+	private static class CustomObj {
+
+		private final int value;
+		final void myMethod() {
+
+		}
+
+		CustomObj(int value) {
+			this.value = value;
+		}
+	}
+
 	@Test
 	public void testDeepCopy_whenNull() {
 		assertNull(Utils.deepCopy((Map) null));
@@ -86,7 +98,7 @@ public class UtilsTest {
 	}
 
 	@Test
-	public void testDeepCopy_whenInvalidMapWithCustomObjects_returnsNullAndNoThrow() {
+	public void testDeepCopy_whenInvalidMapWithCustomObjects_returnsCustomObjectsRemoved() {
 		class CustomObj {
 
 			private final int value;
@@ -100,9 +112,18 @@ public class UtilsTest {
 		map.put("key2", new CustomObj(1000));
 
 		Map<String, Object> deepCopy = Utils.deepCopy(map);
-		assertNull(deepCopy);
+		assertEquals(1, deepCopy.size());
+		assertEquals("value1", deepCopy.get("key1"));
 	}
 
+	@Test
+	public void testDeepCopy_whenMaxMapDepthReached_returnsNullAndNoThrow() {
+		// This exceeds MAX_DEPTH_REACHED
+		Map<String, Object> testMap = createDeeplyNestedMap(257);
+		Map<String, Object> deepCopy = Utils.deepCopy(testMap);
+		assertNull(deepCopy);
+	}
+	
 	@Test
 	public void testOptDeepCopy_whenNull_fallbackNull() {
 		assertNull(Utils.optDeepCopy(null, null));
@@ -114,5 +135,16 @@ public class UtilsTest {
 		Map<String, Object> copyMap = Utils.optDeepCopy(null, emptyMap);
 		assertNotNull(copyMap);
 		assertEquals(emptyMap, copyMap);
+	}
+
+	private Map<String, Object> createDeeplyNestedMap(int depth) {
+		Map<String, Object> map = new HashMap<>();
+		Map<String, Object> currentLevel = map;
+		for (int i = 0; i < depth; i++) {
+			Map<String, Object> nextLevel = new HashMap<>();
+			currentLevel.put("Level" + i, nextLevel);
+			currentLevel = nextLevel;
+		}
+		return map;
 	}
 }
