@@ -105,6 +105,12 @@ public class UtilsTest {
 	}
 
 	@Test
+	public void testDeepCopy_whenNulMap() {
+		Map<String, Object> deepCopy = Utils.deepCopy(null);
+		assertNull(deepCopy);
+	}
+	
+	@Test
 	public void testOptDeepCopy_whenNull_fallbackNull() {
 		assertNull(Utils.optDeepCopy(null, null));
 	}
