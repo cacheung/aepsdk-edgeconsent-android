@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.adobe.marketing.mobile.AdobeCallbackWithError;
 import com.adobe.marketing.mobile.AdobeError;
 import com.adobe.marketing.mobile.edge.consent.Consent;
+
 import java.util.HashMap;
 import java.util.Map;
 

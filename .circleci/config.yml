@@ -92,9 +92,12 @@ jobs:
           command: make assemble-app
 
       - run:
-          name: Run Unit Tests
-          command: make unit-test-coverage
-      
+          name: Assemble App
+          command: make assemble-app
+
+      - android/run-tests:
+          test-command: make unit-test-coverage
+
       - store_artifacts:
           path: code/edgeconsent/build/reports/tests
 
