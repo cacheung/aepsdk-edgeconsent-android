@@ -29,9 +29,8 @@ public class UtilsTest {
 	private static class CustomObj {
 
 		private final int value;
-		final void myMethod() {
 
-		}
+		final void myMethod() {}
 
 		CustomObj(int value) {
 			this.value = value;
@@ -123,7 +122,7 @@ public class UtilsTest {
 		Map<String, Object> deepCopy = Utils.deepCopy(testMap);
 		assertNull(deepCopy);
 	}
-	
+
 	@Test
 	public void testOptDeepCopy_whenNull_fallbackNull() {
 		assertNull(Utils.optDeepCopy(null, null));
