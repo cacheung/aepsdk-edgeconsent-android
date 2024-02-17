@@ -41,7 +41,8 @@ import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
 /**
- * Test helper for functional testing to read, write, reset and assert against eventhub events, shared states and persistence data.
+ * Test helper for functional testing to read, write, reset and assert against eventhub events,
+ * shared states and persistence data.
  */
 public class TestHelper {
 
@@ -64,7 +65,8 @@ public class TestHelper {
 	 * {@code TestRule} which sets up the MobileCore for testing before each test execution, and
 	 * tearsdown the MobileCore after test execution.
 	 *
-	 * To use, add the following to your test class:
+	 * <p>To use, add the following to your test class:
+	 *
 	 * <pre>
 	 * 	@Rule
 	 * 	public TestHelper.SetupCoreRule coreRule = new TestHelper.SetupCoreRule();
@@ -104,8 +106,8 @@ public class TestHelper {
 	}
 
 	/**
-	 * Applies the configuration provided, registers the extensions and then starts
-	 * core.
+	 * Applies the configuration provided, registers the extensions and then starts core.
+	 *
 	 * @param extensions the extensions that need to be registered
 	 * @param configuration the initial configuration update that needs to be applied
 	 * @throws InterruptedException if the wait time for extension registration has elapsed
@@ -124,8 +126,9 @@ public class TestHelper {
 	}
 
 	/**
-	 * Waits for all the {@code #knownThreads} to finish or fails the test after timeoutMillis if some of them are still running
-	 * when the timer expires. If timeoutMillis is 0, a default timeout will be set = 1000ms
+	 * Waits for all the {@code #knownThreads} to finish or fails the test after timeoutMillis if
+	 * some of them are still running when the timer expires. If timeoutMillis is 0, a default
+	 * timeout will be set = 1000ms
 	 *
 	 * @param timeoutMillis max waiting time
 	 */
@@ -159,11 +162,11 @@ public class TestHelper {
 						t.getState().equals(Thread.State.TIMED_WAITING) ||
 						t.getState().equals(Thread.State.WAITING)
 					) {
-						//Cannot use the join() API since we use a cached thread pool, which
-						//means that we keep idle threads around for 60secs (default timeout).
+						// Cannot use the join() API since we use a cached thread pool, which
+						// means that we keep idle threads around for 60secs (default timeout).
 						done = true;
 					} else {
-						//blocking
+						// blocking
 						sleep(sleepTime);
 						timedOut = (System.currentTimeMillis() - startTime) > timeoutTestMillis;
 					}
@@ -192,6 +195,7 @@ public class TestHelper {
 
 	/**
 	 * Retrieves all the known threads that are still running
+	 *
 	 * @return set of running tests
 	 */
 	private static Set<Thread> getEligibleThreads() {
@@ -213,8 +217,8 @@ public class TestHelper {
 	}
 
 	/**
-	 * Checks if current thread is not a daemon and its name starts with one of the known thread names specified here
-	 * {@link #knownThreads}
+	 * Checks if current thread is not a daemon and its name starts with one of the known thread
+	 * names specified here {@link #knownThreads}
 	 *
 	 * @param t current thread to verify
 	 * @return true if it is a known thread, false otherwise
@@ -233,9 +237,7 @@ public class TestHelper {
 		return false;
 	}
 
-	/**
-	 * Resets the network and event test expectations.
-	 */
+	/** Resets the network and event test expectations. */
 	public static void resetTestExpectations() {
 		Log.debug(LOG_TAG, LOG_SOURCE, "Resetting functional test expectations for events");
 		MonitorExtension.reset();
@@ -247,9 +249,11 @@ public class TestHelper {
 
 	/**
 	 * Returns the {@code Event}(s) dispatched through the Event Hub, or empty if none was found.
+	 *
 	 * @param type the event type as in the expectation
 	 * @param source the event source as in the expectation
-	 * @return list of events with the provided {@code type} and {@code source}, or empty if none was dispatched
+	 * @return list of events with the provided {@code type} and {@code source}, or empty if none
+	 *     was dispatched
 	 * @throws InterruptedException
 	 * @throws IllegalArgumentException if {@code type} or {@code source} are null or empty strings
 	 */
@@ -260,10 +264,12 @@ public class TestHelper {
 
 	/**
 	 * Returns the {@code Event}(s) dispatched through the Event Hub, or empty if none was found.
+	 *
 	 * @param type the event type as in the expectation
 	 * @param source the event source as in the expectation
 	 * @param timeout how long should this method wait for the expected event, in milliseconds.
-	 * @return list of events with the provided {@code type} and {@code source}, or empty if none was dispatched
+	 * @return list of events with the provided {@code type} and {@code source}, or empty if none
+	 *     was dispatched
 	 * @throws InterruptedException
 	 * @throws IllegalArgumentException if {@code type} or {@code source} are null or empty strings
 	 */
@@ -278,11 +284,15 @@ public class TestHelper {
 	}
 
 	/**
-	 * Synchronous call to get the shared state for the specified {@code stateOwner}.
-	 * This API throws an assertion failure in case of timeout.
-	 * @param stateOwner the owner extension of the shared state (typically the name of the extension)
-	 * @param timeout how long should this method wait for the requested shared state, in milliseconds
-	 * @return latest shared state of the given {@code stateOwner} or null if no shared state was found
+	 * Synchronous call to get the shared state for the specified {@code stateOwner}. This API
+	 * throws an assertion failure in case of timeout.
+	 *
+	 * @param stateOwner the owner extension of the shared state (typically the name of the
+	 *     extension)
+	 * @param timeout how long should this method wait for the requested shared state, in
+	 *     milliseconds
+	 * @return latest shared state of the given {@code stateOwner} or null if no shared state was
+	 *     found
 	 * @throws InterruptedException
 	 */
 	public static Map<String, Object> getSharedStateFor(final String stateOwner, int timeout)
@@ -331,11 +341,15 @@ public class TestHelper {
 	}
 
 	/**
-	 * Synchronous call to get the XDM shared state for the specified {@code stateOwner}.
-	 * This API throws an assertion failure in case of timeout.
-	 * @param stateOwner the owner extension of the shared state (typically the name of the extension)
-	 * @param timeout how long should this method wait for the requested shared state, in milliseconds
-	 * @return latest shared state of the given {@code stateOwner} or null if no shared state was found
+	 * Synchronous call to get the XDM shared state for the specified {@code stateOwner}. This API
+	 * throws an assertion failure in case of timeout.
+	 *
+	 * @param stateOwner the owner extension of the shared state (typically the name of the
+	 *     extension)
+	 * @param timeout how long should this method wait for the requested shared state, in
+	 *     milliseconds
+	 * @return latest shared state of the given {@code stateOwner} or null if no shared state was
+	 *     found
 	 * @throws InterruptedException
 	 */
 	public static Map<String, Object> getXDMSharedStateFor(final String stateOwner, int timeout)
@@ -387,6 +401,7 @@ public class TestHelper {
 
 	/**
 	 * Pause test execution for the given {@code milliseconds}
+	 *
 	 * @param milliseconds the time to sleep the current thread.
 	 */
 	public static void sleep(int milliseconds) {
@@ -397,9 +412,7 @@ public class TestHelper {
 		}
 	}
 
-	/**
-	 * Dummy Application for the test instrumentation
-	 */
+	/** Dummy Application for the test instrumentation */
 	public static class CustomApplication extends Application {
 
 		public CustomApplication() {}

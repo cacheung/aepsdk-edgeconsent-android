@@ -80,7 +80,7 @@ public class ConsentTest {
 
 	// ========================================================================================
 	// update Public API
-	//========================================================================================
+	// ========================================================================================
 	@Test
 	public void testUpdate() {
 		try (MockedStatic<MobileCore> mobileCoreMockedStatic = Mockito.mockStatic(MobileCore.class)) {
@@ -151,7 +151,7 @@ public class ConsentTest {
 			assertEquals(EventSource.REQUEST_CONTENT, dispatchedEvent.getSource());
 			final Map<String, Object> eventData = dispatchedEvent.getEventData();
 			assertEquals(null, eventData);
-			//verify callback responses
+			// verify callback responses
 
 			callbackWithError.call(buildConsentResponseEvent(SAMPLE_CONSENTS_MAP));
 			assertEquals(SAMPLE_CONSENTS_MAP, callbackReturnValues.get(0));
@@ -247,7 +247,7 @@ public class ConsentTest {
 			callbackWithError.call(buildConsentResponseEvent(verifyConsentMap));
 			assertEquals(verifyConsentMap, callbackReturnValues.get(0));
 
-			//Verify the responseConsentsMap can be modified
+			// Verify the responseConsentsMap can be modified
 			verifyConsentMap.put("newkey", "newvalue");
 			callbackReturnValues.get(0).put("newkey", "newvalue");
 			assertEquals(verifyConsentMap, callbackReturnValues.get(0));

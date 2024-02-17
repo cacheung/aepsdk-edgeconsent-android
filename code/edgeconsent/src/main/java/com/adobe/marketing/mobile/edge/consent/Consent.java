@@ -24,7 +24,6 @@ import com.adobe.marketing.mobile.Extension;
 import com.adobe.marketing.mobile.MobileCore;
 import com.adobe.marketing.mobile.services.Log;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Consent {
@@ -40,15 +39,15 @@ public class Consent {
 	 *
 	 * @return The version as {@code String}
 	 */
-	@NonNull
-	public static String extensionVersion() {
+	@NonNull public static String extensionVersion() {
 		return ConsentConstants.EXTENSION_VERSION;
 	}
 
 	/**
-	 * Merges the existing consents with the given consents. Duplicate keys will take the value of those passed in the API
-	 * <p>
-	 * Input example: {"consents": {"collect": {"val": "y"}}}
+	 * Merges the existing consents with the given consents. Duplicate keys will take the value of
+	 * those passed in the API
+	 *
+	 * <p>Input example: {"consents": {"collect": {"val": "y"}}}
 	 *
 	 * @param consents A {@link Map} of consents to be merged with the existing consents
 	 */
@@ -71,14 +70,13 @@ public class Consent {
 
 	/**
 	 * Retrieves the current consent preferences stored in the Consent extension
-	 * <p>
-	 * Output example: {"consents": {"collect": {"val": "y"}}}
 	 *
-	 * @param callback The {@link AdobeCallback} is invoked with the current consent preferences.
-	 *                 If an {@link AdobeCallbackWithError} is provided, an {@link AdobeError} is returned
-	 *                 when an unexpected error occurs or the request timed out
+	 * <p>Output example: {"consents": {"collect": {"val": "y"}}}
+	 *
+	 * @param callback The {@link AdobeCallback} is invoked with the current consent preferences. If
+	 *     an {@link AdobeCallbackWithError} is provided, an {@link AdobeError} is returned when an
+	 *     unexpected error occurs or the request timed out
 	 */
-
 	public static void getConsents(@NonNull final AdobeCallback<Map<String, Object>> callback) {
 		if (callback == null) {
 			Log.debug(
@@ -119,10 +117,11 @@ public class Consent {
 	}
 
 	/**
-	 * When an {@link AdobeCallbackWithError} is provided, the fail method will be called with provided {@link AdobeError}.
+	 * When an {@link AdobeCallbackWithError} is provided, the fail method will be called with
+	 * provided {@link AdobeError}.
 	 *
 	 * @param callback should not be null, should be instance of {@code AdobeCallbackWithError}
-	 * @param error    the {@code AdobeError} returned back in the callback
+	 * @param error the {@code AdobeError} returned back in the callback
 	 */
 	private static void returnError(final AdobeCallback<Map<String, Object>> callback, final AdobeError error) {
 		if (callback == null) {

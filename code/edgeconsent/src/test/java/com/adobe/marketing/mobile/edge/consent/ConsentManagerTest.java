@@ -195,7 +195,8 @@ public class ConsentManagerTest {
 		Mockito
 			.when(mockNamedCollection.getString(ConsentConstants.DataStoreKey.CONSENT_PREFERENCES, null))
 			.thenReturn(null);
-		consentManager = new ConsentManager(mockNamedCollection); // consentManager now loads nothing from persisted data
+		consentManager = new ConsentManager(mockNamedCollection); // consentManager now loads nothing from persisted
+		// data
 
 		// test
 		Consents newConsent = new Consents(CreateConsentXDMMap("n"));
