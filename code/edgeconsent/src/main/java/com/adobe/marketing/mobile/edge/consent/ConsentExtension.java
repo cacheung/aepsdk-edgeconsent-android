@@ -160,7 +160,11 @@ class ConsentExtension extends Extension {
 		final Map<String, Object> consentData = event.getEventData();
 
 		if (consentData == null || consentData.isEmpty()) {
-			Log.debug(ConsentConstants.LOG_TAG, LOG_SOURCE, "Consent data not found in consent update event. Dropping event.");
+			Log.debug(
+				ConsentConstants.LOG_TAG,
+				LOG_SOURCE,
+				"Consent data not found in consent update event. Dropping event."
+			);
 			return;
 		}
 
@@ -168,7 +172,11 @@ class ConsentExtension extends Extension {
 		final Consents newConsents = new Consents(consentData);
 
 		if (newConsents.isEmpty()) {
-			Log.debug(ConsentConstants.LOG_TAG, LOG_SOURCE, "Unable to find valid data from consent update event. Dropping event.");
+			Log.debug(
+				ConsentConstants.LOG_TAG,
+				LOG_SOURCE,
+				"Unable to find valid data from consent update event. Dropping event."
+			);
 			return;
 		}
 
@@ -355,7 +363,11 @@ class ConsentExtension extends Extension {
 	private void dispatchEdgeConsentUpdateEvent(final Consents consents) {
 		// do not send an event if the consent data is empty
 		if (consents == null || consents.isEmpty()) {
-			Log.debug(ConsentConstants.LOG_TAG, LOG_SOURCE, "Consent data is null/empty, not dispatching Edge Consent Update event.");
+			Log.debug(
+				ConsentConstants.LOG_TAG,
+				LOG_SOURCE,
+				"Consent data is null/empty, not dispatching Edge Consent Update event."
+			);
 			return;
 		}
 

@@ -51,7 +51,11 @@ public class Consent {
 	 */
 	public static void update(@NonNull final Map<String, Object> consents) {
 		if (consents == null || consents.isEmpty()) {
-			Log.debug(ConsentConstants.LOG_TAG, LOG_SOURCE, "Null/Empty consents passed to update API. Ignoring the API call.");
+			Log.debug(
+				ConsentConstants.LOG_TAG,
+				LOG_SOURCE,
+				"Null/Empty consents passed to update API. Ignoring the API call."
+			);
 			return;
 		}
 
@@ -108,7 +112,12 @@ public class Consent {
 			@Override
 			public void fail(final AdobeError adobeError) {
 				returnError(callback, adobeError);
-				Log.error(ConsentConstants.LOG_TAG, LOG_SOURCE, "Failed to dispatch %s event: Error : %s.", adobeError.getErrorName());
+				Log.error(
+					ConsentConstants.LOG_TAG,
+					LOG_SOURCE,
+					"Failed to dispatch %s event: Error : %s.",
+					adobeError.getErrorName()
+				);
 			}
 		};
 		MobileCore.dispatchEventWithResponseCallback(event, CALLBACK_TIMEOUT_MILLIS, callbackWithError);

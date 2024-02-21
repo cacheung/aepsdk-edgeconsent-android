@@ -117,7 +117,11 @@ final class ConsentManager {
 		final String jsonString = namedCollection.getString(ConsentConstants.DataStoreKey.CONSENT_PREFERENCES, null);
 
 		if (jsonString == null) {
-			Log.trace(ConsentConstants.LOG_TAG, LOG_SOURCE, "No previous consents were stored in persistence. Current consent is null.");
+			Log.trace(
+				ConsentConstants.LOG_TAG,
+				LOG_SOURCE,
+				"No previous consents were stored in persistence. Current consent is null."
+			);
 
 			return null;
 		}
