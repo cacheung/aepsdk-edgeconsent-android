@@ -17,7 +17,7 @@ orbs:
   codecov: codecov/codecov@4.0.1
 
 parameters:
-  build_path:
+  build-path:
     type: string
     default: "code/edgeconsent/build"
 
@@ -53,8 +53,8 @@ jobs:
           command: make checkformat
 
       - run:
-          name: Lint
-          command: make lint
+          name: Check Style
+          command: make checkstyle
 
       - android/save-gradle-cache
 

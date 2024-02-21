@@ -11,8 +11,6 @@
 
 package com.adobe.marketing.mobile.edge.consent;
 
-import static com.adobe.marketing.mobile.edge.consent.ConsentConstants.LOG_TAG;
-
 import com.adobe.marketing.mobile.services.Log;
 import com.adobe.marketing.mobile.util.CloneFailedException;
 import com.adobe.marketing.mobile.util.EventDataUtils;
@@ -35,7 +33,7 @@ final class Utils {
 			return EventDataUtils.clone(map);
 		} catch (CloneFailedException e) {
 			Log.debug(
-				LOG_TAG,
+				ConsentConstants.LOG_TAG,
 				LOG_SOURCE,
 				"Unable to deep copy map. CloneFailedException: %s",
 				e.getLocalizedMessage()

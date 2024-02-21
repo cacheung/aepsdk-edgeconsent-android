@@ -11,8 +11,6 @@
 
 package com.adobe.marketing.mobile.edge.consent;
 
-import static com.adobe.marketing.mobile.edge.consent.ConsentConstants.LOG_TAG;
-
 import androidx.annotation.NonNull;
 import com.adobe.marketing.mobile.AdobeCallback;
 import com.adobe.marketing.mobile.AdobeCallbackWithError;
@@ -53,7 +51,7 @@ public class Consent {
 	 */
 	public static void update(@NonNull final Map<String, Object> consents) {
 		if (consents == null || consents.isEmpty()) {
-			Log.debug(LOG_TAG, LOG_SOURCE, "Null/Empty consents passed to update API. Ignoring the API call.");
+			Log.debug(ConsentConstants.LOG_TAG, LOG_SOURCE, "Null/Empty consents passed to update API. Ignoring the API call.");
 			return;
 		}
 
@@ -80,7 +78,7 @@ public class Consent {
 	public static void getConsents(@NonNull final AdobeCallback<Map<String, Object>> callback) {
 		if (callback == null) {
 			Log.debug(
-				LOG_TAG,
+				ConsentConstants.LOG_TAG,
 				LOG_SOURCE,
 				"Unexpected null callback, provide a callback to retrieve current consents."
 			);
@@ -110,7 +108,7 @@ public class Consent {
 			@Override
 			public void fail(final AdobeError adobeError) {
 				returnError(callback, adobeError);
-				Log.error(LOG_TAG, LOG_SOURCE, "Failed to dispatch %s event: Error : %s.", adobeError.getErrorName());
+				Log.error(ConsentConstants.LOG_TAG, LOG_SOURCE, "Failed to dispatch %s event: Error : %s.", adobeError.getErrorName());
 			}
 		};
 		MobileCore.dispatchEventWithResponseCallback(event, CALLBACK_TIMEOUT_MILLIS, callbackWithError);

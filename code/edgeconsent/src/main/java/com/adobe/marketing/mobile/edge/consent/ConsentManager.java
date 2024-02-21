@@ -11,8 +11,6 @@
 
 package com.adobe.marketing.mobile.edge.consent;
 
-import static com.adobe.marketing.mobile.edge.consent.ConsentConstants.LOG_TAG;
-
 import androidx.annotation.VisibleForTesting;
 import com.adobe.marketing.mobile.services.Log;
 import com.adobe.marketing.mobile.services.NamedCollection;
@@ -109,7 +107,7 @@ final class ConsentManager {
 	private Consents loadConsentsFromPersistence() {
 		if (namedCollection == null) {
 			Log.warning(
-				LOG_TAG,
+				ConsentConstants.LOG_TAG,
 				LOG_SOURCE,
 				"loadConsentsFromPersistence failed due to unexpected null namedCollection."
 			);
@@ -119,7 +117,7 @@ final class ConsentManager {
 		final String jsonString = namedCollection.getString(ConsentConstants.DataStoreKey.CONSENT_PREFERENCES, null);
 
 		if (jsonString == null) {
-			Log.trace(LOG_TAG, LOG_SOURCE, "No previous consents were stored in persistence. Current consent is null.");
+			Log.trace(ConsentConstants.LOG_TAG, LOG_SOURCE, "No previous consents were stored in persistence. Current consent is null.");
 
 			return null;
 		}
@@ -130,7 +128,7 @@ final class ConsentManager {
 			return new Consents(consentMap);
 		} catch (JSONException exception) {
 			Log.debug(
-				LOG_TAG,
+				ConsentConstants.LOG_TAG,
 				LOG_SOURCE,
 				"Serialization error while reading consent jsonString from persistence. Unable" +
 				" to load saved consents from persistence."
@@ -149,7 +147,7 @@ final class ConsentManager {
 	private void saveConsentsToPersistence(final Consents consents) {
 		if (namedCollection == null) {
 			Log.warning(
-				LOG_TAG,
+				ConsentConstants.LOG_TAG,
 				LOG_SOURCE,
 				"saveConsentsToPersistence failed due to unexpected null namedCollection."
 			);
