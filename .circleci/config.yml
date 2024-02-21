@@ -53,8 +53,8 @@ jobs:
           command: make checkformat
 
       - run:
-          name: Check Style
-          command: make checkstyle
+          name: Lint
+          command: make lint
 
       - android/save-gradle-cache
 

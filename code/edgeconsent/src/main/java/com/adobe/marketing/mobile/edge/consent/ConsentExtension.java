@@ -11,6 +11,8 @@
 
 package com.adobe.marketing.mobile.edge.consent;
 
+import static com.adobe.marketing.mobile.edge.consent.ConsentConstants.LOG_TAG;
+
 import androidx.annotation.NonNull;
 import com.adobe.marketing.mobile.Event;
 import com.adobe.marketing.mobile.EventSource;
@@ -160,11 +162,7 @@ class ConsentExtension extends Extension {
 		final Map<String, Object> consentData = event.getEventData();
 
 		if (consentData == null || consentData.isEmpty()) {
-			Log.debug(
-				ConsentConstants.LOG_TAG,
-				LOG_SOURCE,
-				"Consent data not found in consent update event. Dropping event."
-			);
+			Log.debug(LOG_TAG, LOG_SOURCE, "Consent data not found in consent update event. Dropping event.");
 			return;
 		}
 
@@ -172,11 +170,7 @@ class ConsentExtension extends Extension {
 		final Consents newConsents = new Consents(consentData);
 
 		if (newConsents.isEmpty()) {
-			Log.debug(
-				ConsentConstants.LOG_TAG,
-				LOG_SOURCE,
-				"Unable to find valid data from consent update event. Dropping event."
-			);
+			Log.debug(LOG_TAG, LOG_SOURCE, "Unable to find valid data from consent update event. Dropping event.");
 			return;
 		}
 
@@ -213,7 +207,7 @@ class ConsentExtension extends Extension {
 
 		if (payload == null || payload.isEmpty()) {
 			Log.debug(
-				ConsentConstants.LOG_TAG,
+				LOG_TAG,
 				LOG_SOURCE,
 				"Ignoring the consent:preferences handle event from Edge Network, empty/missing" + " payload."
 			);
@@ -225,7 +219,7 @@ class ConsentExtension extends Extension {
 
 		if (newConsents.isEmpty()) {
 			Log.debug(
-				ConsentConstants.LOG_TAG,
+				LOG_TAG,
 				LOG_SOURCE,
 				"Ignoring the consent:preferences handle event from Edge Network, no valid" + " consent data found."
 			);
@@ -243,7 +237,7 @@ class ConsentExtension extends Extension {
 			// compare the consents ignoring the timestamp
 			if (newConsents.equalsIgnoreTimestamp(currentConsent)) {
 				Log.debug(
-					ConsentConstants.LOG_TAG,
+					LOG_TAG,
 					LOG_SOURCE,
 					"Ignoring the consent:preferences handle event from Edge Network. There is" +
 					" no modification from existing consent data"
@@ -291,7 +285,7 @@ class ConsentExtension extends Extension {
 
 		if (configData == null || configData.isEmpty()) {
 			Log.debug(
-				ConsentConstants.LOG_TAG,
+				LOG_TAG,
 				LOG_SOURCE,
 				"Event data configuration response event is empty, unable to read configuration" +
 				" consent.default. Dropping event."
@@ -308,7 +302,7 @@ class ConsentExtension extends Extension {
 
 		if (defaultConsentMap == null || defaultConsentMap.isEmpty()) {
 			Log.debug(
-				ConsentConstants.LOG_TAG,
+				LOG_TAG,
 				LOG_SOURCE,
 				"consent.default not found in configuration. Make sure Consent extension is" +
 				" installed in your mobile property"
@@ -363,11 +357,7 @@ class ConsentExtension extends Extension {
 	private void dispatchEdgeConsentUpdateEvent(final Consents consents) {
 		// do not send an event if the consent data is empty
 		if (consents == null || consents.isEmpty()) {
-			Log.debug(
-				ConsentConstants.LOG_TAG,
-				LOG_SOURCE,
-				"Consent data is null/empty, not dispatching Edge Consent Update event."
-			);
+			Log.debug(LOG_TAG, LOG_SOURCE, "Consent data is null/empty, not dispatching Edge Consent Update event.");
 			return;
 		}
 

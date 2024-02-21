@@ -18,8 +18,8 @@ checkformat:
 	(./code/gradlew -p code/$(EXTENSION-LIBRARY-FOLDER-NAME) spotlessCheck)
 	(./code/gradlew -p code/$(TEST-APP-FOLDER-NAME) spotlessCheck)
 
-checkstyle:
-	(./code/gradlew -p code/$(EXTENSION-LIBRARY-FOLDER-NAME) checkstyle)
+lint:
+	(./code/gradlew -p code/$(EXTENSION-LIBRARY-FOLDER-NAME) lint)
 
 unit-test:
 	(./code/gradlew -p code/$(EXTENSION-LIBRARY-FOLDER-NAME) testPhoneDebugUnitTest)

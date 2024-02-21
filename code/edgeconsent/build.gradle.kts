@@ -20,7 +20,6 @@ aepLibrary {
     namespace = "com.adobe.marketing.mobile.edge.consent"
     enableSpotless = true
     enableSpotlessPrettierForJava = true
-    enableCheckStyle = true
  
     publishing {
         gitRepoName = "aepsdk-edgeconsent-android"
