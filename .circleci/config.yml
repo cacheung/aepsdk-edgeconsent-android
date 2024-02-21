@@ -62,7 +62,7 @@ jobs:
 
       # Store Lint report
       - store_artifacts:
-          path: << pipeline.parameters.build_path >>/reports     
+          path: << pipeline.parameters.build-path >>/reports     
 
   build-and-unit-test:
     executor:
@@ -82,7 +82,7 @@ jobs:
           command: make javadoc
 
       - store_artifacts:
-          path: << pipeline.parameters.build_path >>/docs/javadoc
+          path: << pipeline.parameters.build-path >>/docs/javadoc
 
       - run:
           name: Assemble Phone
@@ -100,17 +100,17 @@ jobs:
           test-command: make unit-test-coverage
 
       - store_artifacts:
-          path: << pipeline.parameters.build_path >>/reports/tests
+          path: << pipeline.parameters.build-path >>/reports/tests
 
       - store_test_results:
-          path: << pipeline.parameters.build_path >>/test-results/testPhoneDebugUnitTest
+          path: << pipeline.parameters.build-path >>/test-results/testPhoneDebugUnitTest
 
       - android/save-gradle-cache
 
       - android/save-build-cache
 
       - codecov/upload:
-          file: << pipeline.parameters.build_path >>/reports/coverage/test/phone/debug/report.xml
+          file: << pipeline.parameters.build-path >>/reports/coverage/test/phone/debug/report.xml
           flags: unit-tests
 
   functional-test:
@@ -139,11 +139,11 @@ jobs:
       - android/save-build-cache
 
       - codecov/upload:
-          file: << pipeline.parameters.build_path >>/reports/coverage/androidTest/phone/debug/connected/report.xml
+          file: << pipeline.parameters.build-path >>/reports/coverage/androidTest/phone/debug/connected/report.xml
           flags: functional-tests
  
       - store_artifacts:
-          path: << pipeline.parameters.build_path >>/reports/androidTests
+          path: << pipeline.parameters.build-path >>/reports/androidTests
 
       - store_test_results:
-          path: << pipeline.parameters.build_path >>/outputs/androidTest-results
+          path: << pipeline.parameters.build-path >>/outputs/androidTest-results
