@@ -31,3 +31,7 @@ code/.idea*
 
 #vscode
 .vscode
+
+captures/
+.externalNativeBuild
+.cxx

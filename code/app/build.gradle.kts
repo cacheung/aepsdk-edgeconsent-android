@@ -16,6 +16,9 @@ plugins {
     id("com.diffplug.spotless")
 }
 
+val mavenCoreVersion: String by project
+val mavenEdgeVersion: String by project
+
 configure<com.diffplug.gradle.spotless.SpotlessExtension> {
     java {
         toggleOffOn("format:off", "format:on")
@@ -50,10 +53,12 @@ android {
 
 dependencies {
     implementation(project(":edgeconsent"))
-    implementation("com.adobe.marketing.mobile:core:2.+")
+    implementation("com.adobe.marketing.mobile:core:$mavenCoreVersion-SNAPSHOT")
     implementation("com.adobe.marketing.mobile:assurance:2.+")
-    implementation("com.adobe.marketing.mobile:edge:2.+")
-
+    implementation("com.adobe.marketing.mobile:edge:$mavenEdgeVersion-SNAPSHOT") {
+        exclude(group = "com.adobe.marketing.mobile", module = "core")
+        exclude(group = "com.adobe.marketing.mobile", module = "edgeidentity")
+    }
     implementation("androidx.appcompat:appcompat:1.5.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 }
