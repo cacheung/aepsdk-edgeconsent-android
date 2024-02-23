@@ -50,10 +50,10 @@ jobs:
     steps:
       - checkout
 
-      - android/restore-gradle-cache
+      - android/restore-gradle-cache:
           cache-prefix: << pipeline.parameters.gradle-cache-prefix >>
 
-      - android/restore-build-cache
+      - android/restore-build-cache:
           cache-prefix: << pipeline.parameters.build-cache-prefix >>
 
       - run:
@@ -64,10 +64,10 @@ jobs:
           name: Lint
           command: make lint
 
-      - android/save-gradle-cache
+      - android/save-gradle-cache:
           cache-prefix: << pipeline.parameters.gradle-cache-prefix >>
 
-      - android/save-build-cache
+      - android/save-build-cache:
           cache-prefix: << pipeline.parameters.build-cache-prefix >>
 
       # Store Lint report
@@ -83,10 +83,10 @@ jobs:
     steps:
       - checkout
 
-      - android/restore-gradle-cache
+      - android/restore-gradle-cache:
           cache-prefix: << pipeline.parameters.gradle-cache-prefix >>
        
-      - android/restore-build-cache
+      - android/restore-build-cache:
           cache-prefix: << pipeline.parameters.build-cache-prefix >> 
 
       - run:
@@ -111,10 +111,10 @@ jobs:
       - android/run-tests:
           test-command: make unit-test-coverage
 
-      - android/save-gradle-cache
+      - android/save-gradle-cache:
           cache-prefix: << pipeline.parameters.gradle-cache-prefix >>
 
-      - android/save-build-cache
+      - android/save-build-cache:
           cache-prefix: << pipeline.parameters.build-cache-prefix >>
 
       - store_artifacts:
@@ -136,7 +136,7 @@ jobs:
     steps:
       - checkout
 
-      - android/restore-build-cache
+      - android/restore-build-cache:
           cache-prefix: << pipeline.parameters.build-cache-prefix >>
 
       - run:
@@ -151,7 +151,7 @@ jobs:
           #   The test command
           test-command: make functional-test-coverage
    
-      - android/save-build-cache
+      - android/save-build-cache:
           cache-prefix: << pipeline.parameters.build-cache-prefix >>
 
       - codecov/upload:
