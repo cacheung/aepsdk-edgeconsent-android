@@ -27,7 +27,7 @@ The Consent for Edge Network extension depends on the following extensions:
 
 1. Add the Mobile Core and Edge extensions to your project using the app's Gradle file:
 
-```gradle
+```kotlin
 implementation(platform("com.adobe.marketing.mobile:sdk-bom:3.+"))
 implementation("com.adobe.marketing.mobile:core")
 implementation("com.adobe.marketing.mobile:edge")

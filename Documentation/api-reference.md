@@ -33,7 +33,6 @@ String extensionVersion = Consent.extensionVersion();
 ```kotlin
 val extensionVersion = Consent.extensionVersion()
 ```
-
 ------
 
 ### getConsents
@@ -66,9 +65,7 @@ Consent.getConsents { currentConsents ->
     // handle currentConsents
 }
 ```
-
 ------
-
 
 ### updateConsents
 
