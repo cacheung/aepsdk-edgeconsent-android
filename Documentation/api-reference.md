@@ -8,7 +8,6 @@ Refer to the [Getting started guide](getting-started.md).
 
 - [extensionVersion](#extensionversion)
 - [getConsents](#getConsents)
-- [registerExtension](#registerextension)
 - [updateConsents](#updateConsents)
 ------
 
@@ -30,16 +29,10 @@ String extensionVersion = Consent.extensionVersion();
 
 #### Kotlin
 
-##### Syntax
-```kotlin
-fun extensionVersion(): String
-```
-
 ##### Example
 ```kotlin
 val extensionVersion = Consent.extensionVersion()
 ```
-
 ------
 
 ### getConsents
@@ -66,53 +59,13 @@ Consent.getConsents(new AdobeCallback<Map<String, Object>>() {
 
 #### Kotlin
 
-##### Syntax
-```kotlin
-fun getConsents(callback: AdobeCallback<Map<String, Object>>)
-```
-
 ##### Example
 ```kotlin
 Consent.getConsents { currentConsents ->
     // handle currentConsents
 }
 ```
-
 ------
-
-### registerExtension
-
-Registers the Consent extension with the Mobile Core SDK.
-
-> **Warning**
-> Deprecated as of 2.0.0. Use the [MobileCore.registerExtensions API](https://github.com/adobe/aepsdk-core-android/blob/main/Documentation/MobileCore/api-reference.md) instead.
-
-#### Java
-
-##### Syntax
-```java
-public static void registerExtension()
-```
-
-##### Example
-```java
-Consent.registerExtension();
-```
-
-#### Kotlin
-
-##### Syntax
-```kotlin
-fun registerExtension()
-```
-
-##### Example
-```kotlin
-Consent.registerExtension()
-```
-
-------
-
 
 ### updateConsents
 
@@ -159,11 +112,6 @@ Consent.update(consents);
 ```
 
 #### Kotlin
-
-##### Syntax
-```kotlin
-fun update(consents: Map<String, Object>)
-```
 
 ##### Example
 ```kotlin

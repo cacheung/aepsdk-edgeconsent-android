@@ -33,27 +33,10 @@ class ConsentTestUtil {
 	private static final String VALUE = "val";
 
 	/**
-	 * A fully prepared valid consent JSON looks like :
-	 * {
-	 *   "consents": {
-	 *     "adID": {
-	 *       "val": "n"
-	 *     },
-	 *     "collect": {
-	 *       "val": "y"
-	 *     },
-	 *     "personalize": {
-	 *           "content": {
-	 *               "val":"y"
-	 *            }
-	 *      }
-	 *     "metadata": {
-	 *       "time": "2019-09-23T18:15:45Z"
-	 *     }
-	 *   }
-	 * }
+	 * A fully prepared valid consent JSON looks like : { "consents": { "adID": { "val": "n" },
+	 * "collect": { "val": "y" }, "personalize": { "content": { "val":"y" } } "metadata": { "time":
+	 * "2019-09-23T18:15:45Z" } } }
 	 */
-
 	static Map<String, Object> emptyConsentXDMMap() {
 		Map<String, Object> consentMap = new HashMap<>();
 		consentMap.put(ConsentConstants.EventDataKey.CONSENTS, new HashMap<String, Object>());

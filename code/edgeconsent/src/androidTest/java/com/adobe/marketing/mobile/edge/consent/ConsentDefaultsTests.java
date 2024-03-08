@@ -46,13 +46,13 @@ public class ConsentDefaultsTests {
 	@Test
 	public void test_ConsentExtension_UsesDefaultConsent() throws Exception {
 		// test summary
-		//-----------------------------------------
+		// -----------------------------------------
 		// Type         collect   AdID    Metadata
-		//-----------------------------------------
+		// -----------------------------------------
 		// Default        yes      -        -
-		//-------------------------------------------
+		// -------------------------------------------
 		// Final          yes      -       -
-		//-------------------------------------------
+		// -------------------------------------------
 		// verify in (ConsentResponse and XDMSharedState)
 
 		// setup
@@ -82,14 +82,14 @@ public class ConsentDefaultsTests {
 	@Test
 	public void test_DefaultConsent_GetsOverridden() throws Exception {
 		// test summary
-		//-----------------------------------------
+		// -----------------------------------------
 		// Type         collect   AdID    Metadata
-		//-----------------------------------------
+		// -----------------------------------------
 		// Default        yes      -        -
 		// Update         no       -        -
-		//-------------------------------------------
+		// -------------------------------------------
 		// Final          no       -        available
-		//-------------------------------------------
+		// -------------------------------------------
 		// verify in (XDMSharedState)
 
 		// setup
@@ -108,14 +108,14 @@ public class ConsentDefaultsTests {
 	@Test
 	public void test_Reset_DefaultConsent() throws Exception {
 		// test summary
-		//-----------------------------------------
+		// -----------------------------------------
 		// Type         collect   AdID    Metadata
-		//-----------------------------------------
+		// -----------------------------------------
 		// Default        yes      no        -
 		// Default         no       -        -
-		//-------------------------------------------
+		// -------------------------------------------
 		// Final           no       -        -
-		//-------------------------------------------
+		// -------------------------------------------
 		// verify in (XDMSharedState)
 		// setup
 		initWithDefaultConsent(CreateConsentXDMMap("y", "n")); // Initiate with collectConsent = y and adID = n

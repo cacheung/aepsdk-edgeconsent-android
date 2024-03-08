@@ -52,15 +52,15 @@ public class ConsentEdgeResponseHandlingTests {
 	@Test
 	public void test_EdgeResponse_MergesWithCurrentConsent() throws Exception {
 		// test summary
-		//-----------------------------------------
+		// -----------------------------------------
 		// Type         collect   AdID    Metadata
-		//-----------------------------------------
+		// -----------------------------------------
 		// Default      pending     NO      null
 		// Updated        YES
 		// EdgeResponse    NO
-		//-------------------------------------------
+		// -------------------------------------------
 		// Final           NO      NO       available
-		//-------------------------------------------
+		// -------------------------------------------
 		// verify in (Persistence, ConsentResponse and XDMSharedState)
 
 		// setup
@@ -103,15 +103,15 @@ public class ConsentEdgeResponseHandlingTests {
 	@Test
 	public void test_EdgeResponse_InvalidPayload() throws Exception {
 		// test summary
-		//-----------------------------------------
+		// -----------------------------------------
 		// Type         collect   AdID    Metadata
-		//-----------------------------------------
+		// -----------------------------------------
 		// Default      pending
 		// Updated        YES
 		// EdgeResponse  invalid
-		//-------------------------------------------
+		// -------------------------------------------
 		// Final           YES            available
-		//-------------------------------------------
+		// -------------------------------------------
 
 		// setup
 		applyDefaultConsent(CreateConsentXDMMap("p"));
@@ -146,14 +146,14 @@ public class ConsentEdgeResponseHandlingTests {
 	@Test
 	public void test_EdgeResponse_NoConsentChangeAndNoTimestamp() throws Exception {
 		// test summary
-		//-----------------------------------------
+		// -----------------------------------------
 		// Type         collect   AdID    Metadata
-		//-----------------------------------------
+		// -----------------------------------------
 		// Updated        YES      YES      timestamp
 		// EdgeResponse   YES      YES      null
-		//-------------------------------------------
+		// -------------------------------------------
 		// Final           YES      YES     timestamp
-		//-------------------------------------------
+		// -------------------------------------------
 
 		// setup
 		Consent.update(CreateConsentXDMMap("y"));
@@ -182,14 +182,14 @@ public class ConsentEdgeResponseHandlingTests {
 	@Test
 	public void test_EdgeResponse_NoConsentChangeAndSameTimestamp() throws Exception {
 		// test summary
-		//-----------------------------------------
+		// -----------------------------------------
 		// Type         collect   AdID    Metadata
-		//-----------------------------------------
+		// -----------------------------------------
 		// Updated        YES      YES      timestamp
 		// EdgeResponse   YES      YES      timestamp
-		//-------------------------------------------
+		// -------------------------------------------
 		// Final           YES      YES     timestamp
-		//-------------------------------------------
+		// -------------------------------------------
 
 		// setup
 		Consent.update(CreateConsentXDMMap("y", "n"));

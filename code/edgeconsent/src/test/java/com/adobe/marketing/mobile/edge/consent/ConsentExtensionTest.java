@@ -713,10 +713,10 @@ public class ConsentExtensionTest {
 	/**
 	 * Sets up existing consents values in persistence by setting up a mocked return value for the
 	 * mocked {@link NamedCollection} using the passed JSON consents {@link String}.
-	 * <p>
-	 * Note that the {@link ConsentManager} only fetches the values from persistence once at instantiation time,
-	 * so this method <b>recreates the {@link ConsentExtension} instance used in the test run</b>. However, it
-	 * does not reset the mocks themselves.
+	 *
+	 * <p>Note that the {@link ConsentManager} only fetches the values from persistence once at
+	 * instantiation time, so this method <b>recreates the {@link ConsentExtension} instance used in
+	 * the test run</b>. However, it does not reset the mocks themselves.
 	 *
 	 * @param jsonString the consents JSON string to set in mocked persistence
 	 */

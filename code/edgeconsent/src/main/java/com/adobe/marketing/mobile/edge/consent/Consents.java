@@ -61,7 +61,8 @@ final class Consents {
 	/**
 	 * Retrieves the timestamp for this {@link Consents}.
 	 *
-	 * @return timestamp in ISO 8601 date-time string, null if consents does not have timestamp in its metadata
+	 * @return timestamp in ISO 8601 date-time string, null if consents does not have timestamp in
+	 *     its metadata
 	 */
 	String getTimestamp() {
 		if (isEmpty()) {
@@ -85,7 +86,8 @@ final class Consents {
 	/**
 	 * Use this method to set the metadata timestamp for the consents.
 	 *
-	 * @param timeStamp {@code long} timestamp in milliseconds indicating the time of last consents update
+	 * @param timeStamp {@code long} timestamp in milliseconds indicating the time of last consents
+	 *     update
 	 */
 	void setTimestamp(final long timeStamp) {
 		if (isEmpty()) {
@@ -111,8 +113,8 @@ final class Consents {
 	}
 
 	/**
-	 * Verifies if the consents associated with the current object is empty.
-	 * Returns true if at least one consent is found, false otherwise.
+	 * Verifies if the consents associated with the current object is empty. Returns true if at
+	 * least one consent is found, false otherwise.
 	 *
 	 * @return {@code true} if there are no consents
 	 */
@@ -121,8 +123,8 @@ final class Consents {
 	}
 
 	/**
-	 * Merges the provided {@link Consents} with the current object.
-	 * The current object is undisturbed if the provided consent is null or empty.
+	 * Merges the provided {@link Consents} with the current object. The current object is
+	 * undisturbed if the provided consent is null or empty.
 	 *
 	 * @param newConsents the consents that needs to be merged
 	 */
@@ -141,9 +143,9 @@ final class Consents {
 
 	/**
 	 * XDMMap representation of the available consents associated with this {@link Consents} object.
-	 * <p>
-	 * Will make a deep copy of the available consents map before sharing.
-	 * An empty XDMFormatted consent Map is returned if there are no consents present in this object.
+	 *
+	 * <p>Will make a deep copy of the available consents map before sharing. An empty XDMFormatted
+	 * consent Map is returned if there are no consents present in this object.
 	 *
 	 * @return {@link Map} representing the Consents in XDM format
 	 */
@@ -184,8 +186,11 @@ final class Consents {
 	}
 
 	/**
-	 * Compares the current consent instance the with the passed object ignoring the timestamp field in metadata
-	 * @param comparingConsent the new consent object to be compared against current consent settings
+	 * Compares the current consent instance the with the passed object ignoring the timestamp field
+	 * in metadata
+	 *
+	 * @param comparingConsent the new consent object to be compared against current consent
+	 *     settings
 	 * @return true, if both the consents are equal ignoring timestamp
 	 */
 	boolean equalsIgnoreTimestamp(final Consents comparingConsent) {
@@ -206,9 +211,7 @@ final class Consents {
 		return originalConsentCopy.consentsMap.equals(comparingConsentCopy.consentsMap);
 	}
 
-	/**
-	 * Private helper method to remove metadata timestamp from this {@link Consents}
-	 */
+	/** Private helper method to remove metadata timestamp from this {@link Consents} */
 	private void removeTimeStamp() {
 		Map<String, Object> metaDataContents = DataReader.optTypedMap(
 			Object.class,

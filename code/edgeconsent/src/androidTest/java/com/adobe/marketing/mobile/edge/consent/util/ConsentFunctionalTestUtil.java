@@ -49,27 +49,10 @@ public class ConsentFunctionalTestUtil {
 	private static final String VALUE = "val";
 
 	/**
-	 * A fully prepared valid consent JSON looks like :
-	 * {
-	 *   "consents": {
-	 *     "adID": {
-	 *       "val": "n"
-	 *     },
-	 *     "collect": {
-	 *       "val": "y"
-	 *     },
-	 *     "personalize": {
-	 *           "content": {
-	 *               "val":"y"
-	 *            }
-	 *      }
-	 *     "metadata": {
-	 *       "time": "2019-09-23T18:15:45Z"
-	 *     }
-	 *   }
-	 * }
+	 * A fully prepared valid consent JSON looks like : { "consents": { "adID": { "val": "n" },
+	 * "collect": { "val": "y" }, "personalize": { "content": { "val":"y" } } "metadata": { "time":
+	 * "2019-09-23T18:15:45Z" } } }
 	 */
-
 	public static String CreateConsentsXDMJSONString(
 		final String collectConsentString,
 		final String adIDConsentString,
@@ -227,9 +210,10 @@ public class ConsentFunctionalTestUtil {
 	}
 
 	/**
-	 * Serialize the given {@code map} to a JSON Object, then flattens to {@code Map<String, String>}.
-	 * For example, a JSON such as "{xdm: {stitchId: myID, eventType: myType}}" is flattened
-	 * to two map elements "xdm.stitchId" = "myID" and "xdm.eventType" = "myType".
+	 * Serialize the given {@code map} to a JSON Object, then flattens to {@code Map<String,
+	 * String>}. For example, a JSON such as "{xdm: {stitchId: myID, eventType: myType}}" is
+	 * flattened to two map elements "xdm.stitchId" = "myID" and "xdm.eventType" = "myType".
+	 *
 	 * @param map map with JSON structure to flatten
 	 * @return new map with flattened structure
 	 */
@@ -251,17 +235,16 @@ public class ConsentFunctionalTestUtil {
 	}
 
 	/**
-	 * Deserialize {@code JsonNode} and flatten to provided {@code map}.
-	 * For example, a JSON such as "{xdm: {stitchId: myID, eventType: myType}}" is flattened
-	 * to two map elements "xdm.stitchId" = "myID" and "xdm.eventType" = "myType".
+	 * Deserialize {@code JsonNode} and flatten to provided {@code map}. For example, a JSON such as
+	 * "{xdm: {stitchId: myID, eventType: myType}}" is flattened to two map elements "xdm.stitchId"
+	 * = "myID" and "xdm.eventType" = "myType".
 	 *
-	 * Method is called recursively. To use, call with an empty path such as
-	 * {@code addKeys("", new ObjectMapper().readTree(JsonNodeAsString), map);}
+	 * <p>Method is called recursively. To use, call with an empty path such as {@code addKeys("",
+	 * new ObjectMapper().readTree(JsonNodeAsString), map);}
 	 *
 	 * @param currentPath the path in {@code JsonNode} to process
 	 * @param jsonNode {@link JsonNode} to deserialize
 	 * @param map {@code Map<String, String>} instance to store flattened JSON result
-	 *
 	 * @see <a href="https://stackoverflow.com/a/24150263">Stack Overflow post</a>
 	 */
 	public static void addKeys(String currentPath, JsonNode jsonNode, Map<String, String> map) {

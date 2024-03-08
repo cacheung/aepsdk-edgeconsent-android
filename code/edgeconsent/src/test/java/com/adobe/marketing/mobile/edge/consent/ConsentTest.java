@@ -23,8 +23,6 @@ import com.adobe.marketing.mobile.Event;
 import com.adobe.marketing.mobile.EventSource;
 import com.adobe.marketing.mobile.EventType;
 import com.adobe.marketing.mobile.Extension;
-import com.adobe.marketing.mobile.ExtensionError;
-import com.adobe.marketing.mobile.ExtensionErrorCallback;
 import com.adobe.marketing.mobile.MobileCore;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -69,30 +67,6 @@ public class ConsentTest {
 	}
 
 	// ========================================================================================
-	// registerExtension
-	// ========================================================================================
-	@Test
-	public void testRegistration_deprecated() {
-		try (MockedStatic<MobileCore> mobileCoreMockedStatic = Mockito.mockStatic(MobileCore.class)) {
-			// mock MobileCore.registerExtension()
-			ArgumentCaptor<Class> extensionClassCaptor = ArgumentCaptor.forClass(Class.class);
-			ArgumentCaptor<ExtensionErrorCallback> callbackCaptor = ArgumentCaptor.forClass(
-				ExtensionErrorCallback.class
-			);
-			mobileCoreMockedStatic
-				.when(() -> MobileCore.registerExtension(extensionClassCaptor.capture(), callbackCaptor.capture()))
-				.thenReturn(true);
-			// call registerExtension() API
-			Consent.registerExtension();
-			// verify: happy
-			assertNotNull(callbackCaptor.getValue());
-			assertEquals(ConsentExtension.class, extensionClassCaptor.getValue());
-			// verify: not exception when error callback was called
-			callbackCaptor.getValue().error(ExtensionError.UNEXPECTED_ERROR);
-		}
-	}
-
-	// ========================================================================================
 	// publicExtensionConstants
 	// ========================================================================================
 	@Test
@@ -105,32 +79,8 @@ public class ConsentTest {
 	}
 
 	// ========================================================================================
-	// Registration without Error
-	// ========================================================================================
-	@Test
-	public void test_registerExtension_withoutError_deprecated() {
-		try (MockedStatic<MobileCore> mobileCoreMockedStatic = Mockito.mockStatic(MobileCore.class)) {
-			// mock MobileCore.registerExtension()
-			ArgumentCaptor<Class> extensionClassCaptor = ArgumentCaptor.forClass(Class.class);
-			ArgumentCaptor<ExtensionErrorCallback> callbackCaptor = ArgumentCaptor.forClass(
-				ExtensionErrorCallback.class
-			);
-			mobileCoreMockedStatic
-				.when(() -> MobileCore.registerExtension(extensionClassCaptor.capture(), callbackCaptor.capture()))
-				.thenReturn(true);
-			// call registerExtension() API
-			Consent.registerExtension();
-			// verify: happy
-			assertNotNull(callbackCaptor.getValue());
-			assertEquals(ConsentExtension.class, extensionClassCaptor.getValue());
-			// verify: not exception when error callback was called
-			callbackCaptor.getValue().error(null);
-		}
-	}
-
-	// ========================================================================================
 	// update Public API
-	//========================================================================================
+	// ========================================================================================
 	@Test
 	public void testUpdate() {
 		try (MockedStatic<MobileCore> mobileCoreMockedStatic = Mockito.mockStatic(MobileCore.class)) {
@@ -201,7 +151,7 @@ public class ConsentTest {
 			assertEquals(EventSource.REQUEST_CONTENT, dispatchedEvent.getSource());
 			final Map<String, Object> eventData = dispatchedEvent.getEventData();
 			assertEquals(null, eventData);
-			//verify callback responses
+			// verify callback responses
 
 			callbackWithError.call(buildConsentResponseEvent(SAMPLE_CONSENTS_MAP));
 			assertEquals(SAMPLE_CONSENTS_MAP, callbackReturnValues.get(0));
@@ -297,7 +247,7 @@ public class ConsentTest {
 			callbackWithError.call(buildConsentResponseEvent(verifyConsentMap));
 			assertEquals(verifyConsentMap, callbackReturnValues.get(0));
 
-			//Verify the responseConsentsMap can be modified
+			// Verify the responseConsentsMap can be modified
 			verifyConsentMap.put("newkey", "newvalue");
 			callbackReturnValues.get(0).put("newkey", "newvalue");
 			assertEquals(verifyConsentMap, callbackReturnValues.get(0));

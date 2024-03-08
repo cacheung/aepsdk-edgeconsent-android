@@ -89,14 +89,14 @@ public class ConsentPublicAPITests {
 	@Test
 	public void testUpdateAPI() throws Exception {
 		// test summary
-		//-----------------------------------------
+		// -----------------------------------------
 		// Type         collect   AdID    Metadata
-		//-----------------------------------------
+		// -----------------------------------------
 		// Default
 		// Updated        YES
-		//-------------------------------------------
+		// -------------------------------------------
 		// Final          YES      -       available
-		//-------------------------------------------
+		// -------------------------------------------
 		// verify in (Persistence, ConsentResponse and XDMSharedState)
 
 		// test
@@ -124,7 +124,7 @@ public class ConsentPublicAPITests {
 		assertEquals("y", xdmSharedState.get("consents.collect.val"));
 		assertNotNull(xdmSharedState.get("consents.metadata.time"));
 
-		//verify persisted data
+		// verify persisted data
 		final String persistedJson = TestPersistenceHelper.readPersistedData(
 			ConsentConstants.DataStoreKey.DATASTORE_NAME,
 			ConsentConstants.DataStoreKey.CONSENT_PREFERENCES
@@ -178,15 +178,15 @@ public class ConsentPublicAPITests {
 	@Test
 	public void testUpdateAPI_MergesWithExistingConsents() throws InterruptedException {
 		// test summary
-		//-----------------------------------------
+		// -----------------------------------------
 		// Type         collect   AdID    Metadata
-		//-----------------------------------------
+		// -----------------------------------------
 		// Default
 		// Updated       YES
 		// Updated        NO      YES
-		//-------------------------------------------
+		// -------------------------------------------
 		// Final          NO      YES       available
-		//-------------------------------------------
+		// -------------------------------------------
 		// verify in (Persistence, ConsentResponse and XDMSharedState)
 
 		// test
@@ -256,7 +256,7 @@ public class ConsentPublicAPITests {
 		// test
 		Consent.getConsents(null);
 
-		//add a wait time for mobile core to return the shared state before verifying the test
+		// add a wait time for mobile core to return the shared state before verifying the test
 		Thread.sleep(2000);
 
 		// verify shared state set

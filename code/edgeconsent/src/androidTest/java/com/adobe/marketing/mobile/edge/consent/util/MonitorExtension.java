@@ -31,8 +31,8 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * A third party extension class aiding for assertion against dispatched events, shared state
- * and XDM shared state.
+ * A third party extension class aiding for assertion against dispatched events, shared state and
+ * XDM shared state.
  */
 public class MonitorExtension extends Extension {
 
@@ -46,8 +46,7 @@ public class MonitorExtension extends Extension {
 		super(extensionApi);
 	}
 
-	@NonNull
-	@Override
+	@NonNull @Override
 	protected String getName() {
 		return "MonitorExtension";
 	}
@@ -58,9 +57,7 @@ public class MonitorExtension extends Extension {
 		getApi().registerEventListener(EventType.WILDCARD, EventSource.WILDCARD, this::wildcardProcessor);
 	}
 
-	/**
-	 * Unregister the Monitor Extension from the EventHub.
-	 */
+	/** Unregister the Monitor Extension from the EventHub. */
 	public static void unregisterExtension() {
 		Event event = new Event.Builder(
 			"Unregister Monitor Extension Request",
@@ -75,20 +72,16 @@ public class MonitorExtension extends Extension {
 		return receivedEvents;
 	}
 
-	/**
-	 * Resets the map of received and expected events.
-	 */
+	/** Resets the map of received and expected events. */
 	public static void reset() {
 		Log.trace(LOG_TAG, LOG_SOURCE, "Reset expected and received events.");
 		receivedEvents.clear();
 	}
 
 	/**
-	 * Processor for all heard events.
-	 * If the event type is of this Monitor Extension, then
-	 * the action is performed per the event source.
-	 * All other events are added to the map of received events. If the event is in the map
-	 * of expected events, its latch is counted down.
+	 * Processor for all heard events. If the event type is of this Monitor Extension, then the
+	 * action is performed per the event source. All other events are added to the map of received
+	 * events. If the event is in the map of expected events, its latch is counted down.
 	 *
 	 * @param event
 	 */
@@ -118,6 +111,7 @@ public class MonitorExtension extends Extension {
 
 	/**
 	 * Processor which unregisters this extension.
+	 *
 	 * @param event
 	 */
 	private void processUnregisterRequest(final Event event) {
@@ -128,6 +122,7 @@ public class MonitorExtension extends Extension {
 	/**
 	 * Processor which retrieves and dispatches the XDM shared state for the state owner specified
 	 * in the request.
+	 *
 	 * @param event
 	 */
 	private void processXDMSharedStateRequest(final Event event) {
@@ -159,8 +154,9 @@ public class MonitorExtension extends Extension {
 	}
 
 	/**
-	 * Processor which retrieves and dispatches the shared state for the state owner specified
-	 * in the request.
+	 * Processor which retrieves and dispatches the shared state for the state owner specified in
+	 * the request.
+	 *
 	 * @param event
 	 */
 	private void processSharedStateRequest(final Event event) {
@@ -191,9 +187,7 @@ public class MonitorExtension extends Extension {
 		MobileCore.dispatchEvent(responseEvent);
 	}
 
-	/**
-	 * Class defining {@link Event} specifications, contains Event's source and type.
-	 */
+	/** Class defining {@link Event} specifications, contains Event's source and type. */
 	public static class EventSpec {
 
 		final String source;
