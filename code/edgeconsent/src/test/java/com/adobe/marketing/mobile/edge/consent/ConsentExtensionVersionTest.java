@@ -18,7 +18,7 @@ import org.junit.Test;
 public class ConsentExtensionVersionTest {
 
 	@Test
-	public void internalExtensionVersion_publicExtensionVersion_asEqual() {
+	public void extensionVersion_verifyVersionInConstants_asEqual() {
 		assertEquals(ConsentConstants.EXTENSION_VERSION, Consent.extensionVersion());
 	}
 }
