@@ -46,7 +46,7 @@ workflows:
             branches:
               only:
                 - main
-                - staging 
+                - staging
 
 jobs:
   validate-code:
