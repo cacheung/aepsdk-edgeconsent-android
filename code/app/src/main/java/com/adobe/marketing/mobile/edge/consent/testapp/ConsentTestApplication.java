@@ -13,7 +13,6 @@ package com.adobe.marketing.mobile.edge.consent.testapp;
 
 import android.app.Application;
 import android.util.Log;
-import com.adobe.marketing.mobile.Assurance;
 import com.adobe.marketing.mobile.Edge;
 import com.adobe.marketing.mobile.LoggingMode;
 import com.adobe.marketing.mobile.MobileCore;
@@ -37,7 +36,7 @@ public class ConsentTestApplication extends Application {
 
 		// register Adobe extensions
 		MobileCore.registerExtensions(
-			Arrays.asList(Consent.EXTENSION, Edge.EXTENSION, Assurance.EXTENSION),
+			Arrays.asList(Consent.EXTENSION, Edge.EXTENSION),
 			o -> Log.d(LOG_TAG, "Mobile SDK was initialized")
 		);
 	}
