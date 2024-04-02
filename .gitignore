@@ -28,3 +28,10 @@ local.properties
 
 # .Idea file
 code/.idea*
+
+#vscode
+.vscode
+
+captures/
+.externalNativeBuild
+.cxx

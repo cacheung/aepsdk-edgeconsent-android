@@ -26,7 +26,9 @@ final class ConsentManager {
 
 	private static final String LOG_SOURCE = "ConsentManager";
 	private final NamedCollection namedCollection;
-	private Consents userOptedConsents; // holds on to consents that are updated using PublicAPI or from Edge Consent Response
+	private Consents userOptedConsents; // holds on to consents that are updated using PublicAPI or from Edge
+
+	// Consent Response
 
 	// Package private for testing
 	@VisibleForTesting
@@ -62,7 +64,8 @@ final class ConsentManager {
 	 * Updates and replaces the existing default consents with the passed in default consents.
 	 *
 	 * @param newDefaultConsents the default consent obtained from configuration response event
-	 * @return true if `currentConsents` has been updated as a result of updating the default consents
+	 * @return true if `currentConsents` has been updated as a result of updating the default
+	 *     consents
 	 */
 	boolean updateDefaultConsents(final Consents newDefaultConsents) {
 		// hold temp copy of current consents for comparison
@@ -76,9 +79,10 @@ final class ConsentManager {
 
 	/**
 	 * Getter method to retrieve the current consents.
-	 * <p>
-	 * The current consents is computed by overriding the {@link #userOptedConsents} over the {@link #defaultConsents}
-	 * The returned consent is never null. When there is no {@code #userOptedConsents} or {@code #defaultConsents}, still an empty consent object is returned.
+	 *
+	 * <p>The current consents is computed by overriding the {@link #userOptedConsents} over the
+	 * {@link #defaultConsents} The returned consent is never null. When there is no {@code
+	 * #userOptedConsents} or {@code #defaultConsents}, still an empty consent object is returned.
 	 *
 	 * @return the sharable complete current consents of this user
 	 */
@@ -96,11 +100,11 @@ final class ConsentManager {
 	}
 
 	/**
-	 * Loads the requested consents from persistence.
-	 * The jsonString from persistence is serialized into {@link Consents} object and returned.
+	 * Loads the requested consents from persistence. The jsonString from persistence is serialized
+	 * into {@link Consents} object and returned.
 	 *
 	 * @return {@link Consent} the previously persisted consents. Returns null if there was any
-	 * 		   {@link JSONException} while serializing JSONString to {@code Consents} object.
+	 *     {@link JSONException} while serializing JSONString to {@code Consents} object.
 	 */
 	private Consents loadConsentsFromPersistence() {
 		if (namedCollection == null) {
@@ -128,17 +132,19 @@ final class ConsentManager {
 			Log.debug(
 				LOG_TAG,
 				LOG_SOURCE,
-				"Serialization error while reading consent jsonString from persistence. Unable to load saved consents from persistence."
+				"Serialization error while reading consent jsonString from persistence. Unable" +
+				" to load saved consents from persistence."
 			);
 			return null;
 		}
 	}
 
 	/**
-	 * Call this method to save the consents to persistence.
-	 * The consents are converted to jsonString and stored into persistence.
+	 * Call this method to save the consents to persistence. The consents are converted to
+	 * jsonString and stored into persistence.
 	 *
-	 * @param consents the consents that need to be persisted under key {@link ConsentConstants.DataStoreKey#CONSENT_PREFERENCES}
+	 * @param consents the consents that need to be persisted under key {@link
+	 *     ConsentConstants.DataStoreKey#CONSENT_PREFERENCES}
 	 */
 	private void saveConsentsToPersistence(final Consents consents) {
 		if (namedCollection == null) {

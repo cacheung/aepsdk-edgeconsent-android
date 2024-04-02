@@ -34,8 +34,8 @@ class ConsentExtension extends Extension {
 	private final ConsentManager consentManager;
 
 	/**
-	 * Constructor.
-	 * It is called by the Mobile SDK when registering the extension and it initializes the extension and registers event listeners.
+	 * Constructor. It is called by the Mobile SDK when registering the extension and it initializes
+	 * the extension and registers event listeners.
 	 *
 	 * @param extensionApi {@link ExtensionApi} instance
 	 */
@@ -50,9 +50,11 @@ class ConsentExtension extends Extension {
 	}
 
 	/**
-	 * Convenience constructor that instantiates a new {@link ConsentManager} using the passed {@link NamedCollection}.
-	 * <p>
-	 * Can be used for testing using mocked {@link ExtensionApi} and/or {@link NamedCollection} instances.
+	 * Convenience constructor that instantiates a new {@link ConsentManager} using the passed
+	 * {@link NamedCollection}.
+	 *
+	 * <p>Can be used for testing using mocked {@link ExtensionApi} and/or {@link NamedCollection}
+	 * instances.
 	 *
 	 * @param extensionApi {@link ExtensionApi} instance
 	 * @param namedCollection {@link NamedCollection} instance from {@link ServiceProvider}
@@ -78,8 +80,7 @@ class ConsentExtension extends Extension {
 	 *
 	 * @return unique name of this extension
 	 */
-	@NonNull
-	@Override
+	@NonNull @Override
 	protected String getName() {
 		return ConsentConstants.EXTENSION_NAME;
 	}
@@ -89,8 +90,7 @@ class ConsentExtension extends Extension {
 	 *
 	 * @return unique friendly name of this extension
 	 */
-	@NonNull
-	@Override
+	@NonNull @Override
 	protected String getFriendlyName() {
 		return ConsentConstants.FRIENDLY_NAME;
 	}
@@ -100,22 +100,22 @@ class ConsentExtension extends Extension {
 	 *
 	 * @return the version of this extension
 	 */
-	@NonNull
-	@Override
+	@NonNull @Override
 	protected String getVersion() {
 		return ConsentConstants.EXTENSION_VERSION;
 	}
 
 	/**
-	 * <p>
-	 * Called during the Consent extension's registration.
-	 * The ConsentExtension listens for the following {@link Event}s:
+	 * Called during the Consent extension's registration. The ConsentExtension listens for the
+	 * following {@link Event}s:
+	 *
 	 * <ul>
-	 *     <li> {@code EventType#EDGE} and EventSource {@Code EventSource#CONSENT_PREFERENCE}</li>
-	 *     <li> {@code EventType#CONSENT} and EventSource {@Code EventSource#UPDATE_CONSENT}</li>
-	 *     <li> {@Code EventType#CONSENT} and EventSource {@Code EventSource#REQUEST_CONTENT}</li>
-	 *     <li> {@Code EventType#CONFIGURATION} and EventSource {{@Code EventSource#RESPONSE_CONTENT}</li>
+	 *   <li>{@code EventType#EDGE} and EventSource {@Code EventSource#CONSENT_PREFERENCE}
+	 *   <li>{@code EventType#CONSENT} and EventSource {@Code EventSource#UPDATE_CONSENT}
+	 *   <li>{@Code EventType#CONSENT} and EventSource {@Code EventSource#REQUEST_CONTENT}
+	 *   <li>{@Code EventType#CONFIGURATION} and EventSource {{@Code EventSource#RESPONSE_CONTENT}
 	 * </ul>
+	 *
 	 * <p>
 	 */
 	@Override
@@ -138,9 +138,7 @@ class ConsentExtension extends Extension {
 		handleInitialization();
 	}
 
-	/**
-	 * Share the initial consents loaded from persistence to XDM shared state.
-	 */
+	/** Share the initial consents loaded from persistence to XDM shared state. */
 	void handleInitialization() {
 		// share the initial XDMSharedState onRegistered
 		final Consents currentConsents = consentManager.getCurrentConsents();
@@ -151,12 +149,11 @@ class ConsentExtension extends Extension {
 	}
 
 	/**
-	 * Use this method to process the event with eventType {@link EventType#CONSENT}
-	 * and EventSource {@link EventSource#UPDATE_CONSENT}.
-	 * <p>
-	 * 1. Reads the event data and extract new available consents in XDM Format.
-	 * 2. Merge with the existing consents.
-	 * 3. Dispatch the merged consent to edge for processing.
+	 * Use this method to process the event with eventType {@link EventType#CONSENT} and EventSource
+	 * {@link EventSource#UPDATE_CONSENT}.
+	 *
+	 * <p>1. Reads the event data and extract new available consents in XDM Format. 2. Merge with
+	 * the existing consents. 3. Dispatch the merged consent to edge for processing.
 	 *
 	 * @param event the {@link Event} to be processed
 	 */
@@ -187,11 +184,12 @@ class ConsentExtension extends Extension {
 	}
 
 	/**
-	 * Handles the event with eventType {@link EventType#EDGE} and EventSource {@link EventSource#CONSENT_PREFERENCE}.
-	 * <p>
-	 * 1. Reads the event data and extracts new consents from the edge response in XDM Format.
-	 * 2. Merges with the existing consents.
-	 * 3. Creates XDMSharedState and dispatches a Consent response event for other modules to notify the consent change.
+	 * Handles the event with eventType {@link EventType#EDGE} and EventSource {@link
+	 * EventSource#CONSENT_PREFERENCE}.
+	 *
+	 * <p>1. Reads the event data and extracts new consents from the edge response in XDM Format. 2.
+	 * Merges with the existing consents. 3. Creates XDMSharedState and dispatches a Consent
+	 * response event for other modules to notify the consent change.
 	 *
 	 * @param event the Edge consent preferences response {@link Event} to be processed
 	 */
@@ -211,7 +209,7 @@ class ConsentExtension extends Extension {
 			Log.debug(
 				LOG_TAG,
 				LOG_SOURCE,
-				"Ignoring the consent:preferences handle event from Edge Network, empty/missing payload."
+				"Ignoring the consent:preferences handle event from Edge Network, empty/missing" + " payload."
 			);
 			return;
 		}
@@ -223,7 +221,7 @@ class ConsentExtension extends Extension {
 			Log.debug(
 				LOG_TAG,
 				LOG_SOURCE,
-				"Ignoring the consent:preferences handle event from Edge Network, no valid consent data found."
+				"Ignoring the consent:preferences handle event from Edge Network, no valid" + " consent data found."
 			);
 			return;
 		}
@@ -241,23 +239,26 @@ class ConsentExtension extends Extension {
 				Log.debug(
 					LOG_TAG,
 					LOG_SOURCE,
-					"Ignoring the consent:preferences handle event from Edge Network. There is no modification from existing consent data"
+					"Ignoring the consent:preferences handle event from Edge Network. There is" +
+					" no modification from existing consent data"
 				);
 				return;
 			}
 		}
 
-		// update the timestamp and share the updatedConsents as XDMSharedState and dispatch the consent response event
+		// update the timestamp and share the updatedConsents as XDMSharedState and dispatch the
+		// consent response event
 		newConsents.setTimestamp(event.getTimestamp());
 		consentManager.mergeAndPersist(newConsents);
 		shareCurrentConsents(event);
 	}
 
 	/**
-	 * Handles the get consents request event and dispatches a response event of EventType {@link EventType#CONSENT} and EventSource
-	 * {@link EventSource#RESPONSE_CONTENT} with the current consent details.
-	 * <p>
-	 * Dispatched event will contain empty XDMConsentMap if currentConsents are null/empty.
+	 * Handles the get consents request event and dispatches a response event of EventType {@link
+	 * EventType#CONSENT} and EventSource {@link EventSource#RESPONSE_CONTENT} with the current
+	 * consent details.
+	 *
+	 * <p>Dispatched event will contain empty XDMConsentMap if currentConsents are null/empty.
 	 *
 	 * @param event the {@link Event} requesting consents
 	 */
@@ -286,7 +287,8 @@ class ConsentExtension extends Extension {
 			Log.debug(
 				LOG_TAG,
 				LOG_SOURCE,
-				"Event data configuration response event is empty, unable to read configuration consent.default. Dropping event."
+				"Event data configuration response event is empty, unable to read configuration" +
+				" consent.default. Dropping event."
 			);
 			return;
 		}
@@ -302,10 +304,13 @@ class ConsentExtension extends Extension {
 			Log.debug(
 				LOG_TAG,
 				LOG_SOURCE,
-				"consent.default not found in configuration. Make sure Consent extension is installed in your mobile property"
+				"consent.default not found in configuration. Make sure Consent extension is" +
+				" installed in your mobile property"
 			);
-			// do not return here, even with empty default consent go ahead and update the defaultConsent in ConsentManager
-			// This handles the case where if ConsentExtension was installed and then removed from launch property. Then the defaults should be updated.
+			// do not return here, even with empty default consent go ahead and update the
+			// defaultConsent in ConsentManager
+			// This handles the case where if ConsentExtension was installed and then removed from
+			// launch property. Then the defaults should be updated.
 		}
 
 		if (consentManager.updateDefaultConsents(new Consents(defaultConsentMap))) {
@@ -314,13 +319,14 @@ class ConsentExtension extends Extension {
 	}
 
 	/**
-	 * Creates an XDM Shared state with the consents provided and then dispatches {@link ConsentConstants.EventNames#CONSENT_PREFERENCES_UPDATED}
-	 * event to eventHub to notify other concerned extensions about the Consent changes.
-	 * <p>
-	 * Will not share the XDMSharedEventState or dispatch event if consents is null.
+	 * Creates an XDM Shared state with the consents provided and then dispatches {@link
+	 * ConsentConstants.EventNames#CONSENT_PREFERENCES_UPDATED} event to eventHub to notify other
+	 * concerned extensions about the Consent changes.
 	 *
-	 * @param event the {@link Event} that triggered the consents update. The event can be null on the first call when extension initializes.
+	 * <p>Will not share the XDMSharedEventState or dispatch event if consents is null.
 	 *
+	 * @param event the {@link Event} that triggered the consents update. The event can be null on
+	 *     the first call when extension initializes.
 	 */
 	private void shareCurrentConsents(final Event event) {
 		final Map<String, Object> xdmConsents = consentManager.getCurrentConsents().asXDMMap();
@@ -341,9 +347,10 @@ class ConsentExtension extends Extension {
 	}
 
 	/**
-	 * Dispatches an {@link ConsentConstants.EventNames#EDGE_CONSENT_UPDATE} event with the latest consents in the event data.
-	 * <p>
-	 * Does not dispatch the event if the latest consents are null/empty.
+	 * Dispatches an {@link ConsentConstants.EventNames#EDGE_CONSENT_UPDATE} event with the latest
+	 * consents in the event data.
+	 *
+	 * <p>Does not dispatch the event if the latest consents are null/empty.
 	 *
 	 * @param consents {@link Consents} object representing the updated consents of AEP SDK
 	 */
@@ -366,7 +373,8 @@ class ConsentExtension extends Extension {
 	}
 
 	/**
-	 * Helper methods that take the payload from the edge consent preferences response and builds a XDM formatted consentMap.
+	 * Helper methods that take the payload from the edge consent preferences response and builds a
+	 * XDM formatted consentMap.
 	 *
 	 * @param payload a {@link Map} representing a payload from edge consent response
 	 * @return consentMap in XDM formatted Map

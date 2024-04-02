@@ -13,7 +13,7 @@ Integrate the Consent mobile extension into your app by following the [getting s
 
 #### Open the project
 
-To open and run the project, open the `code/settings.gradle` file in Android Studio.
+To open and run the project, open the `code/settings.gradle.kt` file in Android Studio.
 
 #### Run the test application
 
@@ -37,8 +37,7 @@ make init
 | [Core extensions](https://github.com/adobe/aepsdk-core-android)                      | The Mobile Core represents the foundation of the Adobe Experience Platform Mobile SDK.               |
 | [Edge Network](https://github.com/adobe/aepsdk-edge-android)                      | This extension allows you to send data to Edge Network from a mobile application.               |
 | [Identity for Edge Network](https://github.com/adobe/aepsdk-edgeidentity-android) | The Identity for Edge Network extension enables identity management from a mobile app when using the Edge Network extension. |
-| [Assurance extension](https://github.com/adobe/aepsdk-assurance-android)                      | The Assurance extension enables validation workflows for your Mobile SDK implementation.              |
-| [Adobe Experience Platform Mobile SDK Android sample app](https://github.com/adobe/aepsdk-sample-app-android) | Contains Android sample app for the Mobile SDKs.                 |
+| [Assurance extension](https://github.com/adobe/aepsdk-assurance-android)                      | The Assurance extension enables validation workflows for your Mobile SDK implementation.              |              |
 
 ## Documentation
 

@@ -11,9 +11,7 @@
 
 package com.adobe.marketing.mobile.edge.consent.util;
 
-/**
- * Class to maintain test constants.
- */
+/** Class to maintain test constants. */
 public class ConsentTestConstants {
 
 	public static final String LOG_TAG = "Consent";

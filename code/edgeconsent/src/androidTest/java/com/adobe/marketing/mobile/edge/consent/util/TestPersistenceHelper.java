@@ -31,8 +31,8 @@ public class TestPersistenceHelper {
 	 * Helper method to update the {@link NamedCollection} data.
 	 *
 	 * @param datastore the name of the datastore to be updated
-	 * @param key       the persisted data key that has to be updated
-	 * @param value     the new value
+	 * @param key the persisted data key that has to be updated
+	 * @param value the new value
 	 */
 	public static void updatePersistence(final String datastore, final String key, final String value) {
 		NamedCollection dataStore = ServiceProvider.getInstance().getDataStoreService().getNamedCollection(datastore);
@@ -43,17 +43,16 @@ public class TestPersistenceHelper {
 	 * Reads the requested persisted data from datastore.
 	 *
 	 * @param datastore the name of the datastore to be read
-	 * @param key       the key that needs to be read
-	 * @return {@link String} value of persisted data. Null if data is not found in {@link NamedCollection}
+	 * @param key the key that needs to be read
+	 * @return {@link String} value of persisted data. Null if data is not found in {@link
+	 *     NamedCollection}
 	 */
 	public static String readPersistedData(final String datastore, final String key) {
 		NamedCollection dataStore = ServiceProvider.getInstance().getDataStoreService().getNamedCollection(datastore);
 		return dataStore.getString(key, null);
 	}
 
-	/**
-	 * Clears the Configuration and Consent extension's persisted data
-	 */
+	/** Clears the Configuration and Consent extension's persisted data */
 	public static void resetKnownPersistence() {
 		for (String eachDatastore : knownDatastoreName) {
 			NamedCollection dataStore = ServiceProvider

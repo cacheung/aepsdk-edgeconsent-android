@@ -39,7 +39,7 @@ public class ConsentExtensionVersionTest {
 
 		assertEquals(
 			String.format(
-				"Expected version to match in gradle.properties (%s) and extensionVersion API (%s)",
+				"Expected version to match in gradle.properties (%s) and extensionVersion" + " API (%s)",
 				moduleVersion,
 				Consent.extensionVersion()
 			),

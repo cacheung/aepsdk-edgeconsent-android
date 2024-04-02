@@ -41,14 +41,14 @@ public class ConsentBootUpTests {
 	@Test
 	public void test_BootUp_loadsFromPersistence() throws Exception {
 		// test summary
-		//------------------------------------------------------------
+		// ------------------------------------------------------------
 		// Type         collect   AdID    personalize    metadata
-		//------------------------------------------------------------
+		// ------------------------------------------------------------
 		// Persistence  pending    no        vi         available
 		//
-		//-------------------------------------------------------------
+		// -------------------------------------------------------------
 		// Final        pending    no        vi         available
-		//-------------------------------------------------------------
+		// -------------------------------------------------------------
 		// verify in (ConsentResponse and XDMSharedState)
 
 		// test
@@ -87,14 +87,14 @@ public class ConsentBootUpTests {
 	@Test
 	public void test_BootUp_noPersistedData_withConfigDefault() throws Exception {
 		// test summary
-		//--------------------------------------------
+		// --------------------------------------------
 		// Type         collect   AdID   metadata
-		//--------------------------------------------
+		// --------------------------------------------
 		// Persistence     -
 		// Default         y
-		//--------------------------------------------
+		// --------------------------------------------
 		// Final           y       -       -
-		//--------------------------------------------
+		// --------------------------------------------
 		// verify in (ConsentResponse and XDMSharedState and GetConsent API)
 
 		// test
@@ -124,14 +124,14 @@ public class ConsentBootUpTests {
 	@Test
 	public void test_BootUp_withPersistedData_withConfigDefault() throws Exception {
 		// test summary
-		//--------------------------------------------
+		// --------------------------------------------
 		// Type         collect   AdID   metadata
-		//--------------------------------------------
+		// --------------------------------------------
 		// Persistence     n
 		// Default         y
-		//--------------------------------------------
+		// --------------------------------------------
 		// Final           n       -       -
-		//--------------------------------------------
+		// --------------------------------------------
 		// verify in (ConsentResponse and XDMSharedState and GetConsent API)
 
 		// setup and test
@@ -161,17 +161,17 @@ public class ConsentBootUpTests {
 	@Test
 	public void test_BootUp_CompleteWorkflow() throws Exception {
 		// test summary
-		//----------------------------------------------------------
+		// ----------------------------------------------------------
 		// Type         collect   AdID   personalize    metadata
-		//----------------------------------------------------------
+		// ----------------------------------------------------------
 		// Persistence     y
 		// Default         y       y
 		// Update          n
 		// EdgeResponse    n                vi        available
 		// ChangeDefault   y       n
-		//----------------------------------------------------------
+		// ----------------------------------------------------------
 		// Final           n       n        vi        available
-		//----------------------------------------------------------
+		// ----------------------------------------------------------
 		// verify in (ConsentResponse and XDMSharedState and GetConsent API and persistence)
 
 		// setup and test
